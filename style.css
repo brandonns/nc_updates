@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Jacquarda+Bastarda+9&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --background: #D0CEBA;
+    --text: #417B5A;
+    --primary: #4B3F72;
+}
+
+/* Base Typography */
+h1 {
+    font-family: "Jacquarda Bastarda 9", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    font-family: "Azeret Mono", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    width: 100vw;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+    #currentlyReading {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    header, main, footer {
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 382px) {
+    .navsection p, .navsection a {
+        font-size: 14px;
+    }
+}
+
+/* Layout Components */
+header, main {
+    padding: 1rem;
+}
+
+main, nav {
+    overflow-y: auto;
+}
+
+header {
+    top: 0;
+    background-color: var(--background);
+}
+
+header h1 {
+    margin: 0 0 1rem;
+}
+
+/* Navigation */
+.homenavcontainer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.navsection {
+    display: inline-block;
+}
+
+.navsection p, .navsection a {
+    font-size: 16px;
+}
+
+nav a {
+    text-decoration: none;
+}
+
+h1, h2, h3, nav a, nav p {
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+nav a, nav a:visited {
+    color: var(--primary);
+}
+
+nav a:hover {
+    color: var(--text);
+    text-decoration: underline;
+}
+
+a.headerlink {
+    color: var(--text);
+    text-decoration: none;
+}
+
+/* Typography */
+p, a {
+    line-height: 120%;
+}
+
+a, a:visited {
+    color: var(--primary);
+}
+
+hr {
+    color: var(--background);
+    border: none;
+    border-bottom: 1px solid var(--text);
+}
+
+/* Article Styling */
+.article {
+    width: inherit;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: justify;
+    text-justify: inter-word;
+    padding-top: 10px;
+}
+
+.article > h1, .article > h5 {
+    text-align: center;
+}
