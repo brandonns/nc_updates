@@ -27,25 +27,6 @@ body {
     padding: 0;
 }
 
-/* Media Queries */
-@media screen and (max-width: 768px) {
-    #currentlyReading {
-        display: none;
-    }
-}
-
-@media screen and (max-width: 800px) {
-    header, main, footer {
-        padding: 0.5rem;
-    }
-}
-
-@media (max-width: 382px) {
-    .navsection p, .navsection a {
-        font-size: 14px;
-    }
-}
-
 /* Layout Components */
 header, main {
     padding: 1rem;
@@ -69,6 +50,7 @@ header h1 {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .navsection {
@@ -131,3 +113,53 @@ hr {
 .article > h1, .article > h5 {
     text-align: center;
 }
+
+/* Currently Reading Section */
+#currentlyReading {
+    width: 33%;
+    float: right;
+    position: relative;
+    text-align: center;
+}
+
+#currentlyReading p {
+    width: 100%;
+    margin: 0;
+    padding: 5px 0;
+}
+
+#currentlyReading model-viewer {
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+}
+
+/* Media Queries */
+@media screen and (max-width: 1003px) {
+    .homenavcontainer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header {
+        width: 100%;
+        order: 1;
+        text-align: center;
+    }
+
+    nav {
+        width: 100%;
+        order: 2;
+        text-align: center;
+    }
+
+    #currentlyReading {
+        width: 100%;
+        float: none;
+        order: 3;
+        margin: 1rem auto 0;
+        display: block;
+        text-align: center;
+    }
+}
+
