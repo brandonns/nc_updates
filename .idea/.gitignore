@@ -7,3 +7,6 @@
 /dataSources/
 /dataSources.local.xml
 /vcs.xml
+/modules.xml
+/nc_updates.iml
+/inspectionProfiles/Project_Default.xml
