@@ -315,15 +315,8 @@
         min-width: auto;
         padding: 20px;
       }
-
-
-      .image-item:hover {
-        transform: none !important;
-        z-index: auto !important;
-      }
-
-      .image-item:hover img {
-        transform: none !important;
+      .tooltip {
+        display: none !important;
       }
 
     }
@@ -612,7 +605,12 @@ Didn't want to make dinner after a lame meeting day.`
       });
     }
 
+    // Always allow modal on click/tap
+    imageItem.addEventListener('click', () => {
+      showModal(imgData);
+    });
   }
+
 
   function showTooltip(e, imgData) {
     const tooltipImage = document.getElementById('tooltipImage');
