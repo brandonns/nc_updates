@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scattered Gallery</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #0a0a0a;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Animated liquid background */
+    .liquid-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #fab1a0);
+      background-size: 400% 400%;
+      animation: liquidFlow 15s ease-in-out infinite;
+    }
+
+    @keyframes liquidFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Overlay for glass effect */
+    .glass-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(20px) saturate(180%);
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 0;
+      transition: backdrop-filter 0.3s ease;
+    }
+
+    .glass-overlay.blurred {
+      backdrop-filter: blur(40px) saturate(200%);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main container */
+    .gallery-container {
+      position: relative;
+      z-index: 1;
+      width: 300vw; /* 3x viewport width */
+      height: 300vh; /* 3x viewport height */
+      padding: 50px;
+      cursor: grab;
+      transition: transform 0.1s ease-out;
+    }
+
+    .gallery-container:active {
+      cursor: grabbing;
+    }
+
+    /* Viewport wrapper */
+    .viewport {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* Scattered images */
+    .image-item {
+      position: absolute;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      /*border-radius: 12px;*/
+      /*overflow: hidden;*/
+      /*box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);*/
+      width: 222px;
+      height: 222px;
+    }
+
+    .image-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .image-item:hover {
+      transform: scale(1.05) rotate(2deg);
+      z-index: 10;
+      /*box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);*/
+    }
+
+    .image-item:hover img {
+      transform: scale(1.1);
+    }
+
+    /* Hover tooltip */
+    .tooltip {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      z-index: 20;
+      min-width: 200px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .tooltip.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tooltip-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 10px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .tooltip-title {
+      font-weight: bold;
+      color: #333;
+      font-size: 14px;
+    }
+
+    /* Modal for zoomed view */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      display: flex;
+      max-width: 90%;
+      max-height: 90%;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-image {
+      max-width: 70%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .modal-info {
+      padding: 40px;
+      color: white;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .modal-title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-description {
+      font-size: 16px;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 24px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .close-modal:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .gallery-container {
+        padding: 20px;
+      }
+
+      .modal-content {
+        flex-direction: column;
+        max-width: 95%;
+      }
+
+      .modal-image {
+        max-width: 100%;
+        max-height: 60%;
+      }
+
+      .modal-info {
+        min-width: auto;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="liquid-background"></div>
+<div class="glass-overlay" id="glassOverlay"></div>
+
+<div class="viewport">
+  <div class="gallery-container" id="galleryContainer">
+    <!-- Images will be dynamically added here -->
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <img class="tooltip-image" id="tooltipImage" src="" alt="">
+  <div class="tooltip-title" id="tooltipTitle"></div>
+</div>
+
+<div class="modal" id="modal">
+  <button class="close-modal" id="closeModal">&times;</button>
+  <div class="modal-content">
+    <img class="modal-image" id="modalImage" src="" alt="">
+    <div class="modal-info">
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-description" id="modalDescription"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Sample image data (using placeholder images) - More images for larger canvas
+  const images = [
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+    {
+      src: '/src/scans/mcdouble13.png',
+      title: 'Mountain Vista',
+      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+    },
+  ];
+
+  const galleryContainer = document.getElementById('galleryContainer');
+  const tooltip = document.getElementById('tooltip');
+  const modal = document.getElementById('modal');
+  const glassOverlay = document.getElementById('glassOverlay');
+
+  // Drag functionality
+  let isDragging = false;
+  let startX, startY;
+  let currentX = 0, currentY = 0;
+  let initialX = 0, initialY = 0;
+
+  // Create and position images randomly across the full canvas with slight center bias
+  function createScatteredGallery() {
+    const canvasWidth = window.innerWidth * 3;
+    const canvasHeight = window.innerHeight * 3;
+
+    // Image dimensions for overlap calculation
+    const imageWidth = 120;
+    const imageHeight = 150;
+    const maxOverlap = 0.3; // 30% maximum overlap allowed
+    const minDistance = Math.min(imageWidth, imageHeight) * (1 - maxOverlap);
+
+    const placedImages = []; // Track placed image positions
+
+    images.forEach((img, index) => {
+      const imageItem = document.createElement('div');
+      imageItem.className = 'image-item';
+
+      let x, y, attempts = 0;
+      let validPosition = false;
+
+      // Try to find a position with acceptable overlap
+      while (!validPosition && attempts < 100) {
+        // Use the ENTIRE canvas but with a very slight center bias
+        // 85% chance of uniform distribution, 15% chance of center-biased
+        if (Math.random() < 0.85) {
+          // Uniform distribution across entire canvas
+          x = Math.random() * (canvasWidth - imageWidth);
+          y = Math.random() * (canvasHeight - imageHeight);
+        } else {
+          // Slight center bias - within middle 70% of canvas
+          const centerX = canvasWidth / 2;
+          const centerY = canvasHeight / 2;
+          const biasRadiusX = canvasWidth * 0.35; // 70% width from center
+          const biasRadiusY = canvasHeight * 0.35; // 70% height from center
+
+          x = centerX - biasRadiusX + Math.random() * (biasRadiusX * 2) - imageWidth/2;
+          y = centerY - biasRadiusY + Math.random() * (biasRadiusY * 2) - imageHeight/2;
+
+          // Clamp to canvas bounds
+          x = Math.max(0, Math.min(canvasWidth - imageWidth, x));
+          y = Math.max(0, Math.min(canvasHeight - imageHeight, y));
+        }
+
+        // Check distance from all previously placed images
+        validPosition = true;
+        for (let placed of placedImages) {
+          const distance = Math.sqrt(Math.pow(x - placed.x, 2) + Math.pow(y - placed.y, 2));
+          if (distance < minDistance) {
+            validPosition = false;
+            break;
+          }
+        }
+        attempts++;
+      }
+
+      // If we couldn't find a good spot after 100 attempts, place it anyway
+      // This prevents infinite loops with too many images
+      if (!validPosition) {
+        x = Math.random() * (canvasWidth - imageWidth);
+        y = Math.random() * (canvasHeight - imageHeight);
+      }
+
+      // Store this position for future overlap checking
+      placedImages.push({ x, y });
+
+      const rotation = (Math.random() - 0.5) * 30;
+
+      imageItem.style.left = x + 'px';
+      imageItem.style.top = y + 'px';
+      imageItem.style.transform = `rotate(${rotation}deg)`;
+
+      const imgElement = document.createElement('img');
+      imgElement.src = img.src;
+      imgElement.alt = img.title;
+
+      imageItem.appendChild(imgElement);
+      galleryContainer.appendChild(imageItem);
+
+      // Add event listeners
+      setupImageEvents(imageItem, img, index);
+    });
+
+    // Center the view on the canvas
+    const offsetX = -window.innerWidth;
+    const offsetY = -window.innerHeight;
+    currentX = offsetX;
+    currentY = offsetY;
+    galleryContainer.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+  }
+
+  // Drag event handlers
+  function handleDragStart(e) {
+    if (e.target.closest('.image-item')) return; // Don't drag when clicking on images
+
+    isDragging = true;
+    galleryContainer.style.cursor = 'grabbing';
+    galleryContainer.style.transition = 'none';
+
+    if (e.type === 'mousedown') {
+      startX = e.clientX - currentX;
+      startY = e.clientY - currentY;
+    } else {
+      startX = e.touches[0].clientX - currentX;
+      startY = e.touches[0].clientY - currentY;
+    }
+  }
+
+  function handleDragMove(e) {
+    if (!isDragging) return;
+
+    e.preventDefault();
+
+    if (e.type === 'mousemove') {
+      currentX = e.clientX - startX;
+      currentY = e.clientY - startY;
+    } else {
+      currentX = e.touches[0].clientX - startX;
+      currentY = e.touches[0].clientY - startY;
+    }
+
+    // Constrain movement to keep some content visible
+    const maxX = window.innerWidth * 0.5;
+    const maxY = window.innerHeight * 0.5;
+    const minX = -(window.innerWidth * 2.5);
+    const minY = -(window.innerHeight * 2.5);
+
+    currentX = Math.max(minX, Math.min(maxX, currentX));
+    currentY = Math.max(minY, Math.min(maxY, currentY));
+
+    galleryContainer.style.transform = `translate(${currentX}px, ${currentY}px)`;
+  }
+
+  function handleDragEnd() {
+    isDragging = false;
+    galleryContainer.style.cursor = 'grab';
+    galleryContainer.style.transition = 'transform 0.1s ease-out';
+  }
+
+  // Add drag event listeners
+  galleryContainer.addEventListener('mousedown', handleDragStart);
+  document.addEventListener('mousemove', handleDragMove);
+  document.addEventListener('mouseup', handleDragEnd);
+
+  // Touch events for mobile
+  galleryContainer.addEventListener('touchstart', handleDragStart);
+  document.addEventListener('touchmove', handleDragMove);
+  document.addEventListener('touchend', handleDragEnd);
+
+  function setupImageEvents(imageItem, imgData, index) {
+    // Hover events for tooltip
+    imageItem.addEventListener('mouseenter', (e) => {
+      showTooltip(e, imgData);
+    });
+
+    imageItem.addEventListener('mouseleave', () => {
+      hideTooltip();
+    });
+
+    imageItem.addEventListener('mousemove', (e) => {
+      updateTooltipPosition(e);
+    });
+
+    // Click event for modal
+    imageItem.addEventListener('click', () => {
+      showModal(imgData);
+    });
+  }
+
+  function showTooltip(e, imgData) {
+    const tooltipImage = document.getElementById('tooltipImage');
+    const tooltipTitle = document.getElementById('tooltipTitle');
+
+    tooltipImage.src = imgData.src;
+    tooltipTitle.textContent = imgData.title;
+
+    tooltip.classList.add('show');
+    updateTooltipPosition(e);
+  }
+
+  function hideTooltip() {
+    tooltip.classList.remove('show');
+  }
+
+  function updateTooltipPosition(e) {
+    const rect = tooltip.getBoundingClientRect();
+    let x = e.clientX + 15;
+    let y = e.clientY - rect.height - 15;
+
+    // Keep tooltip in viewport
+    if (x + rect.width > window.innerWidth) {
+      x = e.clientX - rect.width - 15;
+    }
+    if (y < 0) {
+      y = e.clientY + 15;
+    }
+
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+  }
+
+  function showModal(imgData) {
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+
+    modalImage.src = imgData.src;
+    modalTitle.textContent = imgData.title;
+    modalDescription.textContent = imgData.description;
+
+    modal.style.display = 'flex';
+    glassOverlay.classList.add('blurred');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideModal() {
+    modal.style.display = 'none';
+    glassOverlay.classList.remove('blurred');
+    document.body.style.overflow = 'auto';
+  }
+
+  // Modal close events
+  document.getElementById('closeModal').addEventListener('click', hideModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      hideModal();
+    }
+  });
+
+  // Keyboard support
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      hideModal();
+      hideTooltip();
+    }
+  });
+
+  // Responsive repositioning
+  window.addEventListener('resize', () => {
+    // Clear existing images
+    galleryContainer.innerHTML = '';
+    // Reset position
+    currentX = 0;
+    currentY = 0;
+    galleryContainer.style.transform = 'translate(0px, 0px)';
+    // Recreate with new positions
+    createScatteredGallery();
+  });
+
+  // Initialize the gallery
+  createScatteredGallery();
+</script>
+</body>
+</html>
