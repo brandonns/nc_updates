@@ -26,6 +26,10 @@ h1 {
     font-style: normal;
 }
 
+h3 {
+    font-family: "Jacquarda Bastarda 9", serif;
+}
+
 body {
     background-color: var(--background);
     color: var(--text);
@@ -120,6 +124,27 @@ hr {
     text-align: justify;
     text-justify: inter-word;
     padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.article-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.swappable-image {
+    flex-shrink: 0;
+    max-width: 300px;
+    height: auto;
+    cursor: pointer;
+    display: block;
+}
+
+.article-text {
+    flex: 1;
 }
 
 .article > h1, .article > h5 {
@@ -177,5 +202,10 @@ hr {
         margin: 1rem auto 0;
         display: block;
         text-align: center;
+    }
+
+    .swappable-image {
+        max-width: 40%;
+        min-width: 150px;
     }
 }

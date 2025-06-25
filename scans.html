@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀" name="description"/>
+    <meta content="art, music, code" name="keywords"/>
+    <meta content="Brandon Stone" name="author"/>
+    <meta content="🏡" property="og:title"/>
+    <meta content="website" property="og:type"/>
+    <meta content="https://brandonstone.cc/" property="og:url"/>
+    <meta content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀" property="og:description"/>
+    <title>scans</title>
+
+    <link href="/src/favicon/favicon.ico" rel="icon"/>
+    <link href="/style.css" media="all" rel="stylesheet" type="text/css"/>
+    <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
+</head>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const swappableImages = document.querySelectorAll('.swappable-image');
+
+        swappableImages.forEach(function(image) {
+            const originalSrc = image.src;
+            const hoverSrc = image.dataset.hover;
+
+            if (hoverSrc) {
+                image.addEventListener('mouseenter', function() {
+                    this.src = hoverSrc;
+                });
+
+                image.addEventListener('mouseleave', function() {
+                    this.src = originalSrc;
+                });
+            }
+        });
+    });
+</script>
+
+
+
+<body>
+<div class="homenavcontainer">
+    <header>
+        <h1>
+            <a class="headerlink" href="/index.html">scans</a>
+        </h1>
+        <nav>
+            <div class="navsection">
+                <a href="https://barndoors.cc">continue to main site</a>
+                <a href="/index.html">ramblings</a>
+
+            </div>
+        </nav>
+    </header>
+    <div id="currentlyReading" style="width: 33%; float: right; position: relative; text-align: center;">
+        <p style="width: 100%; margin: 0; padding: 5px 0;">currently reading</p>
+        <model-viewer
+                auto-rotate=""
+                auto-rotate-delay="0"
+                camera-controls=""
+                camera-orbit="125deg 75deg 0.6m"
+                field-of-view="25deg"
+                interaction-prompt="none"
+                poster="/src/poster.webp"
+                shadow-intensity="0"
+                src="/src/book.glb"
+                style="width: 100%;
+                    max-width: 250px;
+                    margin: 0 auto;">
+            <div slot="progress-bar"></div>
+        </model-viewer>
+    </div>
+</div>
+<main id="content">
+    <hr/>
+    <h3>mcdoubles</h3>
+    <div class="article">
+        <div class="article-content">
+            <img src="/src/escans/mcdouble13e.png"
+                 alt="mcdouble13e"
+                 class="swappable-image"
+                 data-hover="/src/scans/mcdouble13.png"/>
+            <div class="article-text">
+                <p>
+                    Ticket from a Friday, Jun 6, 2025 drive-thru order.
+                    </br>
+                    Rare `SUB Mac Sauce` modifier note.
+                    Lucky number 13 from side 2.
+                    Lazy lunch.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="article">
+        <div class="article-content">
+            <img src="/src/escans/mcdouble69e.png"
+                 alt="mcdouble69e"
+                 class="swappable-image"
+                 data-hover="/src/scans/mcdouble69.png"/>
+            <div class="article-text">
+                <p>Ticket from a Wednesday, Jun 18, 2025 drive-thru order.
+                    </br>
+                    Confusingly standard `ONLY` modifier notes with an `ADD Mac Sauce.
+                    Side 1 bringing the NICE order number 69.
+                    Didn't want to make dinner after a lame meeting day.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+    <h3>lotto tickets</h3>
+    <div class="article">
+        <div class="article-content">
+            <img src="/src/escans/voidlottoe.png"
+                 alt="mcdouble13e"
+                 class="swappable-image"
+                 data-hover="/src/scans/voidlotto.png"/>
+            <div class="article-text">
+                <p>A fun *VOID* ticket I got. Obvious loser.</p>
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+    <h3>magazines</h3>
+    <div class="article">
+        <div class="article-content">
+            <img src="/src/escans/si_dec1982e.png"
+                 alt="mcdouble13e"
+                 class="swappable-image"
+                 data-hover="/src/scans/si_dec1982.png"/>
+            <div class="article-text">
+                <p>
+                    Scientific American. (1982, December). 247(6).
+                    </br>
+                    Personal favorite cover from a small stash recovered from the
+                    trash outside an office in the CU Boulder Engineering Center.
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
