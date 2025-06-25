@@ -124,9 +124,7 @@ hr {
     text-align: justify;
     text-justify: inter-word;
     padding-top: 10px;
-    /* display: flex; */ /* REMOVE */
-    /* flex-direction: column; */ /* REMOVE */
-    /* gap: 15px; */ /* REMOVE or replace with spacing between children */
+
 }
 
 
