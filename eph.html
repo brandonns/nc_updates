@@ -2,19 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <meta content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀" name="description"/>
-  <meta content="art, music, code" name="keywords"/>
-  <meta content="Brandon Stone" name="author"/>
-  <meta content="🏡" property="og:title"/>
-  <meta content="website" property="og:type"/>
-  <meta content="https://brandonstone.cc/" property="og:url"/>
-  <meta content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀" property="og:description"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="description" content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀"/>
+  <meta name="keywords" content="art, music, code"/>
+  <meta name="author" content="Brandon Stone"/>
+  <meta property="og:title" content="🏡"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://brandonstone.cc/"/>
+  <meta property="og:description" content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀"/>
   <title>scans</title>
 
   <link href="/src/favicon/favicon.ico" rel="icon"/>
   <link href="/style.css" media="all" rel="stylesheet" type="text/css"/>
   <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
+
   <style>
     * {
       margin: 0;
@@ -22,12 +23,14 @@
       box-sizing: border-box;
     }
 
-    body {
-      font-family: "Azeret Mono", serif;
-      background: #D0CEBA;
+    html, body {
+      overscroll-behavior: none;
+      touch-action: none;
       overflow-x: hidden;
       min-height: 100vh;
       position: relative;
+      font-family: "Azeret Mono", serif;
+      background: #D0CEBA;
     }
 
     /* Overlay for glass effect */
@@ -37,8 +40,6 @@
       left: 0;
       width: 100%;
       height: 100%;
-      /*backdrop-filter: blur(20px) saturate(180%);*/
-      /*background: rgba(255, 255, 255, 0.1);*/
       z-index: 0;
       transition: backdrop-filter 0.3s ease;
     }
@@ -48,8 +49,6 @@
       background: #D0CEBA;
     }
 
-    /* Header styling */
-    /* Layout Components */
     header, main {
       padding: 1rem;
     }
@@ -60,7 +59,7 @@
 
     header {
       position: relative;
-      z-index: 10; /* Higher than .viewport (z-index: 1), tooltip (z-index: 20 is okay), etc. */
+      z-index: 10;
       background-color: transparent;
     }
 
@@ -68,7 +67,6 @@
       margin: 0 0 1rem;
     }
 
-    /* Navigation */
     .homenavcontainer {
       display: flex;
       justify-content: space-between;
@@ -108,6 +106,7 @@
       color: var(--text);
       text-decoration: none;
     }
+
     p, a {
       line-height: 120%;
     }
@@ -116,14 +115,13 @@
       color: var(--primary);
     }
 
-    /* Main container */
     .gallery-container {
       position: relative;
       z-index: 1;
-      width: 300vw; /* 3x viewport width */
-      height: 300vh; /* 3x viewport height */
+      width: 300vw;
+      height: 300vh;
       padding: 50px;
-      padding-top: 120px; /* Space for header */
+      padding-top: 120px;
       cursor: grab;
       transition: transform 0.1s ease-out;
     }
@@ -132,7 +130,6 @@
       cursor: grabbing;
     }
 
-    /* Viewport wrapper */
     .viewport {
       position: fixed;
       top: 0;
@@ -143,7 +140,6 @@
       z-index: 1;
     }
 
-    /* Scattered images */
     .image-item {
       position: absolute;
       cursor: pointer;
@@ -168,13 +164,11 @@
       transform: scale(1.1);
     }
 
-    /* Hover tooltip */
     .tooltip {
       position: absolute;
       background: #D0CEBA;
       backdrop-filter: blur(10px);
       padding: 15px;
-      /*box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);*/
       pointer-events: none;
       opacity: 0;
       transform: translateY(10px);
@@ -202,7 +196,6 @@
       font-size: 14px;
     }
 
-    /* Modal for zoomed view */
     .modal {
       position: fixed;
       top: 0;
@@ -230,7 +223,6 @@
       background: rgba(208, 206, 186, 0.1);
       backdrop-filter: blur(20px);
       overflow: hidden;
-      /*box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);*/
       border: 1px solid rgba(65, 123, 90, 0.2);
     }
 
@@ -251,7 +243,6 @@
 
     .modal-title {
       font-family: "Jacquarda Bastarda 9", serif;
-
       font-size: 28px;
       font-weight: bold;
       margin-bottom: 20px;
@@ -260,10 +251,12 @@
 
     .modal-description {
       font-family: "Azeret Mono", serif;
-      font-size: 16px;
+      font-size: clamp(12px, 2.5vw, 16px);
       line-height: 1.6;
       opacity: 0.9;
       white-space: pre-line;
+      overflow-wrap: break-word;
+      hyphens: auto;
     }
 
     .close-modal {
@@ -287,7 +280,6 @@
       transform: scale(1.1);
     }
 
-    /* Responsive design */
     @media (max-width: 768px) {
       .gallery-container {
         padding: 20px;
@@ -323,7 +315,6 @@
         padding: 20px;
       }
     }
-
   </style>
 </head>
 <body>
@@ -706,6 +697,7 @@ Didn't want to make dinner after a lame meeting day.`
     // Recreate with new positions
     createScatteredGallery();
   });
+  document.addEventListener('touchmove', handleDragMove, { passive: false });
 
   // Initialize the gallery
   createScatteredGallery();
