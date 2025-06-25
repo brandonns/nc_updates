@@ -33,7 +33,6 @@
       background: #D0CEBA;
     }
 
-    /* Overlay for glass effect */
     .glass-overlay {
       position: fixed;
       top: 0;
@@ -359,7 +358,6 @@
 
 <div class="viewport">
   <div class="gallery-container" id="galleryContainer">
-    <!-- Images will be dynamically added here -->
   </div>
 </div>
 
@@ -380,7 +378,6 @@
 </div>
 
 <script>
-  // Sample image data (using placeholder images) - More images for larger canvas
   const images = [
     {
       src: '/src/escans/mcdouble13e.png',
@@ -420,24 +417,22 @@ Didn't want to make dinner after a lame meeting day.`
   const modal = document.getElementById('modal');
   const glassOverlay = document.getElementById('glassOverlay');
 
-  // Drag functionality
   let isDragging = false;
   let startX, startY;
   let currentX = 0, currentY = 0;
   let initialX = 0, initialY = 0;
 
-  // Create and position images randomly across the full canvas with slight center bias
   function createScatteredGallery() {
     const canvasWidth = window.innerWidth * 3;
     const canvasHeight = window.innerHeight * 3;
 
     // Image dimensions for overlap calculation
-    const imageWidth = 120;
-    const imageHeight = 150;
-    const maxOverlap = 0.2; // 30% maximum overlap allowed
+    const imageWidth = 333;
+    const imageHeight = 333;
+    const maxOverlap = 0.2; // 20% maximum overlap allowed
     const minDistance = Math.min(imageWidth, imageHeight) * (1 - maxOverlap);
 
-    const placedImages = []; // Track placed image positions
+    const placedImages = [];
 
     let firstImagePosition = null;
 
@@ -468,12 +463,10 @@ Didn't want to make dinner after a lame meeting day.`
           x = centerX - biasRadiusX + Math.random() * (biasRadiusX * 2) - imageWidth/2;
           y = centerY - biasRadiusY + Math.random() * (biasRadiusY * 2) - imageHeight/2;
 
-          // Clamp to canvas bounds
           x = Math.max(0, Math.min(canvasWidth - imageWidth, x));
           y = Math.max(0, Math.min(canvasHeight - imageHeight, y));
         }
 
-        // Check distance from all previously placed images
         validPosition = true;
         for (let placed of placedImages) {
           const distance = Math.sqrt(Math.pow(x - placed.x, 2) + Math.pow(y - placed.y, 2));
@@ -484,18 +477,14 @@ Didn't want to make dinner after a lame meeting day.`
         }
         attempts++;
       }
-// After calculating valid x, y:
       if (index === 0) {
         firstImagePosition = { x, y };
       }
-      // If we couldn't find a good spot after 100 attempts, place it anyway
-      // This prevents infinite loops with too many images
       if (!validPosition) {
         x = Math.random() * (canvasWidth - imageWidth);
         y = Math.random() * (canvasHeight - imageHeight);
       }
 
-      // Store this position for future overlap checking
       placedImages.push({ x, y, element: imageItem });
 
       const rotation = (Math.random() - 0.5) * 30;
@@ -511,11 +500,9 @@ Didn't want to make dinner after a lame meeting day.`
       imageItem.appendChild(imgElement);
       galleryContainer.appendChild(imageItem);
 
-      // Add event listeners
       setupImageEvents(imageItem, img, index);
     });
 
-    // Center the view on the canvas
     const offsetX = -window.innerWidth;
     const offsetY = -window.innerHeight;
     currentX = offsetX;
@@ -536,16 +523,15 @@ Didn't want to make dinner after a lame meeting day.`
       currentX = targetX;
       currentY = targetY;
 
-      galleryContainer.style.transition = 'none'; // Optional: disable initial pan animation
+      galleryContainer.style.transition = 'none';
       galleryContainer.style.transform = `translate(${currentX}px, ${currentY}px)`;
     }
 
 
   }
 
-  // Drag event handlers
   function handleDragStart(e) {
-    if (e.target.closest('.image-item')) return; // Don't drag when clicking on images
+    if (e.target.closest('.image-item')) return;
 
     isDragging = true;
     galleryContainer.style.cursor = 'grabbing';
@@ -573,7 +559,6 @@ Didn't want to make dinner after a lame meeting day.`
       currentY = e.touches[0].clientY - startY;
     }
 
-    // Constrain movement to keep some content visible
     const maxX = window.innerWidth * 0.5;
     const maxY = window.innerHeight * 0.5;
     const minX = -(window.innerWidth * 2.5);
@@ -591,18 +576,15 @@ Didn't want to make dinner after a lame meeting day.`
     galleryContainer.style.transition = 'transform 0.1s ease-out';
   }
 
-  // Add drag event listeners
   galleryContainer.addEventListener('mousedown', handleDragStart);
   document.addEventListener('mousemove', handleDragMove);
   document.addEventListener('mouseup', handleDragEnd);
 
-  // Touch events for mobile
   galleryContainer.addEventListener('touchstart', handleDragStart);
   document.addEventListener('touchmove', handleDragMove);
   document.addEventListener('touchend', handleDragEnd);
 
   function setupImageEvents(imageItem, imgData, index) {
-    // Hover events for tooltip
     imageItem.addEventListener('mouseenter', (e) => {
       showTooltip(e, imgData);
     });
@@ -615,7 +597,6 @@ Didn't want to make dinner after a lame meeting day.`
       updateTooltipPosition(e);
     });
 
-    // Click event for modal
     imageItem.addEventListener('click', () => {
       showModal(imgData);
     });
@@ -641,7 +622,6 @@ Didn't want to make dinner after a lame meeting day.`
     let x = e.clientX + 15;
     let y = e.clientY - rect.height - 15;
 
-    // Keep tooltip in viewport
     if (x + rect.width > window.innerWidth) {
       x = e.clientX - rect.width - 15;
     }
@@ -673,7 +653,6 @@ Didn't want to make dinner after a lame meeting day.`
     document.body.style.overflow = 'auto';
   }
 
-  // Modal close events
   document.getElementById('closeModal').addEventListener('click', hideModal);
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
@@ -681,7 +660,6 @@ Didn't want to make dinner after a lame meeting day.`
     }
   });
 
-  // Keyboard support
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       hideModal();
@@ -689,20 +667,14 @@ Didn't want to make dinner after a lame meeting day.`
     }
   });
 
-  // Responsive repositioning
   window.addEventListener('resize', () => {
-    // Clear existing images
     galleryContainer.innerHTML = '';
-    // Reset position
     currentX = 0;
     currentY = 0;
     galleryContainer.style.transform = 'translate(0px, 0px)';
-    // Recreate with new positions
     createScatteredGallery();
   });
   document.addEventListener('touchmove', handleDragMove, { passive: false });
-
-  // Initialize the gallery
   createScatteredGallery();
 </script>
 </body>
