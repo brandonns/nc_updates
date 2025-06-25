@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scattered Gallery</title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀" name="description"/>
+  <meta content="art, music, code" name="keywords"/>
+  <meta content="Brandon Stone" name="author"/>
+  <meta content="🏡" property="og:title"/>
+  <meta content="website" property="og:type"/>
+  <meta content="https://brandonstone.cc/" property="og:url"/>
+  <meta content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀" property="og:description"/>
+  <title>scans</title>
+
+  <link href="/src/favicon/favicon.ico" rel="icon"/>
+  <link href="/style.css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
   <style>
     * {
       margin: 0;
@@ -12,30 +23,11 @@
     }
 
     body {
-      font-family: 'Arial', sans-serif;
-      background: #0a0a0a;
+      font-family: "Azeret Mono", serif;
+      background: #D0CEBA;
       overflow-x: hidden;
       min-height: 100vh;
       position: relative;
-    }
-
-    /* Animated liquid background */
-    .liquid-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #fab1a0);
-      background-size: 400% 400%;
-      animation: liquidFlow 15s ease-in-out infinite;
-    }
-
-    @keyframes liquidFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     /* Overlay for glass effect */
@@ -45,15 +37,83 @@
       left: 0;
       width: 100%;
       height: 100%;
-      backdrop-filter: blur(20px) saturate(180%);
-      background: rgba(255, 255, 255, 0.1);
+      /*backdrop-filter: blur(20px) saturate(180%);*/
+      /*background: rgba(255, 255, 255, 0.1);*/
       z-index: 0;
       transition: backdrop-filter 0.3s ease;
     }
 
     .glass-overlay.blurred {
       backdrop-filter: blur(40px) saturate(200%);
-      background: rgba(255, 255, 255, 0.2);
+      background: #D0CEBA;
+    }
+
+    /* Header styling */
+    /* Layout Components */
+    header, main {
+      padding: 1rem;
+    }
+
+    main, nav {
+      overflow-y: auto;
+    }
+
+    header {
+      position: relative;
+      z-index: 10; /* Higher than .viewport (z-index: 1), tooltip (z-index: 20 is okay), etc. */
+      background-color: transparent;
+    }
+
+    header h1 {
+      margin: 0 0 1rem;
+    }
+
+    /* Navigation */
+    .homenavcontainer {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 100%;
+      background-color: transparent;
+    }
+
+    .navsection {
+      display: inline-block;
+    }
+
+    .navsection p, .navsection a {
+      font-size: 16px;
+    }
+
+    nav a {
+      text-decoration: none;
+    }
+
+    h1, h2, h3, nav a, nav p {
+      font-weight: normal;
+      text-transform: uppercase;
+    }
+
+    nav a, nav a:visited {
+      color: var(--primary);
+    }
+
+    nav a:hover {
+      color: var(--text);
+      text-decoration: underline;
+    }
+
+    a.headerlink {
+      color: var(--text);
+      text-decoration: none;
+    }
+    p, a {
+      line-height: 120%;
+    }
+
+    a, a:visited {
+      color: var(--primary);
     }
 
     /* Main container */
@@ -63,6 +123,7 @@
       width: 300vw; /* 3x viewport width */
       height: 300vh; /* 3x viewport height */
       padding: 50px;
+      padding-top: 120px; /* Space for header */
       cursor: grab;
       transition: transform 0.1s ease-out;
     }
@@ -87,9 +148,6 @@
       position: absolute;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      /*border-radius: 12px;*/
-      /*overflow: hidden;*/
-      /*box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);*/
       width: 222px;
       height: 222px;
     }
@@ -104,7 +162,6 @@
     .image-item:hover {
       transform: scale(1.05) rotate(2deg);
       z-index: 10;
-      /*box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);*/
     }
 
     .image-item:hover img {
@@ -114,18 +171,17 @@
     /* Hover tooltip */
     .tooltip {
       position: absolute;
-      background: rgba(255, 255, 255, 0.95);
+      background: #D0CEBA;
       backdrop-filter: blur(10px);
-      border-radius: 15px;
       padding: 15px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      /*box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);*/
       pointer-events: none;
       opacity: 0;
       transform: translateY(10px);
       transition: all 0.3s ease;
       z-index: 20;
       min-width: 200px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid #417B5A;
     }
 
     .tooltip.show {
@@ -136,14 +192,13 @@
     .tooltip-image {
       width: 80px;
       height: 80px;
-      border-radius: 10px;
       object-fit: cover;
       margin-bottom: 10px;
     }
 
     .tooltip-title {
       font-weight: bold;
-      color: #333;
+      color: #4B3F72;
       font-size: 14px;
     }
 
@@ -172,12 +227,11 @@
       display: flex;
       max-width: 90%;
       max-height: 90%;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(208, 206, 186, 0.1);
       backdrop-filter: blur(20px);
-      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      /*box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);*/
+      border: 1px solid rgba(65, 123, 90, 0.2);
     }
 
     .modal-image {
@@ -188,7 +242,7 @@
 
     .modal-info {
       padding: 40px;
-      color: white;
+      color: #D0CEBA;
       min-width: 300px;
       display: flex;
       flex-direction: column;
@@ -196,6 +250,8 @@
     }
 
     .modal-title {
+      font-family: "Jacquarda Bastarda 9", serif;
+
       font-size: 28px;
       font-weight: bold;
       margin-bottom: 20px;
@@ -203,9 +259,11 @@
     }
 
     .modal-description {
+      font-family: "Azeret Mono", serif;
       font-size: 16px;
       line-height: 1.6;
       opacity: 0.9;
+      white-space: pre-line;
     }
 
     .close-modal {
@@ -233,6 +291,21 @@
     @media (max-width: 768px) {
       .gallery-container {
         padding: 20px;
+        padding-top: 100px;
+      }
+
+      .homenavcontainer header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px 20px;
+      }
+
+      .navsection {
+        gap: 15px;
+      }
+
+      #currentlyReading {
+        display: none;
       }
 
       .modal-content {
@@ -250,11 +323,45 @@
         padding: 20px;
       }
     }
+
   </style>
 </head>
 <body>
 <div class="liquid-background"></div>
 <div class="glass-overlay" id="glassOverlay"></div>
+
+<div class="homenavcontainer">
+  <header>
+    <h1>
+      <a class="headerlink" href="/index.html">scans</a>
+    </h1>
+    <nav>
+      <div class="navsection">
+        <a href="/catalogue.html">list view</a>
+
+        <a href="https://barndoors.cc">continue to main site</a>
+      </div>
+    </nav>
+  </header>
+  <div id="currentlyReading" style="width: 33%; float: right; position: relative; text-align: center;">
+    <p style="width: 100%; margin: 0; padding: 5px 0;">currently reading</p>
+    <model-viewer
+            auto-rotate=""
+            auto-rotate-delay="0"
+            camera-controls=""
+            camera-orbit="125deg 75deg 0.6m"
+            field-of-view="25deg"
+            interaction-prompt="none"
+            poster="/src/poster.webp"
+            shadow-intensity="0"
+            src="/src/book.glb"
+            style="width: 100%;
+                    max-width: 250px;
+                    margin: 0 auto;">
+      <div slot="progress-bar"></div>
+    </model-viewer>
+  </div>
+</div>
 
 <div class="viewport">
   <div class="gallery-container" id="galleryContainer">
@@ -282,79 +389,35 @@
   // Sample image data (using placeholder images) - More images for larger canvas
   const images = [
     {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+      src: '/src/escans/mcdouble13e.png',
+      fullSrc: '/src/scans/mcdouble13.png',
+      title: 'McDouble Order Number 13',
+      description: `Ticket from a Friday, Jun 6, 2025 drive-thru order.
+Rare SUB Mac Sauce modifier note.
+Lucky number 13 from side 2.
+Lazy lunch.`
     },
     {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+      src: '/src/escans/mcdouble69e.png',
+      fullSrc: '/src/scans/mcdouble69.png',
+      title: 'McDouble Order Number 69',
+      description: `Ticket from a Wednesday, Jun 18, 2025 drive-thru order.
+Confusingly standard ONLY modifier notes with an ADD Mac Sauce.
+Side 1 bringing the NICE order number 69.
+Didn't want to make dinner after a lame meeting day.`
     },
     {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+      src: '/src/escans/voidlottoe.png',
+      fullSrc: '/src/scans/voidlotto.png',
+      title: 'Void Not For Sale',
+      description: `A fun *VOID* ticket I got. Obvious loser.`
     },
     {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
-    },
-    {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
-    },
-    {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
-    },
-    {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
-    },
-    {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
-    },
-    {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
-    },
-    {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
-    },
-    {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
-    },
-    {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
-    },
-    {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
-    },
-    {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
-    },
-    {
-      src: '/src/scans/mcdouble13.png',
-      title: 'Mountain Vista',
-      description: 'A breathtaking view of mountains meeting the sky, captured during golden hour with perfect lighting and composition.'
+      src: '/src/escans/si_dec1982e.png',
+      fullSrc: '/src/scans/si_dec1982.png',
+      title: 'Scientific American. (1982, December). 247(6)',
+      description: `Personal favorite cover from a small stash recovered from the
+                    trash outside an office in the CU Boulder Engineering Center.`
     },
   ];
 
@@ -377,23 +440,27 @@
     // Image dimensions for overlap calculation
     const imageWidth = 120;
     const imageHeight = 150;
-    const maxOverlap = 0.3; // 30% maximum overlap allowed
+    const maxOverlap = 0.2; // 30% maximum overlap allowed
     const minDistance = Math.min(imageWidth, imageHeight) * (1 - maxOverlap);
 
     const placedImages = []; // Track placed image positions
+
+    let firstImagePosition = null;
 
     images.forEach((img, index) => {
       const imageItem = document.createElement('div');
       imageItem.className = 'image-item';
 
       let x, y, attempts = 0;
+
+
       let validPosition = false;
 
       // Try to find a position with acceptable overlap
       while (!validPosition && attempts < 100) {
         // Use the ENTIRE canvas but with a very slight center bias
         // 85% chance of uniform distribution, 15% chance of center-biased
-        if (Math.random() < 0.85) {
+        if (Math.random() < 0.75) {
           // Uniform distribution across entire canvas
           x = Math.random() * (canvasWidth - imageWidth);
           y = Math.random() * (canvasHeight - imageHeight);
@@ -401,8 +468,8 @@
           // Slight center bias - within middle 70% of canvas
           const centerX = canvasWidth / 2;
           const centerY = canvasHeight / 2;
-          const biasRadiusX = canvasWidth * 0.35; // 70% width from center
-          const biasRadiusY = canvasHeight * 0.35; // 70% height from center
+          const biasRadiusX = canvasWidth * 0.2; // 70% width from center
+          const biasRadiusY = canvasHeight * 0.2; // 70% height from center
 
           x = centerX - biasRadiusX + Math.random() * (biasRadiusX * 2) - imageWidth/2;
           y = centerY - biasRadiusY + Math.random() * (biasRadiusY * 2) - imageHeight/2;
@@ -423,7 +490,10 @@
         }
         attempts++;
       }
-
+// After calculating valid x, y:
+      if (index === 0) {
+        firstImagePosition = { x, y };
+      }
       // If we couldn't find a good spot after 100 attempts, place it anyway
       // This prevents infinite loops with too many images
       if (!validPosition) {
@@ -432,7 +502,7 @@
       }
 
       // Store this position for future overlap checking
-      placedImages.push({ x, y });
+      placedImages.push({ x, y, element: imageItem });
 
       const rotation = (Math.random() - 0.5) * 30;
 
@@ -457,6 +527,26 @@
     currentX = offsetX;
     currentY = offsetY;
     galleryContainer.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+
+
+    if (placedImages.length > 0) {
+      const randomIndex = Math.floor(Math.random() * placedImages.length);
+      const targetImage = placedImages[randomIndex];
+
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const targetX = centerX - (targetImage.x + imageWidth / 2);
+      const targetY = centerY - (targetImage.y + imageHeight / 2);
+
+      currentX = targetX;
+      currentY = targetY;
+
+      galleryContainer.style.transition = 'none'; // Optional: disable initial pan animation
+      galleryContainer.style.transform = `translate(${currentX}px, ${currentY}px)`;
+    }
+
+
   }
 
   // Drag event handlers
@@ -574,7 +664,7 @@
     const modalTitle = document.getElementById('modalTitle');
     const modalDescription = document.getElementById('modalDescription');
 
-    modalImage.src = imgData.src;
+    modalImage.src = imgData.fullSrc || imgData.src;
     modalTitle.textContent = imgData.title;
     modalDescription.textContent = imgData.description;
 
