@@ -315,6 +315,17 @@
         min-width: auto;
         padding: 20px;
       }
+
+
+      .image-item:hover {
+        transform: none !important;
+        z-index: auto !important;
+      }
+
+      .image-item:hover img {
+        transform: none !important;
+      }
+
     }
 
   </style>
@@ -585,21 +596,22 @@ Didn't want to make dinner after a lame meeting day.`
   document.addEventListener('touchend', handleDragEnd);
 
   function setupImageEvents(imageItem, imgData, index) {
-    imageItem.addEventListener('mouseenter', (e) => {
-      showTooltip(e, imgData);
-    });
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
-    imageItem.addEventListener('mouseleave', () => {
-      hideTooltip();
-    });
+    if (!isMobile) {
+      imageItem.addEventListener('mouseenter', (e) => {
+        showTooltip(e, imgData);
+      });
 
-    imageItem.addEventListener('mousemove', (e) => {
-      updateTooltipPosition(e);
-    });
+      imageItem.addEventListener('mouseleave', () => {
+        hideTooltip();
+      });
 
-    imageItem.addEventListener('click', () => {
-      showModal(imgData);
-    });
+      imageItem.addEventListener('mousemove', (e) => {
+        updateTooltipPosition(e);
+      });
+    }
+
   }
 
   function showTooltip(e, imgData) {
