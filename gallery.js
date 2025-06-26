@@ -89,7 +89,7 @@ Side 1 bringing the NICE order number 69.`
     {
         src: '/src/scans%20edited/3entry/schoolid.png',
         fullSrc: '/src/scans/3entry/schoolid.png',
-        title: 'Office Badge',
+        title: 'School ID',
         description: `The back of my Sr. year school ID.
                     Rowland's class was "Weights for Athletes III".`
     },
