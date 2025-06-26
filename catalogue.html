@@ -15,6 +15,27 @@
     <link href="/src/favicon/favicon.ico" rel="icon"/>
     <link href="/style.css" media="all" rel="stylesheet" type="text/css"/>
     <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
+
+    <style>
+        .swappable-image {
+            width: 333px;
+            height: 333px;
+            max-width: 100%;
+            object-fit: cover; /* or 'contain' depending on how you want images to fit */
+            display: block;
+        }
+
+        /* Mobile styles */
+        @media screen and (max-width: 768px) {
+            .swappable-image {
+                width: 15%;
+                height: auto;
+                aspect-ratio: 1 / 1; /* Keeps images square */
+                min-width: 50px;
+                max-width: 100px;
+            }
+        }
+    </style>
 </head>
 
 <script>
@@ -37,8 +58,6 @@
         });
     });
 </script>
-
-
 
 <body>
 <div class="homenavcontainer">
@@ -74,8 +93,6 @@
     </div>
 </div>
 <main id="content">
-
-
 
     <hr/>
     <h3>Transportation</h3>
@@ -156,7 +173,6 @@
         </div>
     </div>
 
-
     <br>
     <hr/>
     <h3>Food</h3>
@@ -210,7 +226,6 @@
         </div>
     </div>
 
-
     <br>
     <hr/>
     <h3>Entry</h3>
@@ -230,8 +245,6 @@
         </div>
     </div>
 
-
-
     <br>
     <hr/>
     <h3>Games</h3>
@@ -250,10 +263,6 @@
             </div>
         </div>
     </div>
-
-
-
-
 
     <br>
     <hr/>
@@ -323,7 +332,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="article">
         <div class="article-content">
