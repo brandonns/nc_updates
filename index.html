@@ -601,10 +601,11 @@ Didn't want to make dinner after a lame meeting day.`
         const canvasHeight = window.innerHeight * 3;
 
         // Image dimensions for overlap calculation
-        const imageWidth = 333;
-        const imageHeight = 333;
-        const maxOverlap = 0.2; // 20% maximum overlap allowed
-        const minDistance = Math.min(imageWidth, imageHeight) * (1 - maxOverlap);
+        const isMobile = window.innerWidth < 768;
+        const imageWidth = isMobile ? 200 : 333;
+        const imageHeight = isMobile ? 200 : 333;
+        const maxOverlap = 0.1; // 20% maximum overlap allowed
+        const minDistance = isMobile ? imageWidth * 1.1 : imageWidth * (1 - maxOverlap);
 
         const placedImages = [];
 
@@ -655,9 +656,12 @@ Didn't want to make dinner after a lame meeting day.`
                 firstImagePosition = { x, y };
             }
             if (!validPosition) {
-                x = Math.random() * (canvasWidth - imageWidth);
-                y = Math.random() * (canvasHeight - imageHeight);
+                // Space is too crowded, so just offset slightly from a previous image
+                const fallback = placedImages[Math.floor(Math.random() * placedImages.length)];
+                x = fallback.x + minDistance * (Math.random() - 0.5);
+                y = fallback.y + minDistance * (Math.random() - 0.5);
             }
+
 
             placedImages.push({ x, y, element: imageItem });
 
