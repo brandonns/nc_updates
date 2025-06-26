@@ -321,6 +321,10 @@
             #closeModal {
                 display: none !important;
             }
+            .image-item {
+                width: 150px;   /* Reduced from default 222px */
+                height: 150px;  /* Reduced from default 222px */
+            }
 
         }
 
@@ -680,17 +684,34 @@ Side 1 bringing the NICE order number 69.`
     let currentX = 0, currentY = 0;
     let initialX = 0, initialY = 0;
 
+
+
+
+    function isOverlappingEnough(x1, y1, w1, h1, x2, y2, w2, h2, maxOverlapRatio = 0.15) {
+        const left = Math.max(x1, x2);
+        const top = Math.max(y1, y2);
+        const right = Math.min(x1 + w1, x2 + w2);
+        const bottom = Math.min(y1 + h1, y2 + h2);
+
+        const overlapWidth = Math.max(0, right - left);
+        const overlapHeight = Math.max(0, bottom - top);
+        const overlapArea = overlapWidth * overlapHeight;
+
+        const imageArea = w1 * h1;
+        return (overlapArea / imageArea) < maxOverlapRatio;
+    }
+
+
     function createScatteredGallery() {
         const canvasWidth = window.innerWidth * 3;
         const canvasHeight = window.innerHeight * 3;
 
         // Image dimensions for overlap calculation
-        const isMobile = window.innerWidth < 768;
-        const imageWidth = isMobile ? 200 : 333;
-        const imageHeight = isMobile ? 200 : 333;
+        const isMobile = window.innerWidth < 1000;
+        const imageWidth = isMobile ? 150 : 333;
+        const imageHeight = isMobile ? 150 : 333;
         const maxOverlap = 0.1; // 20% maximum overlap allowed
-        const minDistance = isMobile ? imageWidth * 1.1 : imageWidth * (1 - maxOverlap);
-
+        const minDistance = isMobile ? imageWidth * 2.4 : imageWidth * (1 - maxOverlap);
         const placedImages = [];
 
         let firstImagePosition = null;
@@ -708,7 +729,7 @@ Side 1 bringing the NICE order number 69.`
             while (!validPosition && attempts < 100) {
                 // Use the ENTIRE canvas but with a very slight center bias
                 // 85% chance of uniform distribution, 15% chance of center-biased
-                if (Math.random() < 0.75) {
+                if (Math.random() < 0.85) {
                     // Uniform distribution across entire canvas
                     x = Math.random() * (canvasWidth - imageWidth);
                     y = Math.random() * (canvasHeight - imageHeight);
@@ -716,8 +737,8 @@ Side 1 bringing the NICE order number 69.`
                     // Slight center bias - within middle 70% of canvas
                     const centerX = canvasWidth / 2;
                     const centerY = canvasHeight / 2;
-                    const biasRadiusX = canvasWidth * 0.2; // 70% width from center
-                    const biasRadiusY = canvasHeight * 0.2; // 70% height from center
+                    const biasRadiusX = canvasWidth * 0.5; // 70% width from center
+                    const biasRadiusY = canvasHeight * 0.5; // 70% height from center
 
                     x = centerX - biasRadiusX + Math.random() * (biasRadiusX * 2) - imageWidth/2;
                     y = centerY - biasRadiusY + Math.random() * (biasRadiusY * 2) - imageHeight/2;
@@ -728,11 +749,14 @@ Side 1 bringing the NICE order number 69.`
 
                 validPosition = true;
                 for (let placed of placedImages) {
-                    const distance = Math.sqrt(Math.pow(x - placed.x, 2) + Math.pow(y - placed.y, 2));
-                    if (distance < minDistance) {
+                    if (!isOverlappingEnough(
+                        x, y, imageWidth, imageHeight,
+                        placed.x, placed.y, imageWidth, imageHeight
+                    )) {
                         validPosition = false;
                         break;
                     }
+
                 }
                 attempts++;
             }
