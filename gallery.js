@@ -373,11 +373,14 @@ function moveTip(e) {
     const offset = 5; // Much closer to cursor
     const padding = 10; // Distance from screen edges
 
+    const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+    const viewportHeight = document.documentElement.clientHeight || window.innerHeight;
+
     let x = e.clientX + offset;
     let y = e.clientY - rect.height - offset;
 
     // Smart horizontal positioning - flip to left side if tooltip would go off-screen
-    if (x + rect.width > window.innerWidth - padding) {
+    if (x + rect.width > viewportWidth  - padding) {
         x = e.clientX - rect.width - offset;
     }
 
@@ -392,8 +395,8 @@ function moveTip(e) {
     }
 
     // Ensure tooltip doesn't go off bottom edge
-    if (y + rect.height > window.innerHeight - padding) {
-        y = window.innerHeight - rect.height - padding;
+    if (y + rect.height > viewportHeight - padding) {
+        y = viewportHeight - rect.height - padding;
     }
 
     tooltip.style.left = `${x}px`;
