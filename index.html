@@ -20,6 +20,29 @@
             padding:0;
             box-sizing:border-box
         }
+        .viewport {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: visible; /* Changed from hidden to visible */
+            z-index: 1;
+        }
+
+        .tooltip {
+            position: fixed; /* Changed from absolute to fixed */
+            background: #D0CEBA;
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: .3s ease;
+            z-index: 1000; /* Increased z-index to ensure it's above everything */
+            min-width: 200px;
+            border: 1px solid #417B5A;
+        }
         html,body{
             overscroll-behavior:none;
             touch-action:none;

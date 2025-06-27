@@ -369,9 +369,33 @@ function hideTip() {
 }
 
 function moveTip(e) {
-    const rect = tooltip.getBoundingClientRect(),
-        x = (e.clientX + 15 + rect.width > innerWidth) ? e.clientX - rect.width - 15 : e.clientX + 15,
-        y = (e.clientY - rect.height - 15 < 0) ? e.clientY + 15 : e.clientY - rect.height - 15;
+    const rect = tooltip.getBoundingClientRect();
+    const offset = 5; // Much closer to cursor
+    const padding = 10; // Distance from screen edges
+
+    let x = e.clientX + offset;
+    let y = e.clientY - rect.height - offset;
+
+    // Smart horizontal positioning - flip to left side if tooltip would go off-screen
+    if (x + rect.width > window.innerWidth - padding) {
+        x = e.clientX - rect.width - offset;
+    }
+
+    // Ensure tooltip doesn't go off left edge
+    if (x < padding) {
+        x = padding;
+    }
+
+    // Smart vertical positioning - flip to bottom if tooltip would go off top
+    if (y < padding) {
+        y = e.clientY + offset;
+    }
+
+    // Ensure tooltip doesn't go off bottom edge
+    if (y + rect.height > window.innerHeight - padding) {
+        y = window.innerHeight - rect.height - padding;
+    }
+
     tooltip.style.left = `${x}px`;
     tooltip.style.top = `${y}px`;
 }
