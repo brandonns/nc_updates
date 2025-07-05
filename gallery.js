@@ -67,7 +67,7 @@ const images = [
     {
         src: '/src/scans%20edited/5reference/griddle.png',
         fullSrc: '/src/scans/5reference/griddle.png',
-        title: 'Griddle Me This.',
+        title: 'Griddle Me This',
         description: `Uline griddle free offer.
                      I love the stupid pun.`
     },
