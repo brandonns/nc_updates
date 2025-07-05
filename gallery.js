@@ -1,12 +1,107 @@
 // gallery.js
 const images = [
     {
+        src: '/src/scans%20edited/2food/blcoffee.png',
+        fullSrc: '/src/scans/2food/blcoffee.png',
+        title: 'Hot Coffee',
+        description: `Ticket from a 7:22:41AM drive-thru order.
+                    Very boring coffee order.`
+    },
+    {
+        src: '/src/scans%20edited/2food/botm_helena.png',
+        fullSrc: '/src/scans/2food/botm_helena.png',
+        title: 'BOTM - Helena',
+        description: `June Bird of the Month.
+                    Thanks for the eggs, Helena!`
+    },
+    {
+        src: '/src/scans%20edited/3entry/meowwolf.png',
+        fullSrc: '/src/scans/3entry/meowwolf.png',
+        title: 'QPass',
+        description: `Meow Wolf "QPass".
+                    Wish this was more fun.`
+    },
+    {
+        src: '/src/scans%20edited/4games/lotto628.png',
+        fullSrc: '/src/scans/4games/lotto628.png',
+        title: 'Lotto Jun 28',
+        description: `Powerball ticket Jun 28.
+                    02 16 33 56 57 01. Loser.`
+    },
+    {
+        src: '/src/scans%20edited/4games/lottosched.png',
+        fullSrc: '/src/scans/4games/lottosched.png',
+        title: 'CO Lotto Schedule',
+        description: `A little pocket to hold tickets. 
+                    Includes a schedule of draw dates.
+`
+    },
+    {
+        src: '/src/scans%20edited/5reference/applecard.png',
+        fullSrc: '/src/scans/5reference/applecard.png',
+        title: 'Gen 1 Titanium Apple Card',
+        description: `I like the weight. 
+                    Titanium.`
+    },
+    {
+        src: '/src/scans%20edited/5reference/cal.png',
+        fullSrc: '/src/scans/5reference/cal.png',
+        title: '暑中お見舞い申し上げます',
+        description: `Welcome to summer! 
+                    Calendar page to start July, 2025.`
+    },
+    {
+        src: '/src/scans%20edited/5reference/calib.png',
+        fullSrc: '/src/scans/5reference/calib.png',
+        title: 'HP Certificate of Calibration',
+        description: `Certificate of Calibration.
+                    Power supply calibration cert from 1998.`
+    },
+    {
+        src: '/src/scans%20edited/5reference/foodcontainers.png',
+        fullSrc: '/src/scans/5reference/foodcontainers.png',
+        title: 'Food Containers',
+        description: `Uline food containers.
+                    I get these massive order books a few times a year.`
+    },
+    {
+        src: '/src/scans%20edited/5reference/griddle.png',
+        fullSrc: '/src/scans/5reference/griddle.png',
+        title: 'Griddle Me This.',
+        description: `Uline griddle free offer.
+                     I love the stupid pun.`
+    },
+    {
+        src: '/src/scans%20edited/5reference/woodcrates.png',
+        fullSrc: '/src/scans/5reference/woodcrates.png',
+        title: 'Uline wood crates',
+        description: `I wonder who chooses these "models".`
+    },
+    {
+        src: '/src/scans%20edited/5reference/woodcratessmaller.png',
+        fullSrc: '/src/scans/5reference/woodcratessmaller.png',
+        title: 'Uline wood crates (continued)',
+        description: `I wonder who chooses these "models".`
+    },
+    {
+        src: '/src/scans%20edited/5reference/protract.png',
+        fullSrc: '/src/scans/5reference/protract.png',
+        title: 'Mother Protractor',
+        description: `Acute (heh) Mother protractor.`
+    },
+
+
+
+
+
+    {
         src: '/src/scans%20edited/1transportation/fukuokapass.png',
         fullSrc: '/src/scans/1transportation/fukuokapass.png',
         title: 'Hayakaken (はやかけん)',
         description: `Hayakaken (はやかけん) transit card.
                     Used to get around Fukuoka (福岡市) public transport.`
     },
+
     {
         src: '/src/scans%20edited/1transportation/kchildsbuspass.png',
         fullSrc: '/src/scans/1transportation/kchildsbuspass.png',
