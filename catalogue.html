@@ -21,7 +21,7 @@
             width: 333px;
             height: 333px;
             max-width: 100%;
-            object-fit: cover; /* or 'contain' depending on how you want images to fit */
+            object-fit: cover;
             display: block;
         }
 
@@ -30,34 +30,13 @@
             .swappable-image {
                 width: 15%;
                 height: auto;
-                aspect-ratio: 1 / 1; /* Keeps images square */
+                aspect-ratio: 1 / 1;
                 min-width: 50px;
                 max-width: 100px;
             }
         }
     </style>
 </head>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const swappableImages = document.querySelectorAll('.swappable-image');
-
-        swappableImages.forEach(function(image) {
-            const originalSrc = image.src;
-            const hoverSrc = image.dataset.hover;
-
-            if (hoverSrc) {
-                image.addEventListener('mouseenter', function() {
-                    this.src = hoverSrc;
-                });
-
-                image.addEventListener('mouseleave', function() {
-                    this.src = originalSrc;
-                });
-            }
-        });
-    });
-</script>
 
 <body>
 <div class="homenavcontainer">
@@ -93,850 +72,96 @@
     </div>
 </div>
 <main id="content">
-
-    <hr/>
-    <h3>Transportation</h3>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/1transportation/njtransit.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/1transportation/njtransit.png"/>
-            <div class="article-text">
-                <p>
-                    Ticket for the trip from EWR to Princeton.
-                    <br>
-                    This was for a hackathon I took part in back in college.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/1transportation/kchildsbuspass.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/1transportation/kchildsbuspass.png"/>
-            <div class="article-text">
-                <p>
-                    Child's bus pass for Incheon (인천) transit.
-                    <br>
-                    What I used to get around while visiting family back in the day.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/1transportation/parking28.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/1transportation/parking28.png"/>
-            <div class="article-text">
-                <p>
-                    Parking Permit Number 6328.
-                    <br>
-                    My first parking permit. I never saw security checking these.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/1transportation/parking52.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/1transportation/parking52.png"/>
-            <div class="article-text">
-                <p>
-                    Parking Permit Number 6652.
-                    <br>
-                    My second parking permit. Interestingly, no fine print up top. I wonder if they really only handed out 324
-                    in that time.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/1transportation/fukuokapass.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/1transportation/fukuokapass.png"/>
-            <div class="article-text">
-                <p>
-                    Hayakaken (はやかけん) transit card.
-                    <br>
-                    Used to get around Fukuoka (福岡市) public transport.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <br>
-    <hr/>
-    <h3>Food</h3>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/2food/cheapapplefruitpie.png"
-                 alt="cheapapplefruitpie"
-                 class="swappable-image"
-                 data-hover="/src/scans/2food/cheapapplefruitpie.png"/>
-            <div class="article-text">
-                <p>
-                    Little Debbie mini apple fruit pie wrapper.
-                    <br>
-                    One of my buddies has NEVER had one of these, apparently. Impulse buy at the grocery store
-                </p>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/2food/blcoffee.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/2food/blcoffee.png"/>
-            <div class="article-text">
-                <p>
-                    Ticket from a 7:22:41AM drive-thru order.
-                    <br>
-                    Very boring coffee order.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/2food/botm_helena.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/2food/botm_helena.png"/>
-            <div class="article-text">
-                <p>
-                    June Bird of the Month.
-                    <br>
-                    Thanks for the eggs, Helena!
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/2food/mcdouble13e.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/2food/mcdouble13.png"/>
-            <div class="article-text">
-                <p>
-                    Ticket from a Friday, Jun 6, 2025 drive-thru order.
-                    <br>
-                    Rare `SUB Mac Sauce` modifier note.
-                    Lucky number 13 from side 2.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/2food/mcdouble69e.png"
-                 alt="mcdouble69e"
-                 class="swappable-image"
-                 data-hover="/src/scans/2food/mcdouble69.png"/>
-            <div class="article-text">
-                <p>
-                    Ticket from a Wednesday, Jun 18, 2025 drive-thru order.
-                    <br>
-                    Confusingly standard `ONLY` modifier notes with an `ADD Mac Sauce`.
-                    Side 1 bringing the NICE order number 69.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <br>
-    <hr/>
-    <h3>Entry</h3>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/3entry/diamondhead.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/3entry/diamondhead.png"/>
-            <div class="article-text">
-                <p>
-                    Diamond Head State Monument entry ticket.
-                    <br>
-                    Hawaii is so dang pretty.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/3entry/kenspacecenter.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/3entry/kenspacecenter.png"/>
-            <div class="article-text">
-                <p>
-                    Kennedy Space Center Adult Admission ticket.
-                    <br>
-                    "SPAAAACE!"
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/3entry/lama.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/3entry/lama.png"/>
-            <div class="article-text">
-                <p>
-                    14th Dalai Lama Speech GE ticket.
-                    <br>
-                    Honestly, I only remember one of these CU speaker night things.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/3entry/officepass.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/3entry/officepass.png"/>
-            <div class="article-text">
-                <p>
-                    My office badge.
-                    <br>
-                    Back when we had offices to work in. Uncomfortably thick.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/3entry/meowwolf.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/3entry/meowwolf.png"/>
-            <div class="article-text">
-                <p>
-                    Meow Wolf "QPass".
-                    <br>
-                    Wish this was more fun.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/3entry/schoolid.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/3entry/schoolid.png"/>
-            <div class="article-text">
-                <p>
-                    The back of my Sr. year school ID.
-                    <br>
-                    Rowland's class was "Weights for Athletes III".
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/3entry/stateofsatire.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/3entry/stateofsatire.png"/>
-            <div class="article-text">
-                <p>
-                    State of Satire GE ticket.
-                    <br>
-                    Another CU speaker night thing. I wonder what this speech would look like today.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/3entry/woz.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/3entry/woz.png"/>
-            <div class="article-text">
-                <p>
-                    An Evening with Steve Wozniak GE ticket.
-                    <br>
-                    The one CU speaker night thing I somewhat remember. Basically an hour of dunking on Jobs.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <br>
-    <hr/>
-    <h3>Games</h3>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/4games/rodsmith.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/4games/rodsmith.png"/>
-            <div class="article-text">
-                <p>
-                    Rod Smith's autograph.
-                    <br>
-                    I went to a pool party at his house.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/4games/lottosched.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/4games/lottosched.png"/>
-            <div class="article-text">
-                <p>
-                    CO Lotto schedule.
-                    <br>
-                    A little pocket to hold tickets. Includes a schedule of draw dates.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/4games/voidlottoe.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/4games/voidlotto.png"/>
-            <div class="article-text">
-                <p>
-                    Void Powerball ticket.
-                    <br>
-                    Host training mode lotto ticket. Obvious loser.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/4games/lotto628.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/4games/lotto628.png"/>
-            <div class="article-text">
-                <p>
-                    Powerball ticket Jun 28.
-                    <br>
-                    02 16 33 56 57 01. Loser.
-                </p>
-            </div>
-        </div>
-    </div>
-
-
-    <br>
-    <hr/>
-    <h3>Reference</h3>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/5reference/feedbackloopintroe.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/5reference/feedbackloopintro.png"/>
-            <div class="article-text">
-                <p>
-                    Intro from the Strange Loop users manual.
-                    <br>
-                    Short blurb about feedback loops. I like the little visual.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/5reference/vidglitcher.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/5reference/vidglitcher.png"/>
-            <div class="article-text">
-                <p>
-                    Diagram of internals from the Video Breaker User Guide.
-                    <br>
-                    Not a hardware guy but this is neat.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/5reference/covid.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/5reference/covid.png"/>
-            <div class="article-text">
-                <p>
-                    COVID-19 Vaccination Record Card [redacted].
-                    <br>
-                    Remember all that? Moderna or bust.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/5reference/couponinktest.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/5reference/couponinktest.png"/>
-            <div class="article-text">
-                <p>
-                    King Soopers coupon printer test.
-                    <br>
-                    Very thin lines. Interesting there seems to be a focus on diagonal lines.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/5reference/applecard.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/5reference/applecard.png"/>
-            <div class="article-text">
-                <p>
-                    Apple Card.
-                    <br>
-                    I like the weight. Titanium.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/5reference/cal.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/5reference/cal.png"/>
-            <div class="article-text">
-                <p>
-                    暑中お見舞い申し上げます.
-                    <br>
-                    Welcome to summer! Calendar page to start July, 2025.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/5reference/calib.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/5reference/calib.png"/>
-            <div class="article-text">
-                <p>
-                    Certificate of Calibration.
-                    <br>
-                    Power supply calibration cert from 1998.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/5reference/protract.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/5reference/protract.png"/>
-            <div class="article-text">
-                <p>
-                    Protractor.
-                    <br>
-                    Acute (heh) Mother protractor.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/5reference/foodcontainers.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/5reference/foodcontainers.png"/>
-            <div class="article-text">
-                <p>
-                    Uline food containers.
-                    <br>
-                    I get these massive order books a few times a year.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/5reference/griddle.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/5reference/griddle.png"/>
-            <div class="article-text">
-                <p>
-                    Uline griddle free offer.
-                    <br>
-                    I love the stupid pun.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/5reference/woodcrates.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/5reference/woodcrates.png"/>
-            <div class="article-text">
-                <p>
-                    Uline wood crates.
-                    <br>
-                    I wonder who chooses these "models".
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/5reference/woodcratessmaller.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/5reference/woodcratessmaller.png"/>
-            <div class="article-text">
-                <p>
-                    Uline wood crates cont.
-                    <br>
-                    I wonder who chooses these "models".
-                </p>
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-    <br>
-    <hr/>
-    <h3>Trading Cards</h3>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/6trading_cards/dragonitee.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/6trading_cards/dragonite.png"/>
-            <div class="article-text">
-                <p>
-                    Pokémon WotC Promo Dragonite #5.
-                    <br>
-                    Absolute favorite Pokémon and very neat card. I'm old enough to have gotten this card at the movies.
-                    I don't remember a single thing, but I kept the card.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/6trading_cards/desertstormcardse.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/6trading_cards/desertstormcards.png"/>
-            <div class="article-text">
-                <p>
-                    Topps Desert Storm trading card pack wrapper.
-                    <br>
-                    Random pickup for myself while doing some gift shopping a few years ago.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/6trading_cards/apache.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/6trading_cards/apache.png"/>
-            <div class="article-text">
-                <p>
-                    Apache Attack 'Copter card from the Topps Desert Storm trading card pack.
-                    <br>
-                    7 player killstreak! (6 with Hardline).
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/6trading_cards/apc.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/6trading_cards/apc.png"/>
-            <div class="article-text">
-                <p>
-                    Marine APCs card from the Topps Desert Storm trading card pack.
-                    <br>
-                    Armored Personnel Carriers traditionally carry personnel. Neat chassis.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/6trading_cards/mlrs.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/6trading_cards/mlrs.png"/>
-            <div class="article-text">
-                <p>
-                    Multi-launch Rocket System card from the Topps Desert Storm trading card pack.
-                    <br>
-                    Each rocket is 13' long with a 9" diameter.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/6trading_cards/topgun.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/6trading_cards/topgun.png"/>
-            <div class="article-text">
-                <p>
-                    Top Gun card from the Topps Desert Storm trading card pack.
-                    <br>
-                    [Comment removed by Tom Cruise's agent, Maha Dakhil].
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/6trading_cards/whatatank.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/6trading_cards/whatatank.png"/>
-            <div class="article-text">
-                <p>
-                    What Is A Tank? card from the Topps Desert Storm trading card pack.
-                    <br>
-                    Carries a large, direct-fire cannon; heavily armored.
-                </p>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/6trading_cards/spocke.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/6trading_cards/spock.png"/>
-            <div class="article-text">
-                <p>
-                    Dr. Leonard H. McCoy ("Bones") trading card from Dave & Busters.
-                    <br>
-                    No full sets from my last visit.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/6trading_cards/cyborge.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/6trading_cards/cyborg.png"/>
-            <div class="article-text">
-                <p>
-                    Cyborg (Victor Stone) trading card from Dave & Busters.
-                    <br>
-                    Another random coin-dropper prize.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <br>
-    <hr/>
-    <h3>Textures</h3>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/7textures/postcard.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/7textures/postcard.png"/>
-            <div class="article-text">
-                <p>
-                    Postcard from Rob.
-                    <br>
-                    Love ya bro!
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/7textures/savethebees.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/7textures/savethebees.png"/>
-            <div class="article-text">
-                <p>
-                    Save the Bees, cut from t-shirt.
-                    <br>
-                    I forget why this shirt ended up like this.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/7textures/fieldnotesmape.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/7textures/fieldnotesmap.png"/>
-            <div class="article-text">
-                <p>
-                    Field Notes box interior.
-                    <br>
-                    I love the Grand Canyon. Pretty neat to see and the surrounding area is beautiful.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/7textures/mountainsfromapplewatchbande.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/7textures/mountainsfromapplewatchband.png"/>
-            <div class="article-text">
-                <p>
-                    Apple Watch Band box interior.
-                    <br>
-                    Moody.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/7textures/sonystickers.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/7textures/sonystickers.png"/>
-            <div class="article-text">
-                <p>
-                    Stickers from a Sony camcorder cassette tape.
-                    <br>
-                    I bought a small stack of tapes before finding out my camcorder tape drawer was stuck.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <br>
-    <hr/>
-    <h3>Literature</h3>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/8literature/si_dec1982e.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/8literature/si_dec1982.png"/>
-            <div class="article-text">
-                <p>
-                    Scientific American. (1982, December). 247(6) cover.
-                    <br>
-                    Personal favorite cover from a small stash recovered from the
-                    trash outside an office in the CU Boulder Engineering Center.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/8literature/zenitsu.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/8literature/zenitsu.png"/>
-            <div class="article-text">
-                <p>
-                    Profile for Zenitsu Agatsuma (我妻 善逸) from the Demon Slayer Corps Special Report mini-volume.
-                    <br>
-                    One of my favorite characters from Demon Slayer.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/8literature/opocean.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/8literature/opocean.png"/>
-            <div class="article-text">
-                <p>
-                    Panel from The Solitary Journey of Jimbei.
-                    <br>
-                    Another mini-volume from another box set. Jimbei in the water.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/8literature/opfeast.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/8literature/opfeast.png"/>
-            <div class="article-text">
-                <p>
-                    Panel from Cross Epoch.
-                    <br>
-                    From the same mini-volume. This is from the One Piece x Toriko story.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="article">
-        <div class="article-content">
-            <img src="/src/scans%20edited/8literature/dbzone.png"
-                 alt="mcdouble13e"
-                 class="swappable-image"
-                 data-hover="/src/scans/8literature/dbzone.png"/>
-            <div class="article-text">
-                <p>
-                    Intro panel from Cross Epoch.
-                    <br>
-                    I got this from one of the One Piece box sets. Very fun One Piece x Dragon Ball collab.
-                </p>
-            </div>
-        </div>
-    </div>
+    <!-- Content will be dynamically generated here -->
 </main>
+
+<script src="/gallery.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Category mapping based on folder structure in gallery.js
+        const categories = {
+            '1transportation': 'Transportation',
+            '2food': 'Food',
+            '3entry': 'Entry',
+            '4games': 'Games',
+            '5reference': 'Reference',
+            '6trading_cards': 'Trading Cards',
+            '7textures': 'Textures',
+            '8literature': 'Literature',
+            '9misc': "Misc."
+        };
+
+        // Group images by category
+        const groupedImages = {};
+        images.forEach(image => {
+            // Extract category from src path
+            const pathParts = image.src.split('/');
+            const categoryFolder = pathParts.find(part => Object.keys(categories).includes(part));
+            const category = categories[categoryFolder] || 'Other';
+
+            if (!groupedImages[category]) {
+                groupedImages[category] = [];
+            }
+            groupedImages[category].push(image);
+        });
+
+        const content = document.getElementById('content');
+
+        // Generate HTML for each category
+        Object.keys(categories).forEach(categoryKey => {
+            const categoryName = categories[categoryKey];
+            const categoryImages = groupedImages[categoryName];
+
+            if (!categoryImages || categoryImages.length === 0) return;
+
+            // Create category section
+            const categoryHTML = `
+                <hr/>
+                <h3>${categoryName}</h3>
+            `;
+
+            content.insertAdjacentHTML('beforeend', categoryHTML);
+
+            // Add each image in the category
+            categoryImages.forEach(image => {
+                const articleHTML = `
+                    <div class="article">
+                        <div class="article-content">
+                            <img src="${image.src}"
+                                 alt="${image.title}"
+                                 class="swappable-image"
+                                 data-hover="${image.fullSrc}"/>
+                            <div class="article-text">
+                                <p>
+                                    ${image.description.replace(/\n/g, '<br>')}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                `;
+
+                content.insertAdjacentHTML('beforeend', articleHTML);
+            });
+        });
+
+        // Set up hover functionality for swappable images
+        const swappableImages = document.querySelectorAll('.swappable-image');
+        swappableImages.forEach(function(image) {
+            const originalSrc = image.src;
+            const hoverSrc = image.dataset.hover;
+
+            if (hoverSrc) {
+                image.addEventListener('mouseenter', function() {
+                    this.src = hoverSrc;
+                });
+
+                image.addEventListener('mouseleave', function() {
+                    this.src = originalSrc;
+                });
+            }
+        });
+    });
+</script>
 </body>
 </html>

@@ -1,114 +1,4 @@
-// gallery.js
 const images = [
-    {
-        src: '/src/scans%20edited/2food/blcoffee.png',
-        fullSrc: '/src/scans/2food/blcoffee.png',
-        title: 'Hot Coffee',
-        description: `Ticket from a 7:22:41AM drive-thru order.
-                    Very boring coffee order.`
-    },
-    {
-        src: '/src/scans%20edited/2food/botm_helena.png',
-        fullSrc: '/src/scans/2food/botm_helena.png',
-        title: 'BOTM - Helena',
-        description: `June Bird of the Month.
-                    Thanks for the eggs, Helena!`
-    },
-    {
-        src: '/src/scans%20edited/3entry/meowwolf.png',
-        fullSrc: '/src/scans/3entry/meowwolf.png',
-        title: 'QPass',
-        description: `Meow Wolf "QPass".
-                    Wish this was more fun.`
-    },
-    {
-        src: '/src/scans%20edited/4games/lotto628.png',
-        fullSrc: '/src/scans/4games/lotto628.png',
-        title: 'Lotto Jun 28',
-        description: `Powerball ticket Jun 28.
-                    02 16 33 56 57 01. Loser.`
-    },
-    {
-        src: '/src/scans%20edited/4games/lottosched.png',
-        fullSrc: '/src/scans/4games/lottosched.png',
-        title: 'CO Lotto Schedule',
-        description: `A little pocket to hold tickets. 
-                    Includes a schedule of draw dates.
-`
-    },
-    {
-        src: '/src/scans%20edited/5reference/applecard.png',
-        fullSrc: '/src/scans/5reference/applecard.png',
-        title: 'Gen 1 Titanium Apple Card',
-        description: `I like the weight. 
-                    Titanium.`
-    },
-    {
-        src: '/src/scans%20edited/5reference/cal.png',
-        fullSrc: '/src/scans/5reference/cal.png',
-        title: '暑中お見舞い申し上げます',
-        description: `Welcome to summer! 
-                    Calendar page to start July, 2025.`
-    },
-    {
-        src: '/src/scans%20edited/5reference/calib.png',
-        fullSrc: '/src/scans/5reference/calib.png',
-        title: 'HP Certificate of Calibration',
-        description: `Certificate of Calibration.
-                    Power supply calibration cert from 1998.`
-    },
-    {
-        src: '/src/scans%20edited/5reference/foodcontainers.png',
-        fullSrc: '/src/scans/5reference/foodcontainers.png',
-        title: 'Food Containers',
-        description: `Uline food containers.
-                    I get these massive order books a few times a year.`
-    },
-    {
-        src: '/src/scans%20edited/5reference/griddle.png',
-        fullSrc: '/src/scans/5reference/griddle.png',
-        title: 'Griddle Me This',
-        description: `Uline griddle free offer.
-                     I love the stupid pun.`
-    },
-    {
-        src: '/src/scans%20edited/5reference/woodcrates.png',
-        fullSrc: '/src/scans/5reference/woodcrates.png',
-        title: 'Uline wood crates',
-        description: `I wonder who chooses these "models".`
-    },
-    {
-        src: '/src/scans%20edited/5reference/woodcratessmaller.png',
-        fullSrc: '/src/scans/5reference/woodcratessmaller.png',
-        title: 'Uline wood crates (continued)',
-        description: `I wonder who chooses these "models".`
-    },
-    {
-        src: '/src/scans%20edited/5reference/protract.png',
-        fullSrc: '/src/scans/5reference/protract.png',
-        title: 'Mother Protractor',
-        description: `Acute (heh) Mother protractor.`
-    },
-
-
-
-
-
-    {
-        src: '/src/scans%20edited/1transportation/fukuokapass.png',
-        fullSrc: '/src/scans/1transportation/fukuokapass.png',
-        title: 'Hayakaken (はやかけん)',
-        description: `Hayakaken (はやかけん) transit card.
-                    Used to get around Fukuoka (福岡市) public transport.`
-    },
-
-    {
-        src: '/src/scans%20edited/1transportation/kchildsbuspass.png',
-        fullSrc: '/src/scans/1transportation/kchildsbuspass.png',
-        title: 'Incheon (인천) Child\'s Bus Pass',
-        description: `Child's bus pass for Incheon (인천) transit.
-                    What I used to get around while visiting family back in the day.`
-    },
     {
         src: '/src/scans%20edited/1transportation/njtransit.png',
         fullSrc: '/src/scans/1transportation/njtransit.png',
@@ -131,15 +21,74 @@ const images = [
                     My second parking permit. Interestingly, no fine print up top. I wonder if they really only handed out 324 in that time.`
     },
     {
-        src: '/src/scans%20edited/2food/cheapapplefruitpie.png',
-        fullSrc: '/src/scans/2food/cheapapplefruitpie.png',
-        title: 'Square Snack',
+        src: '/src/scans%20edited/1transportation/passfukuoka.png',
+        fullSrc: '/src/scans/1transportation/passfukuoka.png',
+        title: 'Hayakaken (はやかけん)',
+        description: `Hayakaken (はやかけん) transit card.
+                    Used to get around Fukuoka (福岡市) public transport.`
+    },
+    {
+        src: '/src/scans%20edited/1transportation/passincheon.png',
+        fullSrc: '/src/scans/1transportation/passincheon.png',
+        title: 'Incheon (인천) Child\'s Bus Pass',
+        description: `Child's bus pass for Incheon (인천) transit.
+                    What I used to get around while visiting family back in the day.`
+    },
+    {
+        src: '/src/scans%20edited/2food/blackcoffee4929.png',
+        fullSrc: '/src/scans/2food/blackcoffee4929.png',
+        title: 'Hot Coffee',
+        description: `Ticket from a 7:22:41AM drive-thru order.
+                    Very boring coffee order.`
+    },
+    {
+        src: '/src/scans%20edited/2food/botm_helena.png',
+        fullSrc: '/src/scans/2food/botm_helena.png',
+        title: 'BOTM - Helena',
+        description: `June Bird of the Month.
+                    Thanks for the eggs, Helena!`
+    },
+    {
+        src: '/src/scans%20edited/2food/botm_sydney.png',
+        fullSrc: '/src/scans/2food/botm_sydney.png',
+        title: 'BOTM - Sydney',
+        description: `August Bird of the Month.
+                    Thanks for the eggs, Syd!`
+    },
+    {
+        src: '/src/scans%20edited/2food/mcdonaldhoneymustard.png',
+        fullSrc: '/src/scans/2food/mcdonaldhoneymustard.png',
+        title: 'McDouble Order Number 69',
+        description: `Ticket from a Wednesday, Jun 18, 2025 drive-thru order.
+Confusingly standard \`ONLY\` modifier notes with an \`ADD Mac Sauce\`.
+Side 1 bringing the NICE order number 69.`
+    },
+    {
+        src: '/src/scans%20edited/2food/mcdonaldlandnuggets.png',
+        fullSrc: '/src/scans/2food/mcdonaldlandnuggets.png',
+        title: 'McDonaldland 10 pc nugget box top',
         description: `Little Debbie mini apple fruit pie wrapper.
                     One of my buddies has NEVER had one of these, apparently. Impulse buy at the grocery store`
     },
     {
+        src: '/src/scans%20edited/2food/mcdouble00.png',
+        fullSrc: '/src/scans/2food/mcdouble00.png',
+        title: 'McDouble Order Number 13',
+        description: `Ticket from a Friday, Jun 6, 2025 drive-thru order.
+Rare \`SUB Mac Sauce\` modifier note.
+Lucky number 13 from side 2.`
+    },
+    {
         src: '/src/scans%20edited/2food/mcdouble13e.png',
         fullSrc: '/src/scans/2food/mcdouble13.png',
+        title: 'McDouble Order Number 13',
+        description: `Ticket from a Friday, Jun 6, 2025 drive-thru order.
+Rare \`SUB Mac Sauce\` modifier note.
+Lucky number 13 from side 2.`
+    },
+    {
+        src: '/src/scans%20edited/2food/mcdouble23e.png',
+        fullSrc: '/src/scans/2food/mcdouble23.png',
         title: 'McDouble Order Number 13',
         description: `Ticket from a Friday, Jun 6, 2025 drive-thru order.
 Rare \`SUB Mac Sauce\` modifier note.
@@ -154,6 +103,58 @@ Confusingly standard \`ONLY\` modifier notes with an \`ADD Mac Sauce\`.
 Side 1 bringing the NICE order number 69.`
     },
     {
+        src: '/src/scans%20edited/2food/mcdouble92.png',
+        fullSrc: '/src/scans/2food/mcdouble92.png',
+        title: 'McDouble Order Number 69',
+        description: `Ticket from a Wednesday, Jun 18, 2025 drive-thru order.
+Confusingly standard \`ONLY\` modifier notes with an \`ADD Mac Sauce\`.
+Side 1 bringing the NICE order number 69.`
+    },
+    {
+        src: '/src/scans%20edited/2food/occlupanid84.png',
+        fullSrc: '/src/scans/2food/occlupanid84.png',
+        title: 'McDouble Order Number 69',
+        description: `Ticket from a Wednesday, Jun 18, 2025 drive-thru order.
+Confusingly standard \`ONLY\` modifier notes with an \`ADD Mac Sauce\`.
+Side 1 bringing the NICE order number 69.`
+    },
+    {
+        src: '/src/scans%20edited/2food/occlupanid15169.png',
+        fullSrc: '/src/scans/2food/occlupanid15169.png',
+        title: 'McDouble Order Number 69',
+        description: `Ticket from a Wednesday, Jun 18, 2025 drive-thru order.
+Confusingly standard \`ONLY\` modifier notes with an \`ADD Mac Sauce\`.
+Side 1 bringing the NICE order number 69.`
+    },
+    {
+        src: '/src/scans%20edited/2food/wraplittledebbieapplefruitpie.png',
+        fullSrc: '/src/scans/2food/wraplittledebbieapplefruitpie.png',
+        title: 'Square Snack',
+        description: `Little Debbie mini apple fruit pie wrapper.
+                    One of my buddies has NEVER had one of these, apparently. Impulse buy at the grocery store`
+    },
+    {
+        src: '/src/scans%20edited/3entry/cudalailama.png',
+        fullSrc: '/src/scans/3entry/cudalailama.png',
+        title: '14th Dalai Lama',
+        description: `14th Dalai Lama Speech GE ticket.
+                    Honestly, I only remember one of these CU speaker night things.`
+    },
+    {
+        src: '/src/scans%20edited/3entry/custateofsatire.png',
+        fullSrc: '/src/scans/3entry/custateofsatire.png',
+        title: 'State of Satire',
+        description: `State of Satire GE ticket.
+                    Another CU speaker night thing. I wonder what this speech would look like today.`
+    },
+    {
+        src: '/src/scans%20edited/3entry/cuwoz.png',
+        fullSrc: '/src/scans/3entry/cuwoz.png',
+        title: 'The Woz',
+        description: `An Evening with Steve Wozniak GE ticket.
+                    The one CU speaker night thing I somewhat remember. Basically an hour of dunking on Jobs.`
+    },
+    {
         src: '/src/scans%20edited/3entry/diamondhead.png',
         fullSrc: '/src/scans/3entry/diamondhead.png',
         title: 'Diamond Head',
@@ -161,18 +162,18 @@ Side 1 bringing the NICE order number 69.`
                     Hawaii is so dang pretty.`
     },
     {
-        src: '/src/scans%20edited/3entry/kenspacecenter.png',
-        fullSrc: '/src/scans/3entry/kenspacecenter.png',
+        src: '/src/scans%20edited/3entry/kennedyspacecenter.png',
+        fullSrc: '/src/scans/3entry/kennedyspacecenter.png',
         title: 'Kennedy Space Center',
         description: `Kennedy Space Center Adult Admission ticket.
                     "SPAAAACE!"`
     },
     {
-        src: '/src/scans%20edited/3entry/lama.png',
-        fullSrc: '/src/scans/3entry/lama.png',
-        title: '14th Dalai Lama',
-        description: `14th Dalai Lama Speech GE ticket.
-                    Honestly, I only remember one of these CU speaker night things.`
+        src: '/src/scans%20edited/3entry/meowwolf.png',
+        fullSrc: '/src/scans/3entry/meowwolf.png',
+        title: 'QPass',
+        description: `Meow Wolf "QPass".
+                    Wish this was more fun.`
     },
     {
         src: '/src/scans%20edited/3entry/officepass.png',
@@ -189,18 +190,61 @@ Side 1 bringing the NICE order number 69.`
                     Rowland's class was "Weights for Athletes III".`
     },
     {
-        src: '/src/scans%20edited/3entry/stateofsatire.png',
-        fullSrc: '/src/scans/3entry/stateofsatire.png',
-        title: 'State of Satire',
-        description: `State of Satire GE ticket.
-                    Another CU speaker night thing. I wonder what this speech would look like today.`
+        src: '/src/scans%20edited/4games/lotto0000.png',
+        fullSrc: '/src/scans/4games/lotto0000.png',
+        title: 'Void Not For Sale',
+        description: `A fun *VOID* ticket I got. Obvious loser.`
     },
     {
-        src: '/src/scans%20edited/3entry/woz.png',
-        fullSrc: '/src/scans/3entry/woz.png',
-        title: 'The Woz',
-        description: `An Evening with Steve Wozniak GE ticket.
-                    The one CU speaker night thing I somewhat remember. Basically an hour of dunking on Jobs.`
+        src: '/src/scans%20edited/4games/lotto0628.png',
+        fullSrc: '/src/scans/4games/lotto0628.png',
+        title: 'Lotto Jun 28',
+        description: `Powerball ticket Jun 28.
+                    02 16 33 56 57 01. Loser.`
+    },
+    {
+        src: '/src/scans%20edited/4games/lotto0707.png',
+        fullSrc: '/src/scans/4games/lotto0707.png',
+        title: 'Void Not For Sale',
+        description: `A fun *VOID* ticket I got. Obvious loser.`
+    },
+    {
+        src: '/src/scans%20edited/4games/lotto0719.png',
+        fullSrc: '/src/scans/4games/lotto0719.png',
+        title: 'Void Not For Sale',
+        description: `A fun *VOID* ticket I got. Obvious loser.`
+    },
+    {
+        src: '/src/scans%20edited/4games/lotto0721.png',
+        fullSrc: '/src/scans/4games/lotto0721.png',
+        title: 'Void Not For Sale',
+        description: `A fun *VOID* ticket I got. Obvious loser.`
+    },
+    {
+        src: '/src/scans%20edited/4games/lotto0728.png',
+        fullSrc: '/src/scans/4games/lotto0728.png',
+        title: 'Void Not For Sale',
+        description: `A fun *VOID* ticket I got. Obvious loser.`
+    },
+    {
+        src: '/src/scans%20edited/4games/lotto0802.png',
+        fullSrc: '/src/scans/4games/lotto0802.png',
+        title: 'Void Not For Sale',
+        description: `A fun *VOID* ticket I got. Obvious loser.`
+    },
+    {
+        src: '/src/scans%20edited/4games/lotto0811.png',
+        fullSrc: '/src/scans/4games/lotto0811.png',
+        title: 'Void Not For Sale',
+        description: `A fun *VOID* ticket I got. Obvious loser.`
+    },
+    {
+        src: '/src/scans%20edited/4games/lottosched.png',
+        fullSrc: '/src/scans/4games/lottosched.png',
+        title: 'CO Lotto Schedule',
+        description: `A little pocket to hold tickets. 
+                    Includes a schedule of draw dates.
+`
     },
     {
         src: '/src/scans%20edited/4games/rodsmith.png',
@@ -210,10 +254,11 @@ Side 1 bringing the NICE order number 69.`
                     I went to a pool party at his house.`
     },
     {
-        src: '/src/scans%20edited/4games/voidlottoe.png',
-        fullSrc: '/src/scans/4games/voidlotto.png',
-        title: 'Void Not For Sale',
-        description: `A fun *VOID* ticket I got. Obvious loser.`
+        src: '/src/scans%20edited/5reference/calsummer.png',
+        fullSrc: '/src/scans/5reference/calsummer.png',
+        title: '暑中お見舞い申し上げます',
+        description: `Welcome to summer! 
+                    Calendar page to start July, 2025.`
     },
     {
         src: '/src/scans%20edited/5reference/couponinktest.png',
@@ -237,6 +282,45 @@ Side 1 bringing the NICE order number 69.`
                     Short blurb about feedback loops. I like the little visual.`
     },
     {
+        src: '/src/scans%20edited/5reference/hpcertofcalibration.png',
+        fullSrc: '/src/scans/5reference/hpcertofcalibration.png',
+        title: 'HP Certificate of Calibration',
+        description: `Certificate of Calibration.
+                    Power supply calibration cert from 1998.`
+    },
+    {
+        src: '/src/scans%20edited/5reference/protractor.png',
+        fullSrc: '/src/scans/5reference/protractor.png',
+        title: 'Mother Protractor',
+        description: `Acute (heh) Mother protractor.`
+    },
+    {
+        src: '/src/scans%20edited/5reference/ulinefoodcontainers.png',
+        fullSrc: '/src/scans/5reference/ulinefoodcontainers.png',
+        title: 'Food Containers',
+        description: `Uline food containers.
+                    I get these massive order books a few times a year.`
+    },
+    {
+        src: '/src/scans%20edited/5reference/ulinegriddle.png',
+        fullSrc: '/src/scans/5reference/ulinegriddle.png',
+        title: 'Griddle Me This',
+        description: `Uline griddle free offer.
+                     I love the stupid pun.`
+    },
+    {
+        src: '/src/scans%20edited/5reference/ulinewoodcrates.png',
+        fullSrc: '/src/scans/5reference/ulinewoodcrates.png',
+        title: 'Uline wood crates',
+        description: `I wonder who chooses these "models".`
+    },
+    {
+        src: '/src/scans%20edited/5reference/ulinewoodcrateslarge.png',
+        fullSrc: '/src/scans/5reference/ulinewoodcrateslarge.png',
+        title: 'Uline wood crates (continued)',
+        description: `I wonder who chooses these "models".`
+    },
+    {
         src: '/src/scans%20edited/5reference/vidglitcher.png',
         fullSrc: '/src/scans/5reference/vidglitcher.png',
         title: 'Video Breaker User Guide',
@@ -244,67 +328,67 @@ Side 1 bringing the NICE order number 69.`
                     Not a hardware guy but this is neat.`
     },
     {
-        src: '/src/scans%20edited/6trading_cards/apache.png',
-        fullSrc: '/src/scans/6trading_cards/apache.png',
-        title: 'Apache Attack \'Copter',
-        description: `Apache Attack 'Copter card from the Topps Desert Storm trading card pack.
-                    7 player killstreak! (6 with Hardline).`
-    },
-    {
-        src: '/src/scans%20edited/6trading_cards/apc.png',
-        fullSrc: '/src/scans/6trading_cards/apc.png',
-        title: 'Marine APCs',
-        description: `Marine APCs card from the Topps Desert Storm trading card pack.
-                    Armored Personnel Carriers traditionally carry personnel. Neat chassis.`
-    },
-    {
-        src: '/src/scans%20edited/6trading_cards/cyborge.png',
-        fullSrc: '/src/scans/6trading_cards/cyborg.png',
+        src: '/src/scans%20edited/6trading_cards/dabcyborg.png',
+        fullSrc: '/src/scans/6trading_cards/dabcyborg.png',
         title: 'Cyborg',
         description: `Cyborg (Victor Stone) trading card from Dave & Busters.
                     Another random coin-dropper prize.`
     },
     {
-        src: '/src/scans%20edited/6trading_cards/desertstormcardse.png',
-        fullSrc: '/src/scans/6trading_cards/desertstormcards.png',
-        title: 'Topps Desert Storm',
-        description: `Topps Desert Storm trading card pack wrapper.
-                    Random pickup for myself while doing some gift shopping a few years ago.`
-    },
-    {
-        src: '/src/scans%20edited/6trading_cards/dragonitee.png',
-        fullSrc: '/src/scans/6trading_cards/dragonite.png',
-        title: 'Delivery Dragonite',
-        description: `Pokémon WotC Promo Dragonite #5.
-                    Absolute favorite Pokémon and very neat card. I'm old enough to have gotten this card at the movies. I don't remember a single thing, but I kept the card.`
-    },
-    {
-        src: '/src/scans%20edited/6trading_cards/mlrs.png',
-        fullSrc: '/src/scans/6trading_cards/mlrs.png',
-        title: 'MLRS',
-        description: `Multi-launch Rocket System card from the Topps Desert Storm trading card pack.
-                    Each rocket is 13' long with a 9" diameter.`
-    },
-    {
-        src: '/src/scans%20edited/6trading_cards/spocke.png',
-        fullSrc: '/src/scans/6trading_cards/spock.png',
+        src: '/src/scans%20edited/6trading_cards/dabspock.png',
+        fullSrc: '/src/scans/6trading_cards/dabspock.png',
         title: 'Bones',
         description: `Dr. Leonard H. McCoy ("Bones") trading card from Dave & Busters.
                     No full sets from my last visit.`
     },
     {
-        src: '/src/scans%20edited/6trading_cards/topgun.png',
-        fullSrc: '/src/scans/6trading_cards/topgun.png',
+        src: '/src/scans%20edited/6trading_cards/desertstormcard.png',
+        fullSrc: '/src/scans/6trading_cards/desertstormcard.png',
+        title: 'Topps Desert Storm',
+        description: `Topps Desert Storm trading card pack wrapper.
+                    Random pickup for myself while doing some gift shopping a few years ago.`
+    },
+    {
+        src: '/src/scans%20edited/6trading_cards/desertstormcardapache.png',
+        fullSrc: '/src/scans/6trading_cards/desertstormcardapache.png',
+        title: 'Apache Attack \'Copter',
+        description: `Apache Attack 'Copter card from the Topps Desert Storm trading card pack.
+                    7 player killstreak! (6 with Hardline).`
+    },
+    {
+        src: '/src/scans%20edited/6trading_cards/desertstormcardapc.png',
+        fullSrc: '/src/scans/6trading_cards/desertstormcardapc.png',
+        title: 'Marine APCs',
+        description: `Marine APCs card from the Topps Desert Storm trading card pack.
+                    Armored Personnel Carriers traditionally carry personnel. Neat chassis.`
+    },
+    {
+        src: '/src/scans%20edited/6trading_cards/desertstormmlrs.png',
+        fullSrc: '/src/scans/6trading_cards/desertstormmlrs.png',
+        title: 'MLRS',
+        description: `Multi-launch Rocket System card from the Topps Desert Storm trading card pack.
+                    Each rocket is 13' long with a 9" diameter.`
+    },
+    {
+        src: '/src/scans%20edited/6trading_cards/desertstormtopgun.png',
+        fullSrc: '/src/scans/6trading_cards/desertstormtopgun.png',
         title: 'Top Gun',
         description: `Top Gun card from the Topps Desert Storm trading card pack.
                     [Comment removed by Tom Cruise's agent, Maha Dakhil].`
     },
     {
-        src: '/src/scans%20edited/6trading_cards/whatatank.png',
-        fullSrc: '/src/scans/6trading_cards/whatatank.png',
+        src: '/src/scans%20edited/6trading_cards/desertstormwhatatank.png',
+        fullSrc: '/src/scans/6trading_cards/desertstormwhatatank.png',
         title: 'What Is A Tank?',
         description: `What Is A Tank? card from the Topps Desert Storm trading card pack.
                     Carries a large, direct-fire cannon; heavily armored.`
+    },
+    {
+        src: '/src/scans%20edited/6trading_cards/pokemondragonite.png',
+        fullSrc: '/src/scans/6trading_cards/pokemondragonite.png',
+        title: 'Delivery Dragonite',
+        description: `Pokémon WotC Promo Dragonite #5.
+                    Absolute favorite Pokémon and very neat card. I'm old enough to have gotten this card at the movies. I don't remember a single thing, but I kept the card.`
     },
     {
         src: '/src/scans%20edited/7textures/fieldnotesmape.png',
@@ -321,8 +405,15 @@ Side 1 bringing the NICE order number 69.`
                     Moody.`
     },
     {
-        src: '/src/scans%20edited/7textures/postcard.png',
-        fullSrc: '/src/scans/7textures/postcard.png',
+        src: '/src/scans%20edited/7textures/pjwrap.png',
+        fullSrc: '/src/scans/7textures/pjwrap.png',
+        title: 'Alpine Loop',
+        description: `Apple Watch Band box interior.
+                    Moody.`
+    },
+    {
+        src: '/src/scans%20edited/7textures/postcardfromrob.png',
+        fullSrc: '/src/scans/7textures/postcardfromrob.png',
         title: 'Postcard from Rob',
         description: `Postcard from Rob.
                     Love ya bro!`
@@ -342,11 +433,18 @@ Side 1 bringing the NICE order number 69.`
                     I bought a small stack of tapes before finding out my camcorder tape drawer was stuck.`
     },
     {
-        src: '/src/scans%20edited/8literature/dbzone.png',
-        fullSrc: '/src/scans/8literature/dbzone.png',
+        src: '/src/scans%20edited/8literature/dbzopcrossepoch.png',
+        fullSrc: '/src/scans/8literature/dbzopcrossepoch.png',
         title: 'Cross Epoch Panel',
         description: `Intro panel from Cross Epoch.
                     I got this from one of the One Piece box sets. Very fun One Piece x Dragon Ball collab.`
+    },
+    {
+        src: '/src/scans%20edited/8literature/dszenitsu.png',
+        fullSrc: '/src/scans/8literature/dszenitsu.png',
+        title: 'Zenitsu Agatsuma (我妻 善逸)',
+        description: `Profile for Zenitsu Agatsuma from the Demon Slayer Corps Special Report mini-volume.
+                    One of my favorite characters from Demon Slayer.`
     },
     {
         src: '/src/scans%20edited/8literature/opfeast.png',
@@ -363,19 +461,44 @@ Side 1 bringing the NICE order number 69.`
                     Another mini-volume from another box set. Jimbei in the water.`
     },
     {
-        src: '/src/scans%20edited/8literature/si_dec1982e.png',
-        fullSrc: '/src/scans/8literature/si_dec1982.png',
+        src: '/src/scans%20edited/8literature/sidec1982.png',
+        fullSrc: '/src/scans/8literature/sidec1982.png',
         title: 'Scientific American. (1982, December). 247(6)',
         description: `Personal favorite cover from a small stash recovered from the
                     trash outside an office in the CU Boulder Engineering Center.`
     },
     {
-        src: '/src/scans%20edited/8literature/zenitsu.png',
-        fullSrc: '/src/scans/8literature/zenitsu.png',
-        title: 'Zenitsu Agatsuma (我妻 善逸)',
-        description: `Profile for Zenitsu Agatsuma from the Demon Slayer Corps Special Report mini-volume.
-                    One of my favorite characters from Demon Slayer.`
+        src: '/src/scans%20edited/9misc/applecard.png',
+        fullSrc: '/src/scans/9misc/applecard.png',
+        title: 'Gen 1 Titanium Apple Card',
+        description: `I like the weight. 
+                    Titanium.`
     },
+    {
+        src: '/src/scans%20edited/9misc/guitarpick.png',
+        fullSrc: '/src/scans/9misc/guitarpick.png',
+        title: 'Griddle Me This',
+        description: `Uline griddle free offer.
+                     I love the stupid pun.`
+    },
+    {
+        src: '/src/scans%20edited/9misc/selfportpen.png',
+        fullSrc: '/src/scans/9misc/selfportpen.png',
+        title: 'Mother Protractor',
+        description: `Acute (heh) Mother protractor.`
+    },
+    {
+        src: '/src/scans%20edited/9misc/selfportraitlitho.png',
+        fullSrc: '/src/scans/9misc/selfportraitlitho.png',
+        title: 'Mother Protractor',
+        description: `Acute (heh) Mother protractor.`
+    },
+    {
+        src: '/src/scans%20edited/9misc/selfportraitstickynote.png',
+        fullSrc: '/src/scans/9misc/selfportraitstickynote.png',
+        title: 'Mother Protractor',
+        description: `Acute (heh) Mother protractor.`
+    }
 ];
 
 const container = document.getElementById('galleryContainer'),
