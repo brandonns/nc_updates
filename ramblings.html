@@ -15,6 +15,8 @@
   <link href="/src/favicon/favicon.ico" rel="icon"/>
   <link href="/style.css" media="all" rel="stylesheet" type="text/css"/>
   <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
+    <script src="/currentlyreading.js"></script>
+
 </head>
 <body>
 <div class="homenavcontainer">
@@ -30,24 +32,7 @@
       </div>
     </nav>
   </header>
-  <div id="currentlyReading" style="width: 33%; float: right; position: relative; text-align: center;">
-    <p style="width: 100%; margin: 0; padding: 5px 0;">currently reading</p>
-    <model-viewer
-            auto-rotate=""
-            auto-rotate-delay="0"
-            camera-controls=""
-            camera-orbit="125deg 75deg 0.6m"
-            field-of-view="25deg"
-            interaction-prompt="none"
-            poster="/src/poster.webp"
-            shadow-intensity="0"
-            src="/src/book.glb"
-            style="width: 100%;
-                    max-width: 250px;
-                    margin: 0 auto;">
-      <div slot="progress-bar"></div>
-    </model-viewer>
-  </div>
+    <div class="currently-reading-container"></div>
 </div>
 <main id="content">
     <div class="article">
