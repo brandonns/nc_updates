@@ -11,7 +11,7 @@ const images = [
         fullSrc: '/src/scans/cards/card_apc.png',
         title: 'Marine APCs',
         description: `Marine APCs card from the Topps Desert Storm trading card pack.
-        Armored Personnel Carriers traditionally carry personnel. Neat chassis.`
+        Armored Personnel Carriers traditionally carry personnel.`
     },
     {
         src: '/src/scansedited/cards/card_bones.png',
@@ -88,7 +88,7 @@ const images = [
         fullSrc: '/src/scans/crafted/selfportrait_02.png',
         title: 'Self Portraits',
         description: `Pencil on Sticky Note.
-        Old doodles. Used as a bookmark for years.`
+        Used as a bookmark for years.`
     },
     {
         src: '/src/scansedited/crafted/selfportrait_03.png',
@@ -493,14 +493,14 @@ const images = [
         fullSrc: '/src/scans/transit/parking6328.png',
         title: 'No. 6328',
         description: `Parking Permit Number 6328.
-        My first parking permit. I never saw security checking these.`
+        I never saw security checking these.`
     },
     {
         src: '/src/scansedited/transit/parking6652.png',
         fullSrc: '/src/scans/transit/parking6652.png',
         title: 'No. 6652',
         description: `Parking Permit Number 6652.
-        My second parking permit. Interestingly, no fine print up top. I wonder if they really only handed out 324 in that time.`
+        I wonder if they really only handed out 324 in that time.`
     },
     {
         src: '/src/scansedited/transit/ticket_njtransit.png',
@@ -509,7 +509,6 @@ const images = [
         description: `Ticket for the trip from EWR to Princeton.
         This was for a hackathon I took part in back in college.`
     },
-
 ];
 
 const container = document.getElementById('galleryContainer'),
