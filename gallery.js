@@ -367,7 +367,8 @@ const images = [
         src: '/src/scansedited/pocket/protractor.png',
         fullSrc: '/src/scans/pocket/protractor.png',
         title: 'Mother Protractor',
-        description: `Acute (heh) Mother protractor.`
+        description: `Acute (heh) Mother protractor.
+        Part of a themed pocket journal.`
     },
     {
         src: '/src/scansedited/pocket/schoolid.png',
