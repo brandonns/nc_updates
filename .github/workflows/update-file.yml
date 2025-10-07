@@ -6,10 +6,12 @@ on:
       file_content:
         description: 'Content to write to file'
         required: true
+        type: string
       file_path:
         description: 'Path where file should be saved'
         required: false
         default: 'sc.txt'
+        type: string
 
 jobs:
   update-file:
@@ -20,7 +22,8 @@ jobs:
         
       - name: Write file
         run: |
-          echo "${{ github.event.inputs.file_content }}" > "${{ github.event.inputs.file_path }}"
+          mkdir -p "$(dirname "${{ inputs.file_path }}")"
+          echo "${{ inputs.file_content }}" > "${{ inputs.file_path }}"
           
       - name: Commit and push
         run: |
