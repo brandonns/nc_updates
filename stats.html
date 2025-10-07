@@ -35,21 +35,21 @@
     </style>
 </head>
 <body>
-    <div class="homenavcontainer">
-        <header>
-            <h1>
-                <a class="headerlink" href="https://barndoors.cc">this month</a>
-            </h1>
-            <nav>
-                <div class="navsection">
-                    <a href="https://barndoors.cc">continue</a>
-                    <a href="index.html">ramblings</a>
-                </div>
-            </nav>
-        </header>
-        <div class="currently-reading-container"></div>
-    </div>
-    <main class="wrap">
+<div class="homenavcontainer">
+    <header>
+        <h1>
+            <a class="headerlink" href="https://barndoors.cc">this month</a>
+        </h1>
+        <nav>
+            <div class="navsection">
+                <a href="https://barndoors.cc">continue</a>
+                <a href="index.html">ramblings</a>
+            </div>
+        </nav>
+    </header>
+    <div class="currently-reading-container"></div>
+</div>
+<main class="wrap">
 
     <section id="notice" class="loading">Loading current month…</section>
     <section id="days"></section>
@@ -65,22 +65,30 @@
         const daysEl = document.getElementById('days');
         const noticeEl = document.getElementById('notice');
 
-        const now = new Date();
-        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-        const monthEnd = new Date(now.getFullYear(), now.getMonth()+1, 0); // last day
-
         // Helpers
         const fmtDate = d => new Intl.DateTimeFormat('en-US', {weekday:'short', month:'short', day:'numeric', timeZone: TZ}).format(d);
         const ymd = d => new Intl.DateTimeFormat('en-CA', {year:'numeric', month:'2-digit', day:'2-digit', timeZone: TZ}).format(d); // YYYY-MM-DD
 
+        const now = new Date();
+        // Get current date in the specified timezone
+        const todayInTZ = ymd(now);
+        const [currentYear, currentMonth] = todayInTZ.split('-').map(Number);
+        const monthStart = new Date(currentYear, currentMonth - 1, 1);
+        const monthEnd = new Date(currentYear, currentMonth, 0); // last day
+
         function parseAtom(xmlText){
             const parser = new DOMParser();
             const doc = parser.parseFromString(xmlText, 'application/xml');
-            const entries = [...doc.querySelectorAll('entry')].map(e => ({
-                title: e.querySelector('title')?.textContent?.trim() || '',
-                content: e.querySelector('content')?.textContent?.trim() || '',
-                when: new Date(e.querySelector('updated, published')?.textContent || '')
-            })).filter(x => x.when.toString() !== 'Invalid Date');
+            const entries = [...doc.querySelectorAll('entry')].map(e => {
+                const dateStr = e.querySelector('updated, published')?.textContent || '';
+                // Parse the ISO date string and interpret it in the specified timezone
+                const when = new Date(dateStr);
+                return {
+                    title: e.querySelector('title')?.textContent?.trim() || '',
+                    content: e.querySelector('content')?.textContent?.trim() || '',
+                    when: when
+                };
+            }).filter(x => x.when.toString() !== 'Invalid Date');
             // group by local YYYY-MM-DD in TZ
             const map = {};
             for(const s of entries){
@@ -111,6 +119,20 @@
             return map;
         }
 
+        function getAllDaysInMonth(){
+            const days = [];
+            const today = ymd(new Date());
+            // Loop through each day of the month
+            const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+            for(let day = 1; day <= daysInMonth; day++){
+                const d = new Date(currentYear, currentMonth - 1, day);
+                const dayKey = ymd(d);
+                if(dayKey <= today) {
+                    days.push(dayKey);
+                }
+            }
+            return days;
+        }
 
         function withinCurrentMonth(key){
             const [Y,M,D] = key.split('-').map(Number);
@@ -119,7 +141,9 @@
         }
 
         function renderDay(key, statuses, entries){
-            const dateObj = new Date(key);
+            // Parse YYYY-MM-DD in local timezone to avoid off-by-one errors
+            const [Y, M, D] = key.split('-').map(Number);
+            const dateObj = new Date(Y, M - 1, D);
             const day = document.createElement('article');
             day.className = 'day';
             day.innerHTML = '<h2>' + fmtDate(dateObj) + '<span class="sr-only"> (' + key + ')</span></h2>';
@@ -127,8 +151,9 @@
             const columns = document.createElement('div');
             columns.className = 'columns';
 
+            // Always render status section
+            const statusBox = document.createElement('div');
             if(statuses && statuses.length){
-                const box = document.createElement('div');
                 const ul = document.createElement('ul');
                 ul.className = 'status-list';
                 statuses.forEach(s => {
@@ -142,47 +167,54 @@
                     li.appendChild(body);
                     ul.appendChild(li);
                 });
-                box.appendChild(ul);
-                columns.appendChild(box);
+                statusBox.appendChild(ul);
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'muted';
+                placeholder.style.padding = '.5rem .75rem';
+                placeholder.textContent = 'nothing to say today';
+                statusBox.appendChild(placeholder);
             }
+            columns.appendChild(statusBox);
 
+            // Always render chronicling table
+            const tableBox = document.createElement('div');
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+            table.appendChild(thead);
+            table.appendChild(tbody);
+
+            // Always-show columns in fixed order
+            const wanted = [
+                'Morning Stretches',
+                'Journal',
+                'Music',
+                'Workout'
+            ];
+            // Build header row in this exact order
+            const emoji = {
+                'Morning Stretches': '🌄',
+                'Journal': '📖',
+                'Music': '🎷',
+                'Workout': '🏋🏾‍♂️'
+            };
+            const hr = document.createElement('tr');
+            wanted.forEach(w => {
+                const th = document.createElement('th');
+                th.textContent = emoji[w] || w;
+                th.title = w; // tooltip with full label
+                th.setAttribute('aria-label', w);
+                th.style.textAlign = 'center';
+                hr.appendChild(th);
+            });
+            thead.appendChild(hr);
+
+            // Normalize categories for matching
+            const norm = s => (s||'').trim().toLowerCase();
+            // Group earliest time per category (by display name)
+            const byCat = Object.create(null);
             if(entries && entries.length){
-                const box = document.createElement('div');
-                const table = document.createElement('table');
-                const thead = document.createElement('thead');
-                const tbody = document.createElement('tbody');
-                table.appendChild(thead);
-                table.appendChild(tbody);
-
-                // Always-show columns in fixed order
-                const wanted = [
-                    'Morning Stretches',
-                    'Journal',
-                    'Music',
-                    'Workout'
-                ];
-                // Build header row in this exact order
-                const emoji = {
-                    'Morning Stretches': '🌄',
-                    'Journal': '📖',
-                    'Music': '🎷',
-                    'Workout': '🏋🏾‍♂️'
-                };
-                const hr = document.createElement('tr');
-                wanted.forEach(w => {
-                    const th = document.createElement('th');
-                    th.textContent = emoji[w] || w;
-                    th.title = w; // tooltip with full label
-                    th.setAttribute('aria-label', w);
-                    th.style.textAlign = 'center';
-                    hr.appendChild(th);
-                });
-                thead.appendChild(hr);
-
-                // Normalize categories for matching
-                const norm = s => (s||'').trim().toLowerCase();
-                // Group earliest time per category (by display name)
-                const byCat = Object.create(null);
                 entries.sort((a,b)=>a.when-b.when).forEach(e => {
                     const k = norm(e.category);
                     // map to one of the wanted names if close match
@@ -193,25 +225,25 @@
                         }
                     }
                 });
-                // Build single-row, no header
-                const tr = document.createElement('tr');
-                wanted.forEach(w => {
-                    const td = document.createElement('td');
-                    td.style.whiteSpace = 'nowrap';
-                    td.style.textAlign = 'center';
-                    if(byCat[w]){
-                        const t = new Intl.DateTimeFormat('en-US', {hour:'numeric', minute:'2-digit', timeZone: TZ}).format(byCat[w]);
-                        td.textContent = t;
-                    } else {
-                        td.textContent = '✕';
-                        td.className = 'muted';
-                    }
-                    tr.appendChild(td);
-                });
-                tbody.appendChild(tr);
-                box.appendChild(table);
-                columns.appendChild(box);
             }
+            // Build single-row, no header
+            const tr = document.createElement('tr');
+            wanted.forEach(w => {
+                const td = document.createElement('td');
+                td.style.whiteSpace = 'nowrap';
+                td.style.textAlign = 'center';
+                if(byCat[w]){
+                    const t = new Intl.DateTimeFormat('en-US', {hour:'numeric', minute:'2-digit', timeZone: TZ}).format(byCat[w]);
+                    td.textContent = t;
+                } else {
+                    td.textContent = '✕';
+                    td.className = 'muted';
+                }
+                tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+            tableBox.appendChild(table);
+            columns.appendChild(tableBox);
 
             day.appendChild(columns);
             daysEl.appendChild(day);
@@ -244,31 +276,21 @@
                 const atomMap = parseAtom(atomText);
                 const entriesMap = scToDailyMap(scText);
 
-                // Collect all keys in this month that have either statuses or entries
-                const keys = new Set();
-                for(const k of Object.keys(atomMap)){ if(withinCurrentMonth(k)) keys.add(k); }
-                for(const k of Object.keys(entriesMap)){ if(withinCurrentMonth(k)) keys.add(k); }
+                // Get all days in the current month
+                const allDays = getAllDaysInMonth();
 
-                // Sort keys descending (latest first)
-                const ordered = [...keys].sort((a,b)=> new Date(b) - new Date(a));
+                // Sort descending (latest first)
+                const ordered = allDays.sort((a,b)=> new Date(b) - new Date(a));
 
                 daysEl.innerHTML = '';
-                let rendered = 0;
                 for(const k of ordered){
                     const statuses = atomMap[k] || [];
                     const entries = entriesMap[k] || [];
-                    if(statuses.length || entries.length){
-                        renderDay(k, statuses, entries);
-                        rendered++;
-                    }
+                    // Always render the day (chronicling table always shows)
+                    renderDay(k, statuses, entries);
                 }
 
-                if(rendered === 0){
-                    noticeEl.className = 'error';
-                    noticeEl.textContent = 'No statuses or entries for the current month yet.';
-                } else {
-                    noticeEl.remove();
-                }
+                noticeEl.remove();
             } catch (err){
                 noticeEl.className = 'error';
                 noticeEl.textContent = err.message + ' — tip: if the Atom feed is blocked by CORS, proxy it server-side.';
