@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀" name="description"/>
+    <meta content="art, music, code" name="keywords"/>
+    <meta content="Brandon Stone" name="author"/>
+    <meta content="🏡" property="og:title"/>
+    <meta content="website" property="og:type"/>
+    <meta content="https://brandonstone.cc/" property="og:url"/>
+    <meta content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀" property="og:description"/>
+    <title>this month</title>
+
+    <link href="/src/favicon/favicon.ico" rel="icon"/>
+    <link rel="stylesheet" href="https://barndoors.cc/style.css" />
+    <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
+    <script src="/currentlyreading.js"></script>
+    <style>
+        .day{padding:1rem;margin:1rem 0}
+        .day h2{margin:0 0 .75rem;font-size:1.1rem;opacity:.85}
+        .columns{display:grid;gap:1rem}
+        @media (min-width: 780px){.columns{grid-template-columns:1fr 1fr}}
+        .status-list{list-style:none;padding:0;margin:0;display:grid;gap:.5rem}
+        .status{padding:.5rem .75rem;}
+        .muted{opacity:.7;font-size:.9em}
+        table{width:100%;border-collapse:collapse;table-layout:fixed}
+        th,td{padding:.35rem .35rem;border-bottom:1px solid ;text-align:center;white-space:nowrap}
+        th{opacity:.8}
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+        .status{display:grid;grid-template-columns:auto 1fr;gap:.5rem;align-items:start}
+        .status img{width:40px;height:40px;object-fit:cover;}
+        @media (max-width: 520px){ th,td{font-size:12px} }
+        @media (max-width: 380px){ th,td{font-size:11px} }
+    </style>
+</head>
+<body>
+    <div class="homenavcontainer">
+        <header>
+            <h1>
+                <a class="headerlink" href="https://barndoors.cc">this month</a>
+            </h1>
+            <nav>
+                <div class="navsection">
+                    <a href="https://barndoors.cc">continue</a>
+                    <a href="index.html">ramblings</a>
+                </div>
+            </nav>
+        </header>
+        <div class="currently-reading-container"></div>
+    </div>
+    <main class="wrap">
+
+    <section id="notice" class="loading">Loading current month…</section>
+    <section id="days"></section>
+</main>
+
+<script>
+    (()=>{
+        const TZ = 'America/Denver'; // your timezone
+        const USER = 'barndoors';
+        const ATOM_URL = 'https://status.cafe/users/' + USER + '.atom';
+        const CSV_URL = 'M.csv'; // place M.csv next to this page
+
+        const daysEl = document.getElementById('days');
+        const noticeEl = document.getElementById('notice');
+
+        const now = new Date();
+        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        const monthEnd = new Date(now.getFullYear(), now.getMonth()+1, 0); // last day
+
+        // Helpers
+        const fmtDate = d => new Intl.DateTimeFormat('en-US', {weekday:'short', month:'short', day:'numeric', timeZone: TZ}).format(d);
+        const ymd = d => new Intl.DateTimeFormat('en-CA', {year:'numeric', month:'2-digit', day:'2-digit', timeZone: TZ}).format(d); // YYYY-MM-DD
+
+        function parseAtom(xmlText){
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(xmlText, 'application/xml');
+            const entries = [...doc.querySelectorAll('entry')].map(e => ({
+                title: e.querySelector('title')?.textContent?.trim() || '',
+                content: e.querySelector('content')?.textContent?.trim() || '',
+                when: new Date(e.querySelector('updated, published')?.textContent || '')
+            })).filter(x => x.when.toString() !== 'Invalid Date');
+            // group by local YYYY-MM-DD in TZ
+            const map = {};
+            for(const s of entries){
+                const key = ymd(s.when);
+                (map[key] ||= []).push(s);
+            }
+            return map;
+        }
+
+        function parseCSV(text){
+            // Tiny CSV parser for simple, comma-separated, double-quote escaped CSV
+            const rows = [];
+            let i=0, field='', row=[], inQuotes=false;
+            const pushField = ()=>{ row.push(field); field=''; };
+            const pushRow = ()=>{ if(row.length) rows.push(row); row=[]; };
+            while(i < text.length){
+                const ch = text[i++];
+                if(inQuotes){
+                    if(ch === '"'){
+                        if(text[i] === '"'){ field += '"'; i++; } else { inQuotes = false; }
+                    } else {
+                        field += ch;
+                    }
+                } else {
+                    if(ch === '"'){ inQuotes = true; }
+                    else if(ch === ','){ pushField(); }
+                    else if(ch === '\n' || ch === '\r'){ if(ch==='\r' && text[i]==='\n') i++; pushField(); pushRow(); }
+                    else { field += ch; }
+                }
+            }
+            if(field || row.length){ pushField(); pushRow(); }
+            if(!rows.length) return {header:[], data:[]};
+            const header = rows[0].map(s=>s.trim());
+            const data = rows.slice(1).filter(r => r.some(c => c && c.trim() !== ''));
+            return {header, data};
+        }
+
+        function csvToDailyMap(csv){
+            const idx = {
+                DateTime: csv.header.indexOf('DateTime'),
+                Category: csv.header.indexOf('Category'),
+                Notes: csv.header.indexOf('Notes'),
+                Count: csv.header.indexOf('Count')
+            };
+            const map = {};
+            for(const r of csv.data){
+                const iso = r[idx.DateTime];
+                const d = new Date(iso);
+                if(isNaN(d)) continue;
+                const key = ymd(d);
+                (map[key] ||= []).push({
+                    when: d,
+                    category: r[idx.Category] || '',
+                    notes: r[idx.Notes] || '',
+                    count: r[idx.Count] || ''
+                });
+            }
+            return map;
+        }
+
+        function withinCurrentMonth(key){
+            const [Y,M,D] = key.split('-').map(Number);
+            const d = new Date(Y, M-1, D);
+            return d >= monthStart && d <= monthEnd;
+        }
+
+        function renderDay(key, statuses, entries){
+            const dateObj = new Date(key);
+            const day = document.createElement('article');
+            day.className = 'day';
+            day.innerHTML = '<h2>' + fmtDate(dateObj) + '<span class="sr-only"> (' + key + ')</span></h2>';
+
+            const columns = document.createElement('div');
+            columns.className = 'columns';
+
+            if(statuses && statuses.length){
+                const box = document.createElement('div');
+                const ul = document.createElement('ul');
+                ul.className = 'status-list';
+                statuses.forEach(s => {
+                    const li = document.createElement('li');
+                    li.className = 'status status-with-avatar';
+                    const time = new Intl.DateTimeFormat('en-US', {hour:'numeric', minute:'2-digit', timeZone: TZ}).format(s.when);
+                    const img = createAvatarImg();
+                    const body = document.createElement('div');
+                    body.innerHTML = '<div class="muted">' + time + '</div><div>' + (s.content || s.title).replace(/</g,'&lt;') + '</div>';
+                    li.appendChild(img);
+                    li.appendChild(body);
+                    ul.appendChild(li);
+                });
+                box.appendChild(ul);
+                columns.appendChild(box);
+            }
+
+            if(entries && entries.length){
+                const box = document.createElement('div');
+                const table = document.createElement('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+                table.appendChild(thead);
+                table.appendChild(tbody);
+
+                // Always-show columns in fixed order
+                const wanted = [
+                    'Morning Stretches',
+                    'Journal',
+                    'Music',
+                    'Workout'
+                ];
+                // Build header row in this exact order
+                const emoji = {
+                    'Morning Stretches': '🌄',
+                    'Journal': '📖',
+                    'Music': '🎷',
+                    'Workout': '🏋🏾‍♂️'
+                };
+                const hr = document.createElement('tr');
+                wanted.forEach(w => {
+                    const th = document.createElement('th');
+                    th.textContent = emoji[w] || w;
+                    th.title = w; // tooltip with full label
+                    th.setAttribute('aria-label', w);
+                    th.style.textAlign = 'center';
+                    hr.appendChild(th);
+                });
+                thead.appendChild(hr);
+
+                // Normalize categories for matching
+                const norm = s => (s||'').trim().toLowerCase();
+                // Group earliest time per category (by display name)
+                const byCat = Object.create(null);
+                entries.sort((a,b)=>a.when-b.when).forEach(e => {
+                    const k = norm(e.category);
+                    // map to one of the wanted names if close match
+                    for(const w of wanted){
+                        if(k === norm(w)){
+                            if(!byCat[w]) byCat[w] = new Date(e.when);
+                            break;
+                        }
+                    }
+                });
+                // Build single-row, no header
+                const tr = document.createElement('tr');
+                wanted.forEach(w => {
+                    const td = document.createElement('td');
+                    td.style.whiteSpace = 'nowrap';
+                    td.style.textAlign = 'center';
+                    if(byCat[w]){
+                        const t = new Intl.DateTimeFormat('en-US', {hour:'numeric', minute:'2-digit', timeZone: TZ}).format(byCat[w]);
+                        td.textContent = t;
+                    } else {
+                        td.textContent = '✕';
+                        td.className = 'muted';
+                    }
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+                box.appendChild(table);
+                columns.appendChild(box);
+            }
+
+            day.appendChild(columns);
+            daysEl.appendChild(day);
+        }
+
+        function escapeHtml(s){return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')}
+
+        function createAvatarImg(){
+            const img = new Image();
+            img.src = 'https://brandonstone.cc/src/navbaranddogs/junkdrawer_me.webp';
+            img.alt = USER + ' avatar';
+            img.decoding = 'async';
+            img.referrerPolicy = 'no-referrer';
+            img.width = 40; img.height = 40;
+            return img;
+        }
+
+        async function load(){
+            try {
+                const [atomResp, csvResp] = await Promise.all([
+                    fetch(ATOM_URL, {headers:{'Accept':'application/atom+xml'}}),
+                    fetch(CSV_URL, {cache:'no-store'})
+                ]);
+
+                if(!atomResp.ok) throw new Error('Failed to fetch Atom feed');
+                if(!csvResp.ok) throw new Error('Failed to fetch M.csv');
+
+                const [atomText, csvText] = await Promise.all([atomResp.text(), csvResp.text()]);
+
+                const atomMap = parseAtom(atomText);
+                const csvMap = csvToDailyMap(parseCSV(csvText));
+
+                // Collect all keys in this month that have either statuses or entries
+                const keys = new Set();
+                for(const k of Object.keys(atomMap)){ if(withinCurrentMonth(k)) keys.add(k); }
+                for(const k of Object.keys(csvMap)){ if(withinCurrentMonth(k)) keys.add(k); }
+
+                // Sort keys descending (latest first)
+                const ordered = [...keys].sort((a,b)=> new Date(b) - new Date(a));
+
+                daysEl.innerHTML = '';
+                let rendered = 0;
+                for(const k of ordered){
+                    const statuses = atomMap[k] || [];
+                    const entries = csvMap[k] || [];
+                    if(statuses.length || entries.length){
+                        renderDay(k, statuses, entries);
+                        rendered++;
+                    }
+                }
+
+                if(rendered === 0){
+                    noticeEl.className = 'error';
+                    noticeEl.textContent = 'No statuses or entries for the current month yet.';
+                } else {
+                    noticeEl.remove();
+                }
+            } catch (err){
+                noticeEl.className = 'error';
+                noticeEl.textContent = err.message + ' — tip: if the Atom feed is blocked by CORS, proxy it server-side.';
+            }
+        }
+
+        load();
+    })();
+</script>
+</body>
+</html>
