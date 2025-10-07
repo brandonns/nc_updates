@@ -60,7 +60,7 @@
         const TZ = 'America/Denver'; // your timezone
         const USER = 'barndoors';
         const ATOM_URL = 'https://status.cafe/users/' + USER + '.atom';
-        const CSV_URL = 'M.csv'; // place M.csv next to this page
+        const SC_URL = 'sc.txt'; // place sc.txt next to this page
 
         const daysEl = document.getElementById('days');
         const noticeEl = document.getElementById('notice');
@@ -90,56 +90,27 @@
             return map;
         }
 
-        function parseCSV(text){
-            // Tiny CSV parser for simple, comma-separated, double-quote escaped CSV
-            const rows = [];
-            let i=0, field='', row=[], inQuotes=false;
-            const pushField = ()=>{ row.push(field); field=''; };
-            const pushRow = ()=>{ if(row.length) rows.push(row); row=[]; };
-            while(i < text.length){
-                const ch = text[i++];
-                if(inQuotes){
-                    if(ch === '"'){
-                        if(text[i] === '"'){ field += '"'; i++; } else { inQuotes = false; }
-                    } else {
-                        field += ch;
-                    }
-                } else {
-                    if(ch === '"'){ inQuotes = true; }
-                    else if(ch === ','){ pushField(); }
-                    else if(ch === '\n' || ch === '\r'){ if(ch==='\r' && text[i]==='\n') i++; pushField(); pushRow(); }
-                    else { field += ch; }
-                }
-            }
-            if(field || row.length){ pushField(); pushRow(); }
-            if(!rows.length) return {header:[], data:[]};
-            const header = rows[0].map(s=>s.trim());
-            const data = rows.slice(1).filter(r => r.some(c => c && c.trim() !== ''));
-            return {header, data};
-        }
-
-        function csvToDailyMap(csv){
-            const idx = {
-                DateTime: csv.header.indexOf('DateTime'),
-                Category: csv.header.indexOf('Category'),
-                Notes: csv.header.indexOf('Notes'),
-                Count: csv.header.indexOf('Count')
-            };
+        function scToDailyMap(text){
+            // Each line: "{event name} on {date} at {time}"
+            // Example: "Morning stretches on Oct 6, 2025 at 8:24 AM"
+            const lines = text.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
             const map = {};
-            for(const r of csv.data){
-                const iso = r[idx.DateTime];
-                const d = new Date(iso);
-                if(isNaN(d)) continue;
-                const key = ymd(d);
-                (map[key] ||= []).push({
-                    when: d,
-                    category: r[idx.Category] || '',
-                    notes: r[idx.Notes] || '',
-                    count: r[idx.Count] || ''
-                });
+            const rx = /^(.+?)\s+on\s+([A-Za-z]{3,9}\s+\d{1,2},\s*\d{4})\s+at\s+(.+)$/i;
+
+            for (const line of lines) {
+                const m = line.match(rx);
+                if (!m) continue;
+                const name = m[1];
+                const dateStr = m[2];
+                const timeStr = m[3];
+                const when = new Date(dateStr + ' ' + timeStr); // parsed in your local TZ
+                if (isNaN(when)) continue;
+                const key = ymd(when);
+                (map[key] ||= []).push({ when, category: name });
             }
             return map;
         }
+
 
         function withinCurrentMonth(key){
             const [Y,M,D] = key.split('-').map(Number);
@@ -260,23 +231,23 @@
 
         async function load(){
             try {
-                const [atomResp, csvResp] = await Promise.all([
+                const [atomResp, scResp] = await Promise.all([
                     fetch(ATOM_URL, {headers:{'Accept':'application/atom+xml'}}),
-                    fetch(CSV_URL, {cache:'no-store'})
+                    fetch(SC_URL, {cache:'no-store'})
                 ]);
 
                 if(!atomResp.ok) throw new Error('Failed to fetch Atom feed');
-                if(!csvResp.ok) throw new Error('Failed to fetch M.csv');
+                if(!scResp.ok) throw new Error('Failed to fetch sc.txt');
 
-                const [atomText, csvText] = await Promise.all([atomResp.text(), csvResp.text()]);
+                const [atomText, scText] = await Promise.all([atomResp.text(), scResp.text()]);
 
                 const atomMap = parseAtom(atomText);
-                const csvMap = csvToDailyMap(parseCSV(csvText));
+                const entriesMap = scToDailyMap(scText);
 
                 // Collect all keys in this month that have either statuses or entries
                 const keys = new Set();
                 for(const k of Object.keys(atomMap)){ if(withinCurrentMonth(k)) keys.add(k); }
-                for(const k of Object.keys(csvMap)){ if(withinCurrentMonth(k)) keys.add(k); }
+                for(const k of Object.keys(entriesMap)){ if(withinCurrentMonth(k)) keys.add(k); }
 
                 // Sort keys descending (latest first)
                 const ordered = [...keys].sort((a,b)=> new Date(b) - new Date(a));
@@ -285,7 +256,7 @@
                 let rendered = 0;
                 for(const k of ordered){
                     const statuses = atomMap[k] || [];
-                    const entries = csvMap[k] || [];
+                    const entries = entriesMap[k] || [];
                     if(statuses.length || entries.length){
                         renderDay(k, statuses, entries);
                         rendered++;
