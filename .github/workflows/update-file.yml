@@ -1,0 +1,31 @@
+name: Update File from iOS
+
+on:
+  workflow_dispatch:
+    inputs:
+      file_content:
+        description: 'Content to write to file'
+        required: true
+      file_path:
+        description: 'Path where file should be saved'
+        required: false
+        default: 'sc.txt'
+
+jobs:
+  update-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Write file
+        run: |
+          echo "${{ github.event.inputs.file_content }}" > "${{ github.event.inputs.file_path }}"
+          
+      - name: Commit and push
+        run: |
+          git config user.name "iOS Shortcut"
+          git config user.email "shortcut@ios.local"
+          git add .
+          git commit -m "Update from iOS Shortcut" || echo "No changes"
+          git push
