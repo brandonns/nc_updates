@@ -44,6 +44,8 @@
             <div class="navsection">
                 <a href="https://barndoors.cc">continue</a>
                 <a href="index.html">ramblings</a>
+                <a href="assoc.html">assoc.</a>
+
             </div>
         </nav>
     </header>
@@ -57,31 +59,28 @@
 
 <script>
     (()=>{
-        const TZ = 'America/Denver'; // your timezone
+        const TZ = 'America/Denver';
         const USER = 'barndoors';
         const ATOM_URL = 'https://status.cafe/users/' + USER + '.atom';
-        const SC_URL = 'https://statbot.utopian-catch-0t.workers.dev/'; // place sc.txt next to this page
+        const SC_URL = 'https://statbot.utopian-catch-0t.workers.dev/';
 
         const daysEl = document.getElementById('days');
         const noticeEl = document.getElementById('notice');
 
-        // Helpers
         const fmtDate = d => new Intl.DateTimeFormat('en-US', {weekday:'short', month:'short', day:'numeric', timeZone: TZ}).format(d);
-        const ymd = d => new Intl.DateTimeFormat('en-CA', {year:'numeric', month:'2-digit', day:'2-digit', timeZone: TZ}).format(d); // YYYY-MM-DD
+        const ymd = d => new Intl.DateTimeFormat('en-CA', {year:'numeric', month:'2-digit', day:'2-digit', timeZone: TZ}).format(d);
 
         const now = new Date();
-        // Get current date in the specified timezone
         const todayInTZ = ymd(now);
         const [currentYear, currentMonth] = todayInTZ.split('-').map(Number);
         const monthStart = new Date(currentYear, currentMonth - 1, 1);
-        const monthEnd = new Date(currentYear, currentMonth, 0); // last day
+        const monthEnd = new Date(currentYear, currentMonth, 0);
 
         function parseAtom(xmlText){
             const parser = new DOMParser();
             const doc = parser.parseFromString(xmlText, 'application/xml');
             const entries = [...doc.querySelectorAll('entry')].map(e => {
                 const dateStr = e.querySelector('updated, published')?.textContent || '';
-                // Parse the ISO date string and interpret it in the specified timezone
                 const when = new Date(dateStr);
                 return {
                     title: e.querySelector('title')?.textContent?.trim() || '',
@@ -89,7 +88,6 @@
                     when: when
                 };
             }).filter(x => x.when.toString() !== 'Invalid Date');
-            // group by local YYYY-MM-DD in TZ
             const map = {};
             for(const s of entries){
                 const key = ymd(s.when);
@@ -99,19 +97,16 @@
         }
 
         function scToDailyMap(text){
-            // Each line: "{event name} on {date} at {time}"
-            // Example: "Morning stretches on Oct 6, 2025 at 8:24 AM"
             const lines = text.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
             const map = {};
             const rx = /^(.+?)\s+on\s+([A-Za-z]{3,9}\s+\d{1,2},\s*\d{4})\s+at\s+(.+)$/i;
-
             for (const line of lines) {
                 const m = line.match(rx);
                 if (!m) continue;
                 const name = m[1];
                 const dateStr = m[2];
                 const timeStr = m[3];
-                const when = new Date(dateStr + ' ' + timeStr); // parsed in your local TZ
+                const when = new Date(dateStr + ' ' + timeStr);
                 if (isNaN(when)) continue;
                 const key = ymd(when);
                 (map[key] ||= []).push({ when, category: name });
@@ -122,7 +117,6 @@
         function getAllDaysInMonth(){
             const days = [];
             const today = ymd(new Date());
-            // Loop through each day of the month
             const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
             for(let day = 1; day <= daysInMonth; day++){
                 const d = new Date(currentYear, currentMonth - 1, day);
@@ -141,7 +135,6 @@
         }
 
         function renderDay(key, statuses, entries){
-            // Parse YYYY-MM-DD in local timezone to avoid off-by-one errors
             const [Y, M, D] = key.split('-').map(Number);
             const dateObj = new Date(Y, M - 1, D);
             const day = document.createElement('article');
@@ -151,7 +144,6 @@
             const columns = document.createElement('div');
             columns.className = 'columns';
 
-            // Always render status section
             const statusBox = document.createElement('div');
             if(statuses && statuses.length){
                 const ul = document.createElement('ul');
@@ -177,7 +169,6 @@
             }
             columns.appendChild(statusBox);
 
-            // Always render chronicling table
             const tableBox = document.createElement('div');
             const table = document.createElement('table');
             const thead = document.createElement('thead');
@@ -185,14 +176,12 @@
             table.appendChild(thead);
             table.appendChild(tbody);
 
-            // Always-show columns in fixed order
             const wanted = [
                 'Morning Stretches',
                 'Journal',
                 'Music',
                 'Workout'
             ];
-            // Build header row in this exact order
             const emoji = {
                 'Morning Stretches': '🌄',
                 'Journal': '📖',
@@ -203,21 +192,18 @@
             wanted.forEach(w => {
                 const th = document.createElement('th');
                 th.textContent = emoji[w] || w;
-                th.title = w; // tooltip with full label
+                th.title = w;
                 th.setAttribute('aria-label', w);
                 th.style.textAlign = 'center';
                 hr.appendChild(th);
             });
             thead.appendChild(hr);
 
-            // Normalize categories for matching
             const norm = s => (s||'').trim().toLowerCase();
-            // Group earliest time per category (by display name)
             const byCat = Object.create(null);
             if(entries && entries.length){
                 entries.sort((a,b)=>a.when-b.when).forEach(e => {
                     const k = norm(e.category);
-                    // map to one of the wanted names if close match
                     for(const w of wanted){
                         if(k === norm(w)){
                             if(!byCat[w]) byCat[w] = new Date(e.when);
@@ -226,7 +212,6 @@
                     }
                 });
             }
-            // Build single-row, no header
             const tr = document.createElement('tr');
             wanted.forEach(w => {
                 const td = document.createElement('td');
@@ -276,24 +261,21 @@
                 const atomMap = parseAtom(atomText);
                 const entriesMap = scToDailyMap(scText);
 
-                // Get all days in the current month
                 const allDays = getAllDaysInMonth();
 
-                // Sort descending (latest first)
                 const ordered = allDays.sort((a,b)=> new Date(b) - new Date(a));
 
                 daysEl.innerHTML = '';
                 for(const k of ordered){
                     const statuses = atomMap[k] || [];
                     const entries = entriesMap[k] || [];
-                    // Always render the day (chronicling table always shows)
                     renderDay(k, statuses, entries);
                 }
 
                 noticeEl.remove();
             } catch (err){
                 noticeEl.className = 'error';
-                noticeEl.textContent = err.message + ' — tip: if the Atom feed is blocked by CORS, proxy it server-side.';
+                noticeEl.textContent = err.message + ' — something broke :(';
             }
         }
 
