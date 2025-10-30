@@ -481,22 +481,25 @@
 </body>
 
 <script>
-    const WORKER_URL = "https://upvotes.utopian-catch-0t.workers.dev/";
+    const WORKER_URL = "https://upvotes.utopian-catch-0t.workers.dev";
 
     document.querySelectorAll('.entry').forEach(entry => {
         const key = entry.dataset.key;
         const countEl = entry.querySelector('.upvote-count');
         const btn = entry.querySelector('.upvote-btn');
 
+        // Load current count
         fetch(`${WORKER_URL}?key=${key}`)
             .then(r => r.json())
-            .then(d => countEl.textContent = d.count);
+            .then(d => countEl.textContent = d.count ?? 0);
 
+        // Handle upvote click
         btn.addEventListener('click', () => {
             fetch(`${WORKER_URL}?key=${key}`, { method: 'POST' })
                 .then(r => r.json())
-                .then(d => countEl.textContent = d.count);
+                .then(d => countEl.textContent = d.count ?? 0);
         });
     });
 </script>
+
 </html>
