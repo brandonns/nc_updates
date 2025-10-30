@@ -28,7 +28,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 8px; /* space between button and number */
+        gap: 8px;
         margin-top: 1em;
     }
 
@@ -488,12 +488,10 @@
         const countEl = entry.querySelector('.upvote-count');
         const btn = entry.querySelector('.upvote-btn');
 
-        // Load current count
         fetch(`${WORKER_URL}?key=${key}`)
             .then(r => r.json())
             .then(d => countEl.textContent = d.count);
 
-        // Handle upvote click
         btn.addEventListener('click', () => {
             fetch(`${WORKER_URL}?key=${key}`, { method: 'POST' })
                 .then(r => r.json())
