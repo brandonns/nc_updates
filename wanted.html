@@ -205,12 +205,11 @@
             pointer-events: all;
         }
 
-        /* Modify the hero-suspect class when inside the modal */
         .modal-content.hero-suspect {
-            margin: 0; /* Remove the page margin */
+            margin: 0;
             max-width: 1000px;
             width: 100%;
-            background: var(--color-1); /* Solid background */
+            background: var(--color-1);
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
             transform: scale(0.95);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -239,7 +238,6 @@
             .hero-img { height: 300px; }
             .mad-input, .mad-select { min-width: 100%; display: block; margin: 10px 0; width: 100%; }
             .form-section { padding: 2rem 1rem; }
-            /* Modal mobile adjustments */
             .modal-content.hero-suspect { max-height: 90vh; overflow-y: auto; display: block; }
         }
     </style>
@@ -325,8 +323,8 @@
                             <input type="text" name="lastSeen" class="mad-input" style="width: 100%;">
                         </div>
                         <div id="imageUploadArea" style="border: 1px dashed var(--color-5); display: flex; align-items: center; justify-content: center; height: 150px; cursor: pointer; position: relative; background: rgba(0,0,0,0.3);">
-                            <span style="font-size: 0.8rem;">[ UPLOAD BIO-SCAN IMAGE ]</span>
-                            <input type="file" name="evidence" style="opacity: 0; position: absolute; inset: 0; cursor: pointer;">
+                            <span id="uploadText" style="font-size: 0.8rem;">[ UPLOAD BIO-SCAN IMAGE ]</span>
+                            <input type="file" id="evidenceInput" name="evidence" accept="image/png, image/jpeg, image/webp" style="opacity: 0; position: absolute; inset: 0; cursor: pointer;">
                         </div>
                     </div>
                 </div>
@@ -363,65 +361,90 @@
 <div id="suspectModal" class="modal-overlay">
     <div class="modal-content hero-suspect">
         <button class="close-btn" onclick="closeModal()">X</button>
-
         <img id="m-img" src="" class="hero-img" alt="Suspect">
-
         <div class="hero-info">
             <div id="m-rank" class="hero-rank">RANK #? // CAPTURE</div>
             <div id="m-name" class="hero-name">NAME</div>
-
             <div class="hero-stats">
                 <div><span class="stat-label">ALIAS</span><span id="m-alias" class="stat-val">Alias</span></div>
                 <div><span class="stat-label">AGE</span><span id="m-age" class="stat-val">??</span></div>
                 <div style="grid-column: 1/-1"><span class="stat-label">LAST SEEN</span><span id="m-seen" class="stat-val">Location</span></div>
                 <div style="grid-column: 1/-1"><span class="stat-label">CRIMES</span><span id="m-crimes" class="stat-val">Details...</span></div>
             </div>
-
             <div id="m-bounty" class="hero-bounty">0 GBP</div>
         </div>
     </div>
 </div>
 
 <script>
-    // Expanded data with details for the Modal
-    const suspects = [
-        { name: "Unit 734", alias: "Rust Bucket", age: "N/A", seen: "Orbital Dock 4", crimes: "Grand larceny of helium-3 canisters.", bounty: "120,000", img: "https://placehold.co/400x500/222/FFF" },
-        { name: "Mara Sov", alias: "Void Walker", age: "34", seen: "The Reef", crimes: "Trafficking restricted wetware technology.", bounty: "250,000", img: "https://placehold.co/400x500/333/FFF" },
-        { name: "Unknown", alias: "Ghost", age: "??", seen: "Network Layer 4", crimes: "Total data wipe of Arasaka local servers.", bounty: "50,000", img: "https://placehold.co/400x500/444/FFF" },
-        { name: "Jax", alias: "Stim", age: "19", seen: "Neon District", crimes: "Selling unauthorized combat mods.", bounty: "10,000", img: "https://placehold.co/400x500/555/FFF" },
-        { name: "Vera", alias: "Switch", age: "25", seen: "High-Rise Slums", crimes: "Identity theft and credit siphon.", bounty: "80,000", img: "https://placehold.co/400x500/666/FFF" },
-        { name: "Kovac", alias: "The Butcher", age: "45", seen: "Badlands", crimes: "Multiple counts of homicide. Extremely dangerous.", bounty: "500,000", img: "https://placehold.co/400x500/777/FFF" },
-        { name: "Ryla", alias: "Neon", age: "22", seen: "Club Afterlife", crimes: "Public disturbance via illegal cybernetics.", bounty: "45,000", img: "https://placehold.co/400x500/888/FFF" },
-    ];
+    // REPLACE THIS WITH THE URL YOU COPIED IN PHASE 2
+    const API_URL = "https://most-wanted-api.utopian-catch-0t.workers.dev/";
 
-    function initContent() {
-        // 1. GRID GENERATION (With Click Event)
+    async function initContent() {
+        let suspects = [];
+
+        try {
+            // Fetch from your Cloudflare Database
+            const response = await fetch(`${API_URL}/list`);
+            suspects = await response.json();
+        } catch (e) {
+            console.error("Database Offline", e);
+            // Fallback data in case DB is down
+            suspects = [
+                { name: "DB ERROR", alias: "Offline", age: "0", seen: "N/A", crimes: "Connection Lost", bounty: "0", img: "https://placehold.co/400x500/000/FFF" }
+            ];
+        }
+
+        // 1. GRID GENERATION
         const gridEl = document.getElementById('suspect-grid');
         const shuffled = [...suspects].sort(() => 0.5 - Math.random());
 
+        // Clear grid first in case we re-run
+        gridEl.innerHTML = '';
+
         shuffled.forEach((s, index) => {
-            // Create element manually to attach event listener easily
             const card = document.createElement('div');
             card.className = 'grid-card';
             card.innerHTML = `
-                <img src="${s.img}">
-                <div class="grid-info">
-                    <span style="color:var(--color-7); font-weight:bold;">${s.alias}</span><br>
-                    <span style="font-size:0.8rem; color:var(--color-6);">${s.bounty} GBP</span>
-                </div>
-            `;
-
-            // ATTACH CLICK LISTENER
-            card.addEventListener('click', () => openModal(s, index + 2)); // Rank is index + 2 (since #1 is static)
+            <img src="${s.img}">
+            <div class="grid-info">
+                <span style="color:var(--color-7); font-weight:bold;">${s.alias}</span><br>
+                <span style="font-size:0.8rem; color:var(--color-6);">${s.bounty} GBP</span>
+            </div>
+        `;
+            card.addEventListener('click', () => openModal(s, index + 2));
             gridEl.appendChild(card);
         });
 
         // 2. MARQUEE GENERATION
         const marqueeEl = document.getElementById('marquee-track');
+        marqueeEl.innerHTML = ''; // Clear marquee
+
+        // Create a long list for the loop
+        let baseList = [];
+        if(suspects.length > 0) {
+            while(baseList.length < 50) baseList = baseList.concat(suspects);
+        }
+        const marqueeList = [...baseList, ...baseList];
+
+        marqueeList.forEach(s => {
+            marqueeEl.innerHTML += `
+                <div class="marquee-card">
+                    <img src="${s.img}">
+                    <span>${s.alias}</span>
+                    <span class="b-text">${s.bounty}</span>
+                </div>
+            `;
+        });
+    }
+
+    // Call the async function
+    initContent();
+
+        const marqueeEl = document.getElementById('marquee-track');
         let baseList = [];
         while(baseList.length < 50) baseList = baseList.concat(suspects);
         const marqueeList = [...baseList, ...baseList];
-
         marqueeList.forEach(s => {
             marqueeEl.innerHTML += `
                     <div class="marquee-card">
@@ -436,9 +459,7 @@
 
     // --- MODAL LOGIC ---
     const modal = document.getElementById('suspectModal');
-
     function openModal(data, rank) {
-        // Populate Data
         document.getElementById('m-img').src = data.img;
         document.getElementById('m-name').innerText = data.name.toUpperCase();
         document.getElementById('m-alias').innerText = data.alias;
@@ -447,21 +468,12 @@
         document.getElementById('m-crimes').innerText = data.crimes;
         document.getElementById('m-bounty').innerText = data.bounty + " GBP";
         document.getElementById('m-rank').innerText = "RANK #" + rank + " // WANTED";
-
-        // Show
         modal.classList.add('open');
     }
+    function closeModal() { modal.classList.remove('open'); }
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-    function closeModal() {
-        modal.classList.remove('open');
-    }
-
-    // Close on background click
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
-
-    // --- FORM LOGIC ---
+    // --- FORM LOGIC & FILE VALIDATION ---
     const typeSelect = document.getElementById('requestType');
     const blocks = {
         addition: document.getElementById('block-addition'),
@@ -470,6 +482,8 @@
     };
     const identitySelect = document.getElementById('identitySelect');
     const imgArea = document.getElementById('imageUploadArea');
+    const fileInput = document.getElementById('evidenceInput');
+    const uploadText = document.getElementById('uploadText');
 
     typeSelect.addEventListener('change', (e) => {
         Object.values(blocks).forEach(el => el.classList.remove('active'));
@@ -480,25 +494,104 @@
     identitySelect.addEventListener('change', (e) => {
         if(e.target.value === 'unknown') {
             imgArea.classList.add('hidden');
-            imgArea.innerHTML = '<span style="font-size: 0.8rem; color: var(--color-6);">[ IMAGE UNAVAILABLE ]</span>';
+            uploadText.innerText = '[ IMAGE UNAVAILABLE ]';
+            fileInput.disabled = true;
         } else {
             imgArea.classList.remove('hidden');
-            imgArea.innerHTML = '<span style="font-size: 0.8rem;">[ UPLOAD BIO-SCAN IMAGE ]</span><input type="file" name="evidence" style="opacity: 0; position: absolute; inset: 0; cursor: pointer;">';
+            uploadText.innerText = '[ UPLOAD BIO-SCAN IMAGE ]';
+            fileInput.disabled = false;
         }
     });
 
-    document.getElementById('intelForm').addEventListener('submit', (e) => {
+    // FILE SIZE CHECKER (Limit: 5MB)
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const file = this.files[0];
+            const fileSize = file.size / 1024 / 1024; // in MB
+            if (fileSize > 5) {
+                alert("DATA OVERLOAD: FILE EXCEEDS 5MB LIMIT.");
+                this.value = ""; // Clear input
+                uploadText.innerText = "[ UPLOAD BIO-SCAN IMAGE ]";
+            } else {
+                // Show filename if valid
+                uploadText.innerText = `[ SCAN LOADED: ${file.name.substring(0, 15)}... ]`;
+                uploadText.style.color = "var(--color-7)";
+            }
+        }
+    });
+
+    // --- UPDATED SUBMISSION LOGIC ---
+    document.getElementById('intelForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+
         const btn = e.target.querySelector('button');
         const originalText = btn.innerText;
         btn.innerText = "ENCRYPTING...";
+        btn.disabled = true;
 
-        setTimeout(() => {
-            document.getElementById('form-status').innerHTML = "<span style='color:var(--color-7)'>// TRANSMISSION RECEIVED. STAY VIGILANT.</span>";
+        // 1. GATHER DATA
+        const formData = new FormData(e.target);
+        const file = document.getElementById('evidenceInput').files[0];
+
+        // Helper to convert image to Base64 Text
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
+        let imageString = "";
+        if (file) {
+            try {
+                imageString = await toBase64(file);
+            } catch (err) {
+                console.error("Image encoding failed", err);
+            }
+        }
+
+        // Construct the payload
+        const payload = {
+            requestType: formData.get('requestType'),
+            sector: formData.get('sector'),
+
+            // Addition Fields
+            crime: formData.get('crime'),
+            identity: formData.get('identity'),
+            suspectName: formData.get('suspectName'),
+            lastSeen: formData.get('lastSeen'),
+            image: imageString, // The image as a text string
+
+            // Purge/Update Fields
+            purgeTarget: formData.get('purgeTarget'),
+            updateTarget: formData.get('updateTarget'),
+            correctionDetails: formData.get('correctionDetails')
+        };
+
+        // 2. SEND TO WORKER
+        try {
+            // REPLACE WITH YOUR WORKER URL
+            const response = await fetch("https://most-wanted-api.utopian-catch-0t.workers.dev/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                document.getElementById('form-status').innerHTML = "<span style='color:var(--color-7)'>// TRANSMISSION RECEIVED. AWAITING COUNCIL REVIEW.</span>";
+                e.target.reset();
+                Object.values(blocks).forEach(el => el.classList.remove('active'));
+                uploadText.innerText = "[ UPLOAD BIO-SCAN IMAGE ]";
+                uploadText.style.color = "inherit";
+            } else {
+                throw new Error("Server Error");
+            }
+        } catch (err) {
+            document.getElementById('form-status').innerHTML = "<span style='color:var(--color-2)'>// ERROR: SECURE CONNECTION SEVERED.</span>";
+        } finally {
             btn.innerText = originalText;
-            e.target.reset();
-            Object.values(blocks).forEach(el => el.classList.remove('active'));
-        }, 1500);
+            btn.disabled = false;
+        }
     });
 </script>
 </body>
