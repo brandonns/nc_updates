@@ -79,7 +79,20 @@
             margin-bottom: 0.5rem;
             letter-spacing: 1px;
         }
-
+        .braille {
+            font-family: "braille", system-ui;
+        }
+        .braille-subtext {
+            font-family: "braille", system-ui;
+            color: var(--color-4); /* Blue accent */
+            text-shadow: none !important;
+            font-size: clamp(20px, 3vw, 40px); /* Smaller than main name */
+            margin-top: -1rem; /* Pull closer to the main name */
+            margin-bottom: 2rem;
+            line-height: 1;
+            overflow-wrap: break-word;
+            text-transform: uppercase; /* Ensure mapping works if font requires it */
+        }
         /* --- HERO --- */
         .hero-suspect {
             display: grid;
@@ -147,7 +160,7 @@
 
         .marquee-card {
             width: 110px; flex-shrink: 0;
-            background: var(--color-bg); border: 1px solid var(--color-6);
+            background: var(--color-bg); border: 1px solid var(--color-3);
             padding: 5px; display: flex; flex-direction: column;
             align-items: center; text-align: center;
         }
@@ -156,7 +169,7 @@
             margin-bottom: 5px; filter: grayscale(100%); display: block;
         }
         .marquee-card span { font-size: 0.65rem; line-height: 1.2; font-weight: bold; }
-        .marquee-card .b-text { color: var(--color-3); font-weight: normal; }
+        .marquee-card .b-text { color: var(--color-4); font-weight: normal; }
 
         .grid-section { padding: 0 1rem; margin-bottom: 5rem; }
         .grid-title { font-family: "wom", serif; font-size: 3rem; margin-bottom: 1.5rem; text-align: center; }
@@ -259,8 +272,12 @@
             cursor: pointer;
             z-index: 10;
         }
-        .close-btn:hover { background: var(--color-fg); }
-
+        .close-btn:hover { background: var(--color-3); }
+        /* UPDATE: Force Uppercase for specific data fields */
+        #hero-age, #hero-seen, #hero-crimes, #hero-notes,
+        #m-age, #m-seen, #m-crimes, #m-notes {
+            text-transform: uppercase;
+        }
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -332,10 +349,11 @@
         <img id="hero-img" src="https://placehold.co/400x500/111/FFF" class="hero-img" alt="Suspect">
         <div class="hero-info">
             <div class="hero-rank">RANK #1 // KILL ON SIGHT</div>
-            <div id="hero-name" class="hero-name">LOADING...</div>
-
+            <div class="hero-rank braille">RANK #1 // KILL ON SIGHT</div>
+            <div id="hero-name" class="hero-name">// LOADING</div>
+            <div id="m-name-braille" class="braille-subtext">JAREK HALVEN</div>
             <div class="hero-stats">
-                <div><span class="stat-label">ALIAS</span><span id="hero-alias" class="stat-val">...</span></div>
+                <div><span class="stat-label">ALIAS(ES)</span><span id="hero-alias" class="stat-val">...</span></div>
                 <div><span class="stat-label">AGE</span><span id="hero-age" class="stat-val">...</span></div>
                 <div style="grid-column: 1/-1"><span class="stat-label">LAST SEEN</span><span id="hero-seen" class="stat-val">...</span></div>
                 <div style="grid-column: 1/-1"><span class="stat-label">CRIMES</span><span id="hero-crimes" class="stat-val">...</span></div>
@@ -449,7 +467,7 @@
             <div id="m-rank" class="hero-rank">RANK #? // CAPTURE</div>
             <div id="m-name" class="hero-name">NAME</div>
             <div class="hero-stats">
-                <div><span class="stat-label">ALIAS</span><span id="m-alias" class="stat-val">Alias</span></div>
+                <div><span class="stat-label">ALIAS(ES)</span><span id="m-alias" class="stat-val">Alias</span></div>
                 <div><span class="stat-label">AGE</span><span id="m-age" class="stat-val">??</span></div>
                 <div style="grid-column: 1/-1"><span class="stat-label">LAST SEEN</span><span id="m-seen" class="stat-val">Location</span></div>
                 <div style="grid-column: 1/-1"><span class="stat-label">CRIMES</span><span id="m-crimes" class="stat-val">Details...</span></div>
@@ -513,7 +531,7 @@
             card.innerHTML = `
             <img src="${s.img}">
             <div class="grid-info">
-                <span style="color:var(--color-7); font-weight:bold;">${s.alias}</span><br>
+                <span style="color:var(--color-7); font-weight:bold;">${s.name}</span><br>
                 <span style="font-size:0.8rem; color:var(--color-6);">${formatBounty(s.bounty)}</span>
             </div>
         `;
@@ -534,7 +552,7 @@
             marqueeEl.innerHTML += `
                 <div class="marquee-card">
                     <img src="${s.img}">
-                    <span>${s.alias}</span>
+                    <span>${s.name}</span>
                     <span class="b-text">${formatBounty(s.bounty)}</span>
                 </div>
             `;
