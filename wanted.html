@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MOST WANTED</title>
+    <link rel="dns-prefetch" href="//most-wanted-api.utopian-catch-0t.workers.dev"/>
+    <link rel="preconnect" href="https://most-wanted-api.utopian-catch-0t.workers.dev" crossorigin/>
     <link href="https://barndoors.cc/favicon/favicon.ico" rel="icon"/>
     <link rel="stylesheet" href="https://barndoors.cc/global.css"/>
 
@@ -303,7 +305,7 @@
 <main id="content">
 
     <div class="intro-section">
-        <img src="src/suspects/logo.webp" class="intro-logo">
+        <img src="src/suspects/logo.webp" class="intro-logo" loading="lazy" decoding="async">
 
         <div class="disclaimer-box">
             <div class="disclaimer-title">
@@ -339,7 +341,7 @@
     </div>
 
     <section class="hero-suspect">
-        <img id="hero-img" src="https://barndoors.neocities.org/src/suspects/suspectDEF.webp" class="hero-img" alt="Suspect">
+        <img id="hero-img" src="https://barndoors.neocities.org/src/suspects/suspectDEF.webp" class="hero-img" alt="Suspect" decoding="async" fetchpriority="high">
         <div class="hero-info">
             <div class="hero-rank">RANK #1 // KILL ON SIGHT</div>
             <div id="hero-name" class="hero-name">// LOADING</div>
@@ -469,243 +471,227 @@
     </div>
 </div>
 
-<script>
-    const API_URL = "https://most-wanted-api.utopian-catch-0t.workers.dev";
 
-    function updateBrailleElement(targetElement, text, className) {
-        let brailleEl = targetElement.nextSibling;
-        if (brailleEl && brailleEl.nodeType === Node.ELEMENT_NODE && brailleEl.classList.contains(className.split(' ')[0])) {
-            brailleEl.innerText = text;
-        } else {
-            brailleEl = document.createElement('div');
-            brailleEl.className = className;
-            brailleEl.innerText = text;
-            targetElement.parentNode.insertBefore(brailleEl, targetElement.nextSibling);
-        }
+<script>
+    const API_URL="https://most-wanted-api.utopian-catch-0t.workers.dev";
+    const BLANK_IMG="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+    const heroImg=document.getElementById("hero-img");
+    const DEF_IMG=heroImg?.src||BLANK_IMG;
+
+    function updateBrailleElement(t,text,cls){
+        let b=t.nextSibling,k=cls.split(" ")[0];
+        if(b&&b.nodeType===Node.ELEMENT_NODE&&b.classList.contains(k)) b.innerText=text;
+        else{b=document.createElement("div");b.className=cls;b.innerText=text;t.parentNode.insertBefore(b,t.nextSibling)}
     }
 
-    async function initContent() {
-        let suspects = [];
+    const io=("IntersectionObserver"in window)?new IntersectionObserver(es=>{
+        for(const e of es) if(e.isIntersecting){
+            const i=e.target,s=i.dataset.src;
+            if(s){i.src=s; i.removeAttribute("data-src")}
+            io.unobserve(i);
+        }
+    },{rootMargin:"800px 0px"}):null;
 
-        try {
-            const response = await fetch(`${API_URL}/list`);
-            suspects = await response.json();
-        } catch (e) {
-            console.error("Database Offline", e);
-            suspects = [
-                { name: "DB ERROR", alias: "Offline", age: "0", seen: "N/A", crimes: "Connection Lost", bounty: "0", img: "https://barndoors.neocities.org/src/suspects/suspectDEF.webp" }
-            ];
+    const watch=(root)=>io&&root.querySelectorAll("img[data-src]").forEach(i=>io.observe(i));
+    const imgHTML=(src)=>io?`<img src="${BLANK_IMG}" data-src="${src}" loading="lazy" decoding="async">`:`<img src="${src}" loading="lazy" decoding="async">`;
+
+    const parseBounty=b=>b?parseInt(String(b).replace(/[^0-9]/g,""),10)||0:0;
+    const formatBounty=b=>b==="PENDING"?"PENDING BOUNTY":b+" G₿P";
+
+    async function initContent(){
+        let suspects=[];
+        try{
+            const r=await fetch(`${API_URL}/list`,{cache:"no-store"});
+            suspects=await r.json();
+        }catch(e){
+            console.error("Database Offline",e);
+            suspects=[{name:"DB ERROR",alias:"Offline",age:"0",seen:"N/A",crimes:"Connection Lost",notes:"",bounty:"0",img:DEF_IMG}];
         }
 
-        const parseBounty = (bStr) => {
-            if(!bStr) return 0;
-            return parseInt(bStr.replace(/[^0-9]/g, '')) || 0;
+        suspects.forEach(s=>{s.img=s.img||DEF_IMG});
+        suspects.sort((a,b)=>parseBounty(b.bounty)-parseBounty(a.bounty));
+
+        const topSuspect=suspects[0]||{},others=suspects.slice(1);
+
+        if(topSuspect.name){
+            heroImg.src=topSuspect.img||DEF_IMG;
+            const heroNameEl=document.getElementById("hero-name");
+            heroNameEl.innerText=String(topSuspect.name).toUpperCase();
+            updateBrailleElement(heroNameEl,heroNameEl.innerText,"braille-subtext");
+            const heroRankEl=document.querySelector(".hero-suspect .hero-rank");
+            updateBrailleElement(heroRankEl,heroRankEl.innerText,"hero-rank braille");
+            document.getElementById("hero-alias").innerText=topSuspect.alias;
+            document.getElementById("hero-age").innerText=topSuspect.age;
+            document.getElementById("hero-seen").innerText=topSuspect.seen;
+            document.getElementById("hero-crimes").innerText=topSuspect.crimes;
+            document.getElementById("hero-notes").innerText=topSuspect.notes||"N/A";
+            document.getElementById("hero-bounty").innerText=formatBounty(topSuspect.bounty);
+        }
+
+        const gridEl=document.getElementById("suspect-grid");
+        gridEl.innerHTML="";
+        const gf=document.createDocumentFragment();
+        others.forEach((s,idx)=>{
+            const card=document.createElement("div");
+            card.className="grid-card";
+            card.innerHTML=`${imgHTML(s.img)}<div class="grid-info"><span style="color:var(--color-7); font-weight:bold;">${s.name}</span><br><span style="font-size:0.8rem; color:var(--color-6);">${formatBounty(s.bounty)}</span></div>`;
+            card.addEventListener("click",()=>openModal(s,idx+2));
+            gf.appendChild(card);
+        });
+        gridEl.appendChild(gf);
+        watch(gridEl);
+
+        const marqueeEl=document.getElementById("marquee-track");
+        marqueeEl.innerHTML="";
+
+        const src=[...others].sort(()=>0.5-Math.random());
+        let base=[];
+        if(src.length) while(base.length<50) base=base.concat(src);
+        const marqueeList=base.concat(base);
+
+        const buildChunk=(start,count)=>{
+            const f=document.createDocumentFragment();
+            for(let i=start;i<Math.min(start+count,marqueeList.length);i++){
+                const s=marqueeList[i];
+                const d=document.createElement("div");
+                d.className="marquee-card";
+                d.innerHTML=`${imgHTML(s.img)}<span>${s.name}</span><span class="b-text">${formatBounty(s.bounty)}</span>`;
+                f.appendChild(d);
+            }
+            marqueeEl.appendChild(f);
+            watch(marqueeEl);
         };
 
-        const formatBounty = (b) => {
-            if (b === 'PENDING') return 'PENDING BOUNTY';
-            return b + ' G₿P';
+        const syncCount=Math.min(24,marqueeList.length);
+        buildChunk(0,syncCount);
+
+        let pos=syncCount;
+        const idle=window.requestIdleCallback||((fn)=>setTimeout(()=>fn({timeRemaining:()=>0}),1));
+        const pump=()=>{
+            if(pos>=marqueeList.length) return;
+            buildChunk(pos,24);
+            pos+=24;
+            idle(pump);
         };
-
-        suspects.sort((a, b) => parseBounty(b.bounty) - parseBounty(a.bounty));
-
-        const topSuspect = suspects[0] || {};
-        const others = suspects.slice(1);
-
-        if(topSuspect.name) {
-            document.getElementById('hero-img').src = topSuspect.img || "https://barndoors.neocities.org/src/suspects/suspectDEF.webp";
-
-            const heroNameEl = document.getElementById('hero-name');
-            heroNameEl.innerText = topSuspect.name.toUpperCase();
-            updateBrailleElement(heroNameEl, topSuspect.name.toUpperCase(), 'braille-subtext');
-
-            const heroRankEl = document.querySelector('.hero-suspect .hero-rank');
-            updateBrailleElement(heroRankEl, heroRankEl.innerText, 'hero-rank braille');
-
-            document.getElementById('hero-alias').innerText = topSuspect.alias;
-            document.getElementById('hero-age').innerText = topSuspect.age;
-            document.getElementById('hero-seen').innerText = topSuspect.seen;
-            document.getElementById('hero-crimes').innerText = topSuspect.crimes;
-            document.getElementById('hero-notes').innerText = topSuspect.notes || "N/A";
-            document.getElementById('hero-bounty').innerText = formatBounty(topSuspect.bounty);
-        }
-
-        const gridEl = document.getElementById('suspect-grid');
-        const gridList = [...others];
-
-        gridEl.innerHTML = '';
-
-        gridList.forEach((s, index) => {
-            const card = document.createElement('div');
-            card.className = 'grid-card';
-            card.innerHTML = `
-            <img src="${s.img}">
-            <div class="grid-info">
-                <span style="color:var(--color-7); font-weight:bold;">${s.name}</span><br>
-                <span style="font-size:0.8rem; color:var(--color-6);">${formatBounty(s.bounty)}</span>
-            </div>
-        `;
-            card.addEventListener('click', () => openModal(s, index + 2));
-            gridEl.appendChild(card);
-        });
-
-        const marqueeEl = document.getElementById('marquee-track');
-        marqueeEl.innerHTML = '';
-
-        const marqueeSource = [...others].sort(() => 0.5 - Math.random());
-        let baseList = [];
-        if(marqueeSource.length > 0) {
-            while(baseList.length < 50) baseList = baseList.concat(marqueeSource);
-        }
-        const marqueeList = [...baseList, ...baseList];
-
-        marqueeList.forEach(s => {
-            marqueeEl.innerHTML += `
-                <div class="marquee-card">
-                    <img src="${s.img}">
-                    <span>${s.name}</span>
-                    <span class="b-text">${formatBounty(s.bounty)}</span>
-                </div>
-            `;
-        });
+        idle(pump);
     }
 
     initContent();
 
-    const modal = document.getElementById('suspectModal');
-    function openModal(data, rank) {
-        document.getElementById('m-img').src = data.img;
-
-        const modalNameEl = document.getElementById('m-name');
-        modalNameEl.innerText = data.name.toUpperCase();
-        updateBrailleElement(modalNameEl, data.name.toUpperCase(), 'braille-subtext');
-
-        document.getElementById('m-alias').innerText = data.alias;
-        document.getElementById('m-age').innerText = data.age;
-        document.getElementById('m-seen').innerText = data.seen;
-        document.getElementById('m-crimes').innerText = data.crimes;
-        document.getElementById('m-notes').innerText = data.notes || "N/A";
-
-        const bText = data.bounty === 'PENDING' ? 'PENDING BOUNTY' : data.bounty + ' G₿P';
-        document.getElementById('m-bounty').innerText = bText;
-
-        const modalRankEl = document.getElementById('m-rank');
-        modalRankEl.innerText = "RANK #" + rank + " // WANTED";
-        updateBrailleElement(modalRankEl, modalRankEl.innerText, 'hero-rank braille');
-
-        modal.classList.add('open');
+    const modal=document.getElementById("suspectModal");
+    function openModal(data,rank){
+        document.getElementById("m-img").src=data.img||DEF_IMG;
+        const modalNameEl=document.getElementById("m-name");
+        modalNameEl.innerText=String(data.name).toUpperCase();
+        updateBrailleElement(modalNameEl,modalNameEl.innerText,"braille-subtext");
+        document.getElementById("m-alias").innerText=data.alias;
+        document.getElementById("m-age").innerText=data.age;
+        document.getElementById("m-seen").innerText=data.seen;
+        document.getElementById("m-crimes").innerText=data.crimes;
+        document.getElementById("m-notes").innerText=data.notes||"N/A";
+        document.getElementById("m-bounty").innerText=data.bounty==="PENDING"?"PENDING BOUNTY":data.bounty+" G₿P";
+        const modalRankEl=document.getElementById("m-rank");
+        modalRankEl.innerText="RANK #"+rank+" // WANTED";
+        updateBrailleElement(modalRankEl,modalRankEl.innerText,"hero-rank braille");
+        modal.classList.add("open");
     }
-    function closeModal() { modal.classList.remove('open'); }
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    function closeModal(){modal.classList.remove("open")}
+    modal.addEventListener("click",(e)=>{if(e.target===modal)closeModal()});
 
-    const typeSelect = document.getElementById('requestType');
-    const blocks = {
-        addition: document.getElementById('block-addition'),
-        purge: document.getElementById('block-purge'),
-        update: document.getElementById('block-update')
-    };
-    const identitySelect = document.getElementById('identitySelect');
-    const imgArea = document.getElementById('imageUploadArea');
-    const fileInput = document.getElementById('evidenceInput');
-    const uploadText = document.getElementById('uploadText');
+    const typeSelect=document.getElementById("requestType");
+    const blocks={addition:document.getElementById("block-addition"),purge:document.getElementById("block-purge"),update:document.getElementById("block-update")};
+    const identitySelect=document.getElementById("identitySelect");
+    const imgArea=document.getElementById("imageUploadArea");
+    const fileInput=document.getElementById("evidenceInput");
+    const uploadText=document.getElementById("uploadText");
 
-    typeSelect.addEventListener('change', (e) => {
-        Object.values(blocks).forEach(el => el.classList.remove('active'));
-        const selected = blocks[e.target.value];
-        if(selected) selected.classList.add('active');
+    typeSelect.addEventListener("change",(e)=>{
+        Object.values(blocks).forEach(el=>el.classList.remove("active"));
+        const selected=blocks[e.target.value];
+        if(selected) selected.classList.add("active");
     });
 
-    identitySelect.addEventListener('change', (e) => {
-        if(e.target.value === 'unknown') {
-            imgArea.classList.add('hidden');
-            uploadText.innerText = '[ IMAGE UNAVAILABLE ]';
-            fileInput.disabled = true;
-        } else {
-            imgArea.classList.remove('hidden');
-            uploadText.innerText = '[ UPLOAD BIO-SCAN IMAGE ]';
-            fileInput.disabled = false;
+    identitySelect.addEventListener("change",(e)=>{
+        if(e.target.value==="unknown"){
+            imgArea.classList.add("hidden");
+            uploadText.innerText="[ IMAGE UNAVAILABLE ]";
+            fileInput.disabled=true;
+        }else{
+            imgArea.classList.remove("hidden");
+            uploadText.innerText="[ UPLOAD BIO-SCAN IMAGE ]";
+            fileInput.disabled=false;
         }
     });
 
-    fileInput.addEventListener('change', function() {
-        if (this.files && this.files[0]) {
-            const file = this.files[0];
-            const fileSize = file.size / 1024 / 1024;
-            if (fileSize > 5) {
+    fileInput.addEventListener("change",function(){
+        if(this.files&&this.files[0]){
+            const file=this.files[0];
+            const fileSize=file.size/1024/1024;
+            if(fileSize>5){
                 alert("DATA OVERLOAD: FILE EXCEEDS 5MB LIMIT.");
-                this.value = "";
-                uploadText.innerText = "[ UPLOAD BIO-SCAN IMAGE ]";
-            } else {
-                uploadText.innerText = `[ SCAN LOADED: ${file.name.substring(0, 15)}... ]`;
-                uploadText.style.color = "var(--color-7)";
+                this.value="";
+                uploadText.innerText="[ UPLOAD BIO-SCAN IMAGE ]";
+                uploadText.style.color="inherit";
+            }else{
+                uploadText.innerText=`[ SCAN LOADED: ${file.name.substring(0,15)}. ]`;
+                uploadText.style.color="var(--color-7)";
             }
         }
     });
 
-    document.getElementById('intelForm').addEventListener('submit', async (e) => {
+    document.getElementById("intelForm").addEventListener("submit",async(e)=>{
         e.preventDefault();
+        const btn=e.target.querySelector("button");
+        const originalText=btn.innerText;
+        btn.innerText="ENCRYPTING.";
+        btn.disabled=true;
 
-        const btn = e.target.querySelector('button');
-        const originalText = btn.innerText;
-        btn.innerText = "ENCRYPTING...";
-        btn.disabled = true;
+        const formData=new FormData(e.target);
+        const file=fileInput.files[0];
 
-        const formData = new FormData(e.target);
-        const file = document.getElementById('evidenceInput').files[0];
-
-        const toBase64 = file => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
+        const toBase64=f=>new Promise((res,rej)=>{
+            const r=new FileReader();
+            r.readAsDataURL(f);
+            r.onload=()=>res(r.result);
+            r.onerror=rej;
         });
 
-        let imageString = "";
-        if (file) {
-            try {
-                imageString = await toBase64(file);
-            } catch (err) {
-                console.error("Image encoding failed", err);
-            }
+        let imageString="";
+        if(file){
+            try{imageString=await toBase64(file)}catch(err){console.error("Image encoding failed",err)}
         }
 
-        const payload = {
-            requestType: formData.get('requestType'),
-            sector: formData.get('lastSeen'),
-            crime: formData.get('crime'),
-            identity: formData.get('identity'),
-            suspectName: formData.get('suspectName'),
-            lastSeen: formData.get('lastSeen'),
-            notes: formData.get('notes'),
-            image: imageString,
-            purgeTarget: formData.get('purgeTarget'),
-            updateTarget: formData.get('updateTarget'),
-            correctionDetails: formData.get('correctionDetails')
+        const payload={
+            requestType:formData.get("requestType"),
+            sector:formData.get("lastSeen"),
+            crime:formData.get("crime"),
+            identity:formData.get("identity"),
+            suspectName:formData.get("suspectName"),
+            lastSeen:formData.get("lastSeen"),
+            notes:formData.get("notes"),
+            image:imageString,
+            purgeTarget:formData.get("purgeTarget"),
+            updateTarget:formData.get("updateTarget"),
+            correctionDetails:formData.get("correctionDetails")
         };
 
-        try {
-            const response = await fetch(`${API_URL}/submit`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-
-            if (response.ok) {
-                document.getElementById('form-status').innerHTML = "<span style='color:var(--color-7)'>// TRANSMISSION RECEIVED -- AWAITING COUNCIL REVIEW //</span>";
+        try{
+            const response=await fetch(`${API_URL}/submit`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+            if(response.ok){
+                document.getElementById("form-status").innerHTML="<span style='color:var(--color-7)'>// TRANSMISSION RECEIVED -- AWAITING COUNCIL REVIEW //</span>";
                 e.target.reset();
-                Object.values(blocks).forEach(el => el.classList.remove('active'));
-                uploadText.innerText = "[ UPLOAD BIO-SCAN IMAGE ]";
-                uploadText.style.color = "inherit";
-            } else {
-                throw new Error("Server Error");
-            }
-        } catch (err) {
-            document.getElementById('form-status').innerHTML = "<span style='color:var(--color-2)'>// ERROR: SECURE CONNECTION SEVERED</span>";
-        } finally {
-            btn.innerText = originalText;
-            btn.disabled = false;
+                Object.values(blocks).forEach(el=>el.classList.remove("active"));
+                uploadText.innerText="[ UPLOAD BIO-SCAN IMAGE ]";
+                uploadText.style.color="inherit";
+            }else throw 0;
+        }catch(err){
+            document.getElementById("form-status").innerHTML="<span style='color:var(--color-2)'>// ERROR: SECURE CONNECTION SEVERED</span>";
+        }finally{
+            btn.innerText=originalText;
+            btn.disabled=false;
         }
     });
 </script>
+
 </body>
 </html>
