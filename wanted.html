@@ -90,7 +90,6 @@
             overflow-wrap: break-word;
             text-transform: uppercase;
         }
-        /* --- HERO --- */
         .hero-suspect {
             display: grid;
             grid-template-columns: 350px 1fr;
@@ -132,7 +131,6 @@
             margin-top: auto;
         }
 
-        /* --- MARQUEE --- */
         .marquee-wrapper {
             width: 100vw;
             position: relative;
@@ -186,7 +184,6 @@
         .grid-card img { width: 100%; height: 220px; object-fit: cover; display: block; }
         .grid-info { padding: 1rem; }
 
-        /* --- FORM --- */
         .form-section {
             background: var(--color-1);
             border-top: 2px solid var(--color-fg);
@@ -228,7 +225,6 @@
         }
         .cyber-btn:hover { background: var(--color-2); }
 
-        /* --- MODAL --- */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -343,7 +339,7 @@
     </div>
 
     <section class="hero-suspect">
-        <img id="hero-img" src="https://placehold.co/400x500/111/FFF" class="hero-img" alt="Suspect">
+        <img id="hero-img" src="https://barndoors.neocities.org/src/suspects/suspectDEF.webp" class="hero-img" alt="Suspect">
         <div class="hero-info">
             <div class="hero-rank">RANK #1 // KILL ON SIGHT</div>
             <div id="hero-name" class="hero-name">// LOADING</div>
@@ -497,7 +493,7 @@
         } catch (e) {
             console.error("Database Offline", e);
             suspects = [
-                { name: "DB ERROR", alias: "Offline", age: "0", seen: "N/A", crimes: "Connection Lost", bounty: "0", img: "https://placehold.co/400x500/000/FFF" }
+                { name: "DB ERROR", alias: "Offline", age: "0", seen: "N/A", crimes: "Connection Lost", bounty: "0", img: "https://barndoors.neocities.org/src/suspects/suspectDEF.webp" }
             ];
         }
 
@@ -517,7 +513,7 @@
         const others = suspects.slice(1);
 
         if(topSuspect.name) {
-            document.getElementById('hero-img').src = topSuspect.img || "https://placehold.co/400x500/111/FFF";
+            document.getElementById('hero-img').src = topSuspect.img || "https://barndoors.neocities.org/src/suspects/suspectDEF.webp";
 
             const heroNameEl = document.getElementById('hero-name');
             heroNameEl.innerText = topSuspect.name.toUpperCase();
@@ -535,7 +531,6 @@
         }
 
         const gridEl = document.getElementById('suspect-grid');
-        // SORTED for grid
         const gridList = [...others];
 
         gridEl.innerHTML = '';
@@ -557,7 +552,6 @@
         const marqueeEl = document.getElementById('marquee-track');
         marqueeEl.innerHTML = '';
 
-        // SHUFFLED for marquee
         const marqueeSource = [...others].sort(() => 0.5 - Math.random());
         let baseList = [];
         if(marqueeSource.length > 0) {
