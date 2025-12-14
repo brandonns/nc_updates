@@ -20,9 +20,9 @@
         }
 
         body, html {
-            min-height: 100vh; /* Changed from height: auto to min-height: 100vh */
-            display: flex;     /* Enables flexbox layout */
-            flex-direction: column; /* Stacks content vertically */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             overflow-x: hidden !important;
             width: 100%;
             max-width: 100%;
@@ -30,9 +30,9 @@
         }
 
         main#content {
-            display: flex !important; /* Changed to flex */
-            flex-direction: column;   /* Stack children vertically */
-            flex: 1;                  /* Forces this container to fill available space */
+            display: flex !important;
+            flex-direction: column;
+            flex: 1;
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
@@ -50,21 +50,18 @@
             height: auto;
             display: block;
             margin: 0 auto 1.5rem;
-            border-radius: 50%; /* Optional: Makes placeholder round */
+            border-radius: 50%;
         }
         .disclaimer-box {
-            /*max-width: 600px;*/
             margin: 0 auto;
-            border: 3px solid var(--color-2); /* Red border for warning */
-            /*background: color-mix(in srgb, var(--color-2) 5%, rgba(0,0,0,0.8));*/
+            border: 3px solid var(--color-2);
             padding: 1.5rem;
             font-size: 0.8rem;
             line-height: 1.5;
             color: var(--color-fg);
         }
         .disclaimer-box p {
-
-            text-align: left; /* Force left alignment */
+            text-align: left;
         }
         .disclaimer-title {
             color: var(--color-2);
@@ -84,14 +81,14 @@
         }
         .braille-subtext {
             font-family: "braille", system-ui;
-            color: var(--color-4); /* Blue accent */
+            color: var(--color-4);
             text-shadow: none !important;
-            font-size: clamp(20px, 3vw, 40px); /* Smaller than main name */
-            margin-top: -1rem; /* Pull closer to the main name */
+            font-size: clamp(20px, 3vw, 40px);
+            margin-top: -1rem;
             margin-bottom: 2rem;
             line-height: 1;
             overflow-wrap: break-word;
-            text-transform: uppercase; /* Ensure mapping works if font requires it */
+            text-transform: uppercase;
         }
         /* --- HERO --- */
         .hero-suspect {
@@ -129,7 +126,6 @@
 
         .hero-bounty {
             font-family: "gnum";
-
             text-align: right; font-size: clamp(2rem, 4vw, 3.5rem);
             color: var(--color-1); font-weight: 900;
             text-shadow: 2px 2px 2px var(--color-7);
@@ -197,8 +193,8 @@
             padding: 3rem 2rem; margin-top: 2rem; color: var(--color-7);
             width: 100vw; position: relative; left: 50%; margin-left: -50vw;
             box-sizing: border-box;
-            flex-grow: 1; /* This makes the black box stretch to the bottom */
-            display: flex; /* Helps organize internal content */
+            flex-grow: 1;
+            display: flex;
             flex-direction: column;
             justify-content: center;
         }
@@ -273,7 +269,7 @@
             z-index: 10;
         }
         .close-btn:hover { background: var(--color-3); }
-        /* UPDATE: Force Uppercase for specific data fields */
+
         #hero-age, #hero-seen, #hero-crimes, #hero-notes,
         #m-age, #m-seen, #m-crimes, #m-notes {
             text-transform: uppercase;
@@ -339,8 +335,8 @@
                 subject to regional availability & ongoing compliance status.
                 <br><br>
             <p style="color:var(--color-3)"> BARNDOORS assumes no responsibility for injury, loss of assets, or reclassification of citizenship status incurred during enforcement actions.</p>
-                <br><br>
-                <b>*Compliance is mandatory. Cooperation is compensable.*</b>
+            <br><br>
+            <b>*Compliance is mandatory. Cooperation is compensable.*</b>
             </p>
         </div>
     </div>
@@ -349,9 +345,7 @@
         <img id="hero-img" src="https://placehold.co/400x500/111/FFF" class="hero-img" alt="Suspect">
         <div class="hero-info">
             <div class="hero-rank">RANK #1 // KILL ON SIGHT</div>
-            <div class="hero-rank braille">RANK #1 // KILL ON SIGHT</div>
             <div id="hero-name" class="hero-name">// LOADING</div>
-            <div id="m-name-braille" class="braille-subtext">JAREK HALVEN</div>
             <div class="hero-stats">
                 <div><span class="stat-label">ALIAS(ES)</span><span id="hero-alias" class="stat-val">...</span></div>
                 <div><span class="stat-label">AGE</span><span id="hero-age" class="stat-val">...</span></div>
@@ -481,6 +475,18 @@
 <script>
     const API_URL = "https://most-wanted-api.utopian-catch-0t.workers.dev";
 
+    function updateBrailleElement(targetElement, text, className) {
+        let brailleEl = targetElement.nextSibling;
+        if (brailleEl && brailleEl.nodeType === Node.ELEMENT_NODE && brailleEl.classList.contains(className.split(' ')[0])) {
+            brailleEl.innerText = text;
+        } else {
+            brailleEl = document.createElement('div');
+            brailleEl.className = className;
+            brailleEl.innerText = text;
+            targetElement.parentNode.insertBefore(brailleEl, targetElement.nextSibling);
+        }
+    }
+
     async function initContent() {
         let suspects = [];
 
@@ -511,7 +517,14 @@
 
         if(topSuspect.name) {
             document.getElementById('hero-img').src = topSuspect.img || "https://placehold.co/400x500/111/FFF";
-            document.getElementById('hero-name').innerText = topSuspect.name.toUpperCase();
+
+            const heroNameEl = document.getElementById('hero-name');
+            heroNameEl.innerText = topSuspect.name.toUpperCase();
+            updateBrailleElement(heroNameEl, topSuspect.name.toUpperCase(), 'braille-subtext');
+
+            const heroRankEl = document.querySelector('.hero-suspect .hero-rank');
+            updateBrailleElement(heroRankEl, heroRankEl.innerText, 'hero-rank braille');
+
             document.getElementById('hero-alias').innerText = topSuspect.alias;
             document.getElementById('hero-age').innerText = topSuspect.age;
             document.getElementById('hero-seen').innerText = topSuspect.seen;
@@ -521,11 +534,12 @@
         }
 
         const gridEl = document.getElementById('suspect-grid');
-        const shuffled = [...others].sort(() => 0.5 - Math.random());
+        // SORTED for grid
+        const gridList = [...others];
 
         gridEl.innerHTML = '';
 
-        shuffled.forEach((s, index) => {
+        gridList.forEach((s, index) => {
             const card = document.createElement('div');
             card.className = 'grid-card';
             card.innerHTML = `
@@ -542,9 +556,11 @@
         const marqueeEl = document.getElementById('marquee-track');
         marqueeEl.innerHTML = '';
 
+        // SHUFFLED for marquee
+        const marqueeSource = [...others].sort(() => 0.5 - Math.random());
         let baseList = [];
-        if(others.length > 0) {
-            while(baseList.length < 50) baseList = baseList.concat(others);
+        if(marqueeSource.length > 0) {
+            while(baseList.length < 50) baseList = baseList.concat(marqueeSource);
         }
         const marqueeList = [...baseList, ...baseList];
 
@@ -564,7 +580,11 @@
     const modal = document.getElementById('suspectModal');
     function openModal(data, rank) {
         document.getElementById('m-img').src = data.img;
-        document.getElementById('m-name').innerText = data.name.toUpperCase();
+
+        const modalNameEl = document.getElementById('m-name');
+        modalNameEl.innerText = data.name.toUpperCase();
+        updateBrailleElement(modalNameEl, data.name.toUpperCase(), 'braille-subtext');
+
         document.getElementById('m-alias').innerText = data.alias;
         document.getElementById('m-age').innerText = data.age;
         document.getElementById('m-seen').innerText = data.seen;
@@ -574,7 +594,10 @@
         const bText = data.bounty === 'PENDING' ? 'PENDING BOUNTY' : data.bounty + ' G₿P';
         document.getElementById('m-bounty').innerText = bText;
 
-        document.getElementById('m-rank').innerText = "RANK #" + rank + " // WANTED";
+        const modalRankEl = document.getElementById('m-rank');
+        modalRankEl.innerText = "RANK #" + rank + " // WANTED";
+        updateBrailleElement(modalRankEl, modalRankEl.innerText, 'hero-rank braille');
+
         modal.classList.add('open');
     }
     function closeModal() { modal.classList.remove('open'); }
@@ -653,7 +676,7 @@
 
         const payload = {
             requestType: formData.get('requestType'),
-            sector: formData.get('lastSeen'), // Mapped as requested
+            sector: formData.get('lastSeen'),
             crime: formData.get('crime'),
             identity: formData.get('identity'),
             suspectName: formData.get('suspectName'),

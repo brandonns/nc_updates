@@ -1,0 +1,5 @@
+suspects
+first scale to 1500 smallest
+dither
+random depth
+scale 500
