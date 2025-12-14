@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCPD // MOST WANTED</title>
+    <link rel="stylesheet" href="https://barndoors.cc/global.css"/>
+
+    <style>
+        /* --- LAYOUT OVERRIDES --- */
+        /* Unlock vertical scrolling */
+        body, html {
+            height: auto !important;
+            overflow-y: auto !important;
+            overflow-x: hidden;
+        }
+
+        main#content {
+            display: block !important;
+            height: auto !important;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+        }
+
+        /* --- HEADER & NAV --- */
+        /* Force the specific order you requested */
+        header { position: relative; width: 100%; margin-bottom: 3rem; }
+        .custom-nav-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Your Brand Title */
+        .brand-title {
+            font-family: "wom", serif;
+            font-size: clamp(40px, 8vw, 80px);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        /* The Nav Links below the title */
+        .nav-links {
+            font-family: "Azeret Mono", monospace;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        /* --- 1. HERO SECTION --- */
+        .hero-suspect {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            margin: 0 1rem 4rem;
+            border: 2px solid var(--color-2);
+            padding: 2rem;
+            background: color-mix(in srgb, var(--color-2) 5%, var(--color-bg));
+        }
+
+        .hero-img {
+            width: 100%; height: 450px; object-fit: cover;
+            filter: grayscale(100%) contrast(120%);
+            border: 1px solid var(--color-fg);
+        }
+
+        .hero-info { display: flex; flex-direction: column; justify-content: center; }
+        .hero-rank { color: var(--color-2); font-weight: bold; margin-bottom: 0.5rem; }
+        .hero-name {
+            font-family: "wom", serif; font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 0.9; margin-bottom: 1.5rem;
+        }
+
+        .hero-stats {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;
+        }
+        .stat-label { font-size: 0.7rem; color: var(--color-5); display: block; }
+        .stat-val { font-size: 1.1rem; font-weight: bold; }
+
+        .hero-bounty {
+            text-align: right; font-size: clamp(2rem, 4vw, 3.5rem);
+            color: var(--color-3); font-weight: 900;
+            text-shadow: 2px 2px 0 var(--color-1);
+            margin-top: auto;
+        }
+
+        /* --- 2. SEAMLESS MARQUEE --- */
+        .marquee-wrapper {
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+            background: var(--color-1);
+            border-top: 1px solid var(--color-5);
+            border-bottom: 1px solid var(--color-5);
+            padding: 2rem 0;
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 2rem;
+            width: max-content;
+            /* This animation handles the loop */
+            animation: scroll-left 20s linear infinite;
+        }
+        /* When hovering, pause so people can read */
+        .marquee-track:hover { animation-play-state: paused; }
+
+        .marquee-card {
+            width: 200px;
+            flex-shrink: 0;
+            background: var(--color-bg);
+            border: 1px solid var(--color-6);
+            padding: 0.5rem;
+            display: flex; flex-direction: column;
+        }
+        .marquee-card img { width: 100%; height: 180px; object-fit: cover; margin-bottom: 0.5rem; filter: grayscale(100%); }
+
+        /* --- 3. GRID SECTION --- */
+        .grid-section { padding: 0 1rem; margin-bottom: 5rem; }
+        .grid-title { font-family: "wom", serif; font-size: 3rem; margin-bottom: 1.5rem; text-align: center; }
+
+        .suspect-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+        .grid-card {
+            border: 1px solid var(--color-5);
+            background: var(--color-1);
+            transition: transform 0.2s;
+        }
+        .grid-card:hover { transform: translateY(-5px); border-color: var(--color-2); }
+        .grid-card img { width: 100%; height: 220px; object-fit: cover; }
+        .grid-info { padding: 1rem; }
+
+        /* --- 4. MADLIBS FORM (Horizontal & Conditional) --- */
+        .form-section {
+            background: var(--color-1);
+            border-top: 2px solid var(--color-fg);
+            padding: 3rem 1rem;
+            margin-top: 2rem;
+            color: var(--color-7); /* Green text */
+        }
+
+        .madlibs-container {
+            max-width: 900px;
+            margin: 0 auto;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            line-height: 1.8;
+            font-family: "Azeret Mono", monospace;
+        }
+
+        /* Inline form elements style */
+        .mad-input, .mad-select {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--color-4);
+            color: var(--color-fg); /* White text for contrast */
+            font-family: inherit;
+            font-size: inherit;
+            padding: 0 5px;
+            text-align: center;
+            cursor: pointer;
+            width: auto;
+            min-width: 100px;
+        }
+        .mad-select { color: var(--color-3); font-weight: bold; }
+        .mad-input:focus, .mad-select:focus { outline: none; border-bottom-color: var(--color-2); }
+
+        /* Hidden blocks for conditional logic */
+        .conditional-block { display: none; margin-top: 1.5rem; padding: 1.5rem; border: 1px solid var(--color-5); }
+        .conditional-block.active { display: block; animation: fade-in 0.5s; }
+
+        .hidden { opacity: 0.5; pointer-events: none; filter: blur(2px); }
+
+        .submit-area { margin-top: 2rem; text-align: right; }
+        .cyber-btn {
+            background: var(--color-4); color: white;
+            border: none; padding: 1rem 2rem;
+            font-family: "Azeret Mono", monospace; font-weight: bold;
+            font-size: 1.2rem; cursor: pointer; text-transform: uppercase;
+        }
+        .cyber-btn:hover { background: var(--color-2); }
+
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Move exactly 50% because we duplicate the list */
+        }
+        @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 800px) {
+            .hero-suspect { grid-template-columns: 1fr; text-align: center; }
+            .hero-bounty { text-align: center; margin-top: 1rem; }
+            .hero-img { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="homenavcontainer">
+    <header>
+        <h1>
+            <a class="headerlink" href="index.html">thoughts on things and stuff</a>
+        </h1>
+        <nav>
+            <div class="navsection">
+                <a href="https://barndoors.cc">continue</a>
+                <a href="assoc.html">assoc.</a>
+            </div>
+        </nav>
+    </header>
+    <div class="currently-reading-container"></div>
+</div>
+
+<main id="content">
+
+    <section class="hero-suspect">
+        <img src="https://placehold.co/400x500/111/FFF" class="hero-img" alt="Suspect">
+        <div class="hero-info">
+            <div class="hero-rank">RANK #1 // KILL ON SIGHT</div>
+            <div class="hero-name">KAELEN "ZERO" VOSS</div>
+
+            <div class="hero-stats">
+                <div><span class="stat-label">ALIAS</span><span class="stat-val">The Fragment</span></div>
+                <div><span class="stat-label">AGE</span><span class="stat-val">28</span></div>
+                <div style="grid-column: 1/-1"><span class="stat-label">LAST SEEN</span><span class="stat-val">Sector 7 (Undercity)</span></div>
+                <div style="grid-column: 1/-1"><span class="stat-label">CRIMES</span><span class="stat-val">Unauthorized reality tampering via Hydra-synth injection.</span></div>
+            </div>
+
+            <div class="hero-bounty">5,000,000 GBP</div>
+        </div>
+    </section>
+
+    <section class="marquee-wrapper">
+        <div class="marquee-track" id="marquee-track">
+        </div>
+    </section>
+
+    <section class="grid-section">
+        <h2 class="grid-title">ACTIVE WARRANTS</h2>
+        <div class="suspect-grid" id="suspect-grid">
+        </div>
+    </section>
+
+    <section class="form-section">
+        <form id="intelForm">
+            <div class="madlibs-container">
+                <p>
+                    AS A CITIZEN OF B.A.R.N.D.O.O.R.S,
+                    I, OF SOUND MIND, REQUEST A DATA
+                    <select id="requestType" name="requestType" class="mad-select">
+                        <option value="" disabled selected>-- SELECT --</option>
+                        <option value="addition">ADDITION</option>
+                        <option value="purge">PURGE</option>
+                        <option value="update">UPDATE</option>
+                    </select>.
+                </p>
+
+                <div id="block-addition" class="conditional-block">
+                    <p>
+                        I WOULD LIKE TO REPORT
+                        <select name="crime" class="mad-select">
+                            <option value="hacking">ILLEGAL NETRUNNING</option>
+                            <option value="thoughtcrime">THOUGHTCRIME</option>
+                            <option value="grand_larceny">GRAND LARCENY</option>
+                            <option value="vandalism">VANDALISM</option>
+                        </select>
+                        BY
+                        <select id="identitySelect" name="identity" class="mad-select">
+                            <option value="identified">IDENTIFIED CITIZEN</option>
+                            <option value="unknown">UNKNOWN ENTITY</option>
+                        </select>.
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+                        <div>
+                            <label style="display:block; font-size: 0.8rem; margin-bottom: 5px;">SUSPECT NAME/ALIAS</label>
+                            <input type="text" name="suspectName" class="mad-input" style="width: 100%; text-align: left;">
+
+                            <label style="display:block; font-size: 0.8rem; margin-bottom: 5px; margin-top: 1rem;">LAST SEEN LOCATION</label>
+                            <input type="text" name="lastSeen" class="mad-input" style="width: 100%; text-align: left;">
+                        </div>
+                        <div id="imageUploadArea" style="border: 1px dashed var(--color-5); display: flex; align-items: center; justify-content: center; height: 150px; cursor: pointer; position: relative;">
+                            <span style="font-size: 0.8rem;">[ UPLOAD BIO-SCAN IMAGE ]</span>
+                            <input type="file" name="evidence" style="opacity: 0; position: absolute; inset: 0; cursor: pointer;">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="block-purge" class="conditional-block">
+                    <p>
+                        DATA PURGE REQUEST FOR <input type="text" name="purgeTarget" class="mad-input" placeholder="SUBJECT NAME">.
+                        <br><br>
+                        <span style="color: var(--color-2); font-size: 0.9em;">
+                                WARNING: BY SUBMITTING THIS REQUEST YOU FORFEIT YOUR RIGHTS TO DAILY OUTSIDE TIME AND AGREE TO MANDATORY RE-EDUCATION.
+                            </span>
+                    </p>
+                </div>
+
+                <div id="block-update" class="conditional-block">
+                    <p>
+                        I WOULD LIKE TO REPORT INCORRECT INFORMATION ON
+                        <input type="text" name="updateTarget" class="mad-input" placeholder="SUBJECT ID">
+                        TO THE STATE.
+                    </p>
+                    <textarea name="correctionDetails" placeholder="STATE THE CORRECTION HERE..." style="width: 100%; background: #000; border: 1px solid var(--color-5); color: var(--color-7); padding: 1rem; margin-top: 1rem; font-family: inherit; height: 150px;"></textarea>
+                </div>
+
+                <div class="submit-area">
+                    <button type="submit" class="cyber-btn">ENCRYPT & TRANSMIT</button>
+                </div>
+            </div>
+        </form>
+        <div id="form-status" style="text-align: center; margin-top: 1rem;"></div>
+    </section>
+
+</main>
+
+<script>
+    // --- 1. SEAMLESS MARQUEE LOGIC ---
+    // We use JS just to duplicate the items so CSS can animate them seamlessly
+    const suspects = [
+        { name: "Unit 734", alias: "Rust Bucket", bounty: "120,000", img: "https://placehold.co/200x200/222/FFF" },
+        { name: "Mara Sov", alias: "Void Walker", bounty: "250,000", img: "https://placehold.co/200x200/333/FFF" },
+        { name: "Unknown", alias: "Ghost", bounty: "50,000", img: "https://placehold.co/200x200/444/FFF" },
+        { name: "Jax", alias: "Stim", bounty: "10,000", img: "https://placehold.co/200x200/555/FFF" },
+        { name: "Vera", alias: "Switch", bounty: "80,000", img: "https://placehold.co/200x200/666/FFF" },
+        { name: "Kovac", alias: "The Butcher", bounty: "500,000", img: "https://placehold.co/200x200/777/FFF" },
+        { name: "Ryla", alias: "Neon", bounty: "45,000", img: "https://placehold.co/200x200/888/FFF" },
+    ];
+
+    function initContent() {
+        // Populate Grid (Randomized)
+        const gridEl = document.getElementById('suspect-grid');
+        const shuffled = [...suspects].sort(() => 0.5 - Math.random());
+
+        shuffled.forEach(s => {
+            gridEl.innerHTML += `
+                    <div class="grid-card">
+                        <img src="${s.img}">
+                        <div class="grid-info">
+                            <span style="color:var(--color-7); font-weight:bold;">${s.alias}</span><br>
+                            <span style="font-size:0.8rem; color:var(--color-6);">${s.bounty} GBP</span>
+                        </div>
+                    </div>
+                `;
+        });
+
+        // Populate Marquee (Double the content for seamless loop)
+        const marqueeEl = document.getElementById('marquee-track');
+        // We create a list twice as long
+        const marqueeList = [...suspects, ...suspects];
+
+        marqueeList.forEach(s => {
+            marqueeEl.innerHTML += `
+                    <div class="marquee-card">
+                        <img src="${s.img}">
+                        <span style="font-weight:bold; font-size:0.9rem;">${s.alias}</span>
+                        <span style="color:var(--color-3); font-size:0.8rem;">${s.bounty} GBP</span>
+                    </div>
+                `;
+        });
+    }
+    initContent();
+
+    // --- 2. MADLIBS LOGIC ---
+    const typeSelect = document.getElementById('requestType');
+    const blocks = {
+        addition: document.getElementById('block-addition'),
+        purge: document.getElementById('block-purge'),
+        update: document.getElementById('block-update')
+    };
+    const identitySelect = document.getElementById('identitySelect');
+    const imgArea = document.getElementById('imageUploadArea');
+
+    // Toggle Form Sections
+    typeSelect.addEventListener('change', (e) => {
+        // Hide all
+        Object.values(blocks).forEach(el => el.classList.remove('active'));
+        // Show selected
+        const selected = blocks[e.target.value];
+        if(selected) selected.classList.add('active');
+    });
+
+    // Toggle Image Upload State
+    identitySelect.addEventListener('change', (e) => {
+        if(e.target.value === 'unknown') {
+            imgArea.classList.add('hidden');
+            imgArea.innerHTML = '<span style="font-size: 0.8rem; color: var(--color-6);">[ IMAGE UNAVAILABLE ]</span>';
+        } else {
+            imgArea.classList.remove('hidden');
+            imgArea.innerHTML = '<span style="font-size: 0.8rem;">[ UPLOAD BIO-SCAN IMAGE ]</span><input type="file" name="evidence" style="opacity: 0; position: absolute; inset: 0; cursor: pointer;">';
+        }
+    });
+
+    // Form Submit
+    document.getElementById('intelForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        const originalText = btn.innerText;
+        btn.innerText = "ENCRYPTING...";
+
+        setTimeout(() => {
+            document.getElementById('form-status').innerHTML = "<span style='color:var(--color-7)'>// TRANSMISSION RECEIVED. STAY VIGILANT.</span>";
+            btn.innerText = originalText;
+            e.target.reset();
+            Object.values(blocks).forEach(el => el.classList.remove('active'));
+        }, 1500);
+    });
+</script>
+</body>
+</html>
