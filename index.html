@@ -66,6 +66,81 @@
         }
 
 
+        .media-widget {
+            border: 1px solid var(--color-fg);
+            color: var(--color-fg);
+            font-family: "Azeret Mono", serif;
+            padding: 1rem;
+            width: 100%;
+            max-width: 222px;
+            background: transparent;
+            box-sizing: border-box;
+        }
+
+        .widget-header {
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid var(--color-fg);
+            padding-bottom: 0.25rem;
+            letter-spacing: 0.5px;
+        }
+
+        .media-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .media-art {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 1px solid var(--color-fg);
+            display: block;
+            filter: grayscale(100%);
+        }
+
+        .media-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 80px;
+            flex: 1;
+        }
+
+        .media-title {
+            color: var(--color-fg) !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-size: 1rem;
+            line-height: 1.2;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .media-title:hover {
+            text-decoration: underline;
+        }
+
+        .media-artist {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .marquee {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+
+
     </style>
 </head>
 <body>
@@ -82,7 +157,30 @@
             </div>
         </nav>
     </header>
-    <div class="currently-reading-container"></div>
+    <div class="status-stack">
+
+        <div class="media-widget currently-reading-container">
+        </div>
+
+        <div id="lastfm-widget" class="media-widget">
+            <div class="loading">// loading</div>
+
+            <div class="song-info" style="display: none;">
+                <div id="status-header" class="widget-header">last played</div>
+                <div class="media-content">
+                    <img id="track-art" class="media-art" src="" alt="Album Art">
+                    <div class="media-details">
+                        <div class="marquee">
+                            <a id="track-name" class="media-title" href="#" target="_blank">Track Name</a>
+                        </div>
+                        <span id="artist-name" class="media-artist">Artist Name</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 <!--
 <div class="article" data-key="MMDDYYYY">
@@ -2161,6 +2259,45 @@
       </div>
   </div>
 </main>
+<script>
+    const username = 'barndoors__';
+    const apiKey = 'a5975bc1ca42877b7111381f6cb77ae4'; // lmfao go nuts buddy
+    const apiUrl = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=1`;
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            const track = data.recenttracks.track[0];
+            const widget = document.getElementById('lastfm-widget');
+            const header = document.getElementById('status-header');
+
+            const artist = track.artist['#text'];
+            const song = track.name;
+            const url = track.url;
+            const image = track.image[1]['#text'] || 'https://via.placeholder.com/64';
+
+            document.getElementById('track-art').src = image || '';
+            document.getElementById('track-name').textContent = song;
+            document.getElementById('artist-name').textContent = artist;
+
+            const isPlaying = track['@attr'] && track['@attr'].nowplaying === 'true';
+
+            if (isPlaying) {
+                header.textContent = "Now Playing:";
+                header.classList.add('anim-pulse');
+            } else {
+                header.textContent = "Last Played:";
+                header.classList.remove('anim-pulse');
+            }
+
+            widget.querySelector('.loading').style.display = 'none';
+            widget.querySelector('.song-info').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('lastfm-widget').innerHTML = 'Error loading music.';
+        });
+</script>
 </body>
 <script>
     const WORKER_URL = "https://upvotes.utopian-catch-0t.workers.dev";
