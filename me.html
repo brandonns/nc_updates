@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀" name="description"/>
+    <meta content="art, music, code" name="keywords"/>
+    <meta content="Brandon Stone" name="author"/>
+    <meta content="🏡" property="og:title"/>
+    <meta content="website" property="og:type"/>
+    <meta content="https://brandonstone.cc/" property="og:url"/>
+    <meta content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀" property="og:description"/>
+    <title>me</title>
+    <link href="https://barndoors.cc/favicon/favicon.ico" rel="icon"/>
+    <link rel="stylesheet" href="https://barndoors.cc/global.css"/>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .homenavcontainer {
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .center-stage {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .split-layout {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .stage-left {
+            flex: 0 0 auto;
+        }
+
+        .stage-left img {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            /*border: 1px solid var(--color-fg);*/
+            object-fit: cover;
+        }
+
+        .stage-right {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stage-right p {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .link-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .link-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .link-list a {
+            text-decoration: none;
+            border-bottom: 1px dashed var(--color-fg);
+        }
+
+        .link-list a:hover {
+            border-bottom-style: solid;
+        }
+
+        @media (max-width: 700px) {
+            .split-layout {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .stage-left img {
+                max-width: 200px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="homenavcontainer">
+    <header>
+        <h1>
+            <a class="headerlink" href="index.html">about?</a>
+        </h1>
+        <nav>
+            <div class="navsection">
+                <a href="https://barndoors.cc">"main site"</a>
+                <a href="index.html">"ramblings"</a>
+                <a href="wanted.html">"most wanted"</a>
+                <a href="assoc.html">"assoc."</a>
+            </div>
+        </nav>
+    </header>
+</div>
+
+<main class="center-stage">
+    <div class="split-layout">
+
+        <div class="stage-left">
+            <img src="https://barndoors.neocities.org/src/suspects/suspect03.webp" alt="Placeholder">
+        </div>
+
+        <div class="stage-right">
+            <p>
+                uhh i'm just some dude don't listen to me. i do this, gunpla, and go <a href="https://en.wikipedia.org/wiki/Wilderness" target="_blank">outside</a>.
+                <br>
+                some thoughts on:
+            </p>
+
+            <ul class="link-list">
+                <li><a href="mu.html">music</a></li>
+                <li><a href="#">lit</a></li>
+                <li><a href="#">gams</a></li>
+                <li><a href="#">movies/tv</a></li>
+            </ul>
+        </div>
+
+    </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="▀▄▀▄▀▄ art, music, code ▄▀▄▀▄▀" name="description"/>
+    <title>owbums and songz</title>
+    <link href="https://barndoors.cc/favicon/favicon.ico" rel="icon"/>
+    <link rel="stylesheet" href="https://barndoors.cc/global.css"/>
+    <style>
+        @font-face {
+            font-family: "braille";
+            src: url("src/braille.woff2") format("woff2");
+            font-display: swap;
+        }
+
+        .article h5 {
+            font-family: "braille", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin-bottom: 1.5rem;
+        }
+        .b { font-family: "braille", system-ui; }
+        .normal { font-family: system-ui, sans-serif; }
+
+        /* --- Widgets & Layout --- */
+        .media-widget {
+            border: 1px solid var(--color-fg);
+            color: var(--color-fg);
+            font-family: "Azeret Mono", serif;
+            padding: 1rem;
+            width: 100%;
+            max-width: 222px;
+            box-sizing: border-box;
+        }
+
+        .widget-header {
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid var(--color-fg);
+            padding-bottom: 0.25rem;
+        }
+
+        .media-content { display: flex; align-items: flex-start; gap: 1rem; }
+
+        .media-art {
+            width: 80px; height: 80px; min-width: 80px;
+            object-fit: cover; border: 1px solid var(--color-fg); display: block;
+        }
+
+        .media-details {
+            display: flex; flex-direction: column; justify-content: center;
+            min-height: 80px; flex: 1;
+        }
+
+        .media-title {
+            color: var(--color-fg) !important; font-weight: 700; text-transform: uppercase;
+            text-decoration: none; font-size: 1rem; line-height: 1; margin-bottom: 0.25rem;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+            overflow: hidden; word-break: normal;
+        }
+
+        .media-artist { font-size: 0.85rem; opacity: 0.8; text-transform: uppercase; line-height: 1.2; }
+        .marquee { width: 100%; overflow: visible; white-space: normal; text-overflow: clip; }
+
+        /* --- Review CSS --- */
+        .review-layout { display: flex; gap: 20px; align-items: flex-start; }
+        .art-col { width: 150px; flex-shrink: 0; }
+        .art-col img { width: 100%; height: auto; border: 1px solid var(--color-fg); display: block; }
+        .text-col { flex-grow: 1; }
+
+        @media (max-width: 600px) {
+            .review-layout { flex-direction: column; }
+            .art-col { width: 100%; max-width: 200px; }
+        }
+
+        /* --- Sort Controls CSS --- */
+        .sort-controls {
+            margin: 2rem 0 1rem 0;
+            padding: 0.5rem;
+            border: 1px dashed var(--color-fg);
+            font-family: "Azeret Mono", monospace;
+            font-size: 0.85rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .sort-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .sort-btn {
+            background: none;
+            border: none;
+            color: var(--color-fg);
+            font-family: inherit;
+            cursor: pointer;
+            text-transform: uppercase;
+            padding: 2px 4px;
+            opacity: 0.6;
+        }
+
+        .sort-btn:hover { opacity: 1; text-decoration: underline; }
+
+        .sort-btn.active {
+            opacity: 1;
+            font-weight: bold;
+            background: var(--color-fg);
+            color: var(--color-bg);
+        }
+
+        .direction-btn {
+            font-size: 1.1em;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="homenavcontainer">
+    <header>
+        <h1><a class="headerlink" href="index.html">owbums and songz</a></h1>
+        <nav>
+            <div class="navsection">
+                <a href="https://barndoors.cc">"main site"</a>
+                <a href="index.html">"ramblings"</a>
+                <a href="wanted.html">"most wanted"</a>
+                <a href="assoc.html">"assoc."</a>
+                <a href="me.html">"about"</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="status-stack">
+        <div id="lastfm-widget" class="media-widget">
+            <div class="loading">// loading</div>
+            <div class="song-info" style="display: none;">
+                <div id="status-header" class="widget-header">last played</div>
+                <div class="media-content">
+                    <a href="https://www.last.fm/user/barndoors__" target="_blank"> <img id="track-art" class="media-art" src="" alt="Album Art"></a>
+                    <div class="media-details">
+                        <div class="marquee"><p id="track-name" class="media-title">Track Name</p></div>
+                        <span id="artist-name" class="media-artist">Artist Name</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main id="content">
+
+    <div class="sort-controls">
+        <span>SORT BY:</span>
+        <div class="sort-group">
+            <button class="sort-btn active" data-sort="genre">Genre</button>
+            <button class="sort-btn" data-sort="artist">Artist</button>
+            <button class="sort-btn" data-sort="title">Album/Song</button>
+            <button class="sort-btn" data-sort="rating">Rating</button>
+        </div>
+        <span class="direction-btn" id="sort-dir" title="Toggle Direction">↓</span>
+    </div>
+
+    <div id="reviews-container"></div>
+</main>
+
+<script>
+    let allReviews = [];
+    let currentSort = 'genre';
+    let sortAsc = true;
+
+    fetch('murev.json')
+        .then(res => res.json())
+        .then(data => {
+            allReviews = data;
+            applySort();
+        })
+        .catch(err => console.error(err));
+
+    function applySort() {
+        allReviews.sort((a, b) => {
+            let valA, valB;
+
+            if (currentSort === 'genre') {
+                valA = (a.genre || '').toLowerCase();
+                valB = (b.genre || '').toLowerCase();
+            } else if (currentSort === 'artist') {
+                valA = (a.artist || '').toLowerCase();
+                valB = (b.artist || '').toLowerCase();
+            } else if (currentSort === 'title') {
+                valA = (a.title || '').toLowerCase();
+                valB = (b.title || '').toLowerCase();
+            } else if (currentSort === 'rating') {
+                valA = (a.rating || '').length;
+                valB = (b.rating || '').length;
+            }
+
+            if (valA < valB) return sortAsc ? -1 : 1;
+            if (valA > valB) return sortAsc ? 1 : -1;
+
+            if (currentSort === 'genre') {
+                if (a.artist !== b.artist) return a.artist.localeCompare(b.artist);
+                return a.title.localeCompare(b.title);
+            }
+            if (currentSort === 'artist') {
+                return a.title.localeCompare(b.title);
+            }
+            if (currentSort === 'rating') {
+                return a.artist.localeCompare(b.artist);
+            }
+            return 0;
+        });
+
+        renderReviews();
+    }
+
+    function renderReviews() {
+        const container = document.getElementById('reviews-container');
+        container.innerHTML = '';
+
+        let lastGenre = null;
+
+        allReviews.forEach(review => {
+            const article = document.createElement('div');
+            article.className = 'article';
+
+            let showHeader = true;
+            if (currentSort === 'genre') {
+                if (review.genre === lastGenre) {
+                    showHeader = false;
+                }
+            }
+
+            let headerHTML = '';
+            if (showHeader) {
+                headerHTML = `
+                    <hr/>
+                    <h1>${review.genre}</h1>
+                `;
+            }
+
+            const displayHeader = `${review.artist} - ${review.title}`;
+
+            article.innerHTML = `
+                ${headerHTML}
+                <h5><span class="b">${review.dateStart || '?'}</span><span class="normal"> - </span><span class="b">${review.dateEnd || '?'}</span></h5>
+                <h5>
+                    <span class="normal">${displayHeader}</span>
+                    <br>
+                    <span class="b">${displayHeader}</span>
+                </h5>
+                <div class="review-layout">
+                    <div class="art-col">
+                        <img src="${review.imgUrl}" alt="${displayHeader}" loading="lazy">
+                    </div>
+                    <div class="text-col">
+                        <p>${review.rating}</p>
+                        <p>${review.body}</p>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(article);
+            lastGenre = review.genre;
+        });
+    }
+
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentSort = e.target.dataset.sort;
+            applySort();
+        });
+    });
+
+    const dirBtn = document.getElementById('sort-dir');
+    dirBtn.addEventListener('click', () => {
+        sortAsc = !sortAsc;
+        dirBtn.textContent = sortAsc ? '↓' : '↑';
+        applySort();
+    });
+
+    const username = 'barndoors__';
+    const apiKey = 'a5975bc1ca42877b7111381f6cb77ae4';
+    fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=1`)
+        .then(r => r.json())
+        .then(d => {
+            const t = d.recenttracks.track[0];
+            const w = document.getElementById('lastfm-widget');
+
+            document.getElementById('track-art').src = t.image[1]['#text'] || '';
+            document.getElementById('track-name').textContent = t.name;
+            document.getElementById('artist-name').textContent = t.artist['#text'];
+
+            if (t['@attr']?.nowplaying === 'true') {
+                document.getElementById('status-header').textContent = "Now Playing:";
+                document.getElementById('status-header').classList.add('anim-pulse');
+            }
+
+            w.querySelector('.loading').style.display = 'none';
+            w.querySelector('.song-info').style.display = 'block';
+        })
+        .catch(e => console.error(e));
+</script>
+</body>
+</html>
