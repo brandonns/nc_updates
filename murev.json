@@ -1,29 +1,109 @@
 [
   {
+    "genre": "Pop",
+    "artist": "The Blue Jean Committee",
+    "title": "Catalina Breeze - Single",
+    "dateStart": "2015",
+    "dateEnd": "12, 22, 2025",
+    "imgUrl": "https://i.scdn.co/image/ab67616d0000b27335d758c197071a039636b059",
+    "rating": "#####",
+    "body": "Fred Armisen is amazing. I actually heard this song before I watched the episode of Documentary Now!"
+  },
+  {
+    "genre": "Rock",
+    "artist": "The Toxhards",
+    "title": "How Lucky Am I? - Single",
+    "dateStart": "2021",
+    "dateEnd": "12, 22, 2025",
+    "imgUrl": "https://i.scdn.co/image/ab67616d0000b27326bdf15790ff1325832c0bb8",
+    "rating": "#####",
+    "body": "Favorite of the 2-3 Toxhards songs I've listened to. Relatable"
+  },
+  {
+    "genre": "Rock",
+    "artist": "Jordan Wav",
+    "title": "Avalanche - Single",
+    "dateStart": "2025",
+    "dateEnd": "12, 22, 2025",
+    "imgUrl": "https://i.scdn.co/image/ab67616d0000b2738a6d0038a8240a7f34711efd",
+    "rating": "#####",
+    "body": "Master shredder"
+  },
+  {
+    "genre": "Underground Rap",
+    "artist": "Jackson Whalan feat. Wax",
+    "title": "Don't Let It Get Ya Down - Single",
+    "dateStart": "2025",
+    "dateEnd": "12, 22, 2025",
+    "imgUrl": "https://i.scdn.co/image/ab67616d00001e02f62631bcbb32b2aa4c966727",
+    "rating": "##",
+    "body": "Why do white rappers always sound \"like that\"? Not too bad just a thing I can't get over. Only bumping for the Wax feature"
+  },
+  {
+    "genre": "Rock",
+    "artist": "tricot",
+    "title": "The",
+    "dateStart": "2013",
+    "dateEnd": "12, 22, 2025",
+    "imgUrl": "https://i.scdn.co/image/ab67616d0000b2733463e832119a0b27b9150e9d",
+    "rating": "####",
+    "body": "Good guitars. Ochansensu-Su 5#"
+  },
+  {
+    "genre": "Pop",
+    "artist": "Aly & AJ",
+    "title": "Insomniatic",
+    "dateStart": "2007",
+    "dateEnd": "12, 22, 2025",
+    "imgUrl": "https://i.scdn.co/image/ab67616d0000b27370b17101f1ffd99cd810a3c4",
+    "rating": "##",
+    "body": "What a lame album. All points go to Like Woah. Sounds of childhood though. Potential Breakup Song starting an entire album of breakup songs is interesting. Hillary Duff started playing after and I didn't even notice"
+  },
+  {
+    "genre": "RnB, Soul",
+    "artist": "Kitty N.",
+    "title": "Nothing to Say - Single",
+    "dateStart": "2024",
+    "dateEnd": "12, 22, 2025",
+    "imgUrl": "https://i.scdn.co/image/ab67616d0000b27366ff40e13f7c69efd423bbc5",
+    "rating": "####",
+    "body": "Pretty voice. Good instrument stacks. Cute stabs and adlibs. I think that landline vox effect adds instant points. Easy swing perc section. Feel that"
+  },
+  {
     "genre": "Alternative",
     "artist": "Ginger Root",
     "title": "City Slicker EP",
-    "dateStart": "12, 21, 2025",
+    "dateStart": "2021",
     "dateEnd": "12, 21, 2025",
     "imgUrl": "https://i.scdn.co/image/ab67616d0000b27344cab39318afcff6a9699ad2",
     "rating": "#####",
-    "body": "I love this ep Loretta especially. Dreamy wobbly synths."
+    "body": "I love this ep Loretta especially. Dreamy wobbly synths"
   },
   {
     "genre": "Dance",
     "artist": "shonci & Mc Magrinho",
     "title": "Set do shonci",
-    "dateStart": "12, 21, 2025",
+    "dateStart": "2024",
     "dateEnd": "12, 21, 2025",
     "imgUrl": "https://i.scdn.co/image/ab67616d0000b2730efe6f4f73d7896b669c084c",
     "rating": "##",
     "body": "I don't speak portuguese. Not the point of this though. CHEGOU 3 carries and is in the daily rotation. That song alone gets 5#"
   },
   {
+    "genre": "RnB, Soul",
+    "artist": "Brainstory",
+    "title": "Buck",
+    "dateStart": "2019",
+    "dateEnd": "12, 22, 2025",
+    "imgUrl": "https://i.scdn.co/image/ab67616d0000b273225ed6765d9a7122afe9a9f4",
+    "rating": "##",
+    "body": "Is this r&b/soul? I guess so. The first song reminds me of me trying to sing Prince in the shower. Cool enough guitar and keys. Pretty boring"
+  },
+  {
     "genre": "Jungle, DnB",
     "artist": "Pizza Hotline",
     "title": "Level Select",
-    "dateStart": "12, 21, 2025",
+    "dateStart": "2022",
     "dateEnd": "12, 21, 2025",
     "imgUrl": "https://i.scdn.co/image/ab67616d0000b27305e339ac161baaa557d9289d",
     "rating": "###",
