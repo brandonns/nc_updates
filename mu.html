@@ -284,7 +284,7 @@
     });
 
     const username = 'barndoors__';
-    const apiKey = 'a5975bc1ca42877b7111381f6cb77ae4';
+    const apiKey = 'a5975bc1ca42877b7111381f6cb77ae4'; //go nuts buddy
     fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=1`)
         .then(r => r.json())
         .then(d => {
