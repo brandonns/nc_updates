@@ -21,14 +21,22 @@
         .b { font-family: "braille", system-ui; }
         .normal { font-family: system-ui, sans-serif; }
 
+        .status-stack {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
         .media-widget {
             border: 1px solid var(--color-fg);
             color: var(--color-fg);
             font-family: "Azeret Mono", serif;
             padding: 1rem;
             width: 100%;
-            max-width: 222px;
+            max-width: 250px;
             box-sizing: border-box;
+            background: var(--color-bg);
         }
 
         .widget-header {
@@ -38,6 +46,8 @@
             margin-bottom: 0.75rem;
             border-bottom: 1px solid var(--color-fg);
             padding-bottom: 0.25rem;
+            display: flex;
+            justify-content: space-between;
         }
 
         .media-content { display: flex; align-items: flex-start; gap: 1rem; }
@@ -62,6 +72,35 @@
         .media-artist { font-size: 0.85rem; opacity: 0.8; text-transform: uppercase; line-height: 1.2; }
         .marquee { width: 100%; overflow: visible; white-space: normal; text-overflow: clip; }
 
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.75rem;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px dotted var(--color-fg);
+            padding-bottom: 2px;
+        }
+        .history-item:last-child { border-bottom: none; margin-bottom: 0; }
+        .history-track { font-weight: bold; margin-right: 5px; }
+        .history-artist { opacity: 0.7; text-align: right; }
+
+        .live-tag {
+            color: var(--color-2);
+            font-weight: 900;
+            animation: softPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes softPulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
         .review-layout { display: flex; gap: 20px; align-items: flex-start; }
         .art-col { width: 150px; flex-shrink: 0; }
         .art-col img { width: 100%; height: auto; border: 1px solid var(--color-fg); display: block; }
@@ -72,7 +111,6 @@
             .art-col { width: 100%; max-width: 200px; }
         }
 
-        /* --- Sort Controls CSS --- */
         .sort-controls {
             margin: 2rem 0 1rem 0;
             padding: 0.5rem;
@@ -134,12 +172,18 @@
     </header>
 
     <div class="status-stack">
+
         <div id="lastfm-widget" class="media-widget">
             <div class="loading">// loading</div>
             <div class="song-info" style="display: none;">
-                <div id="status-header" class="widget-header">last played</div>
+                <div class="widget-header">
+                    <span id="status-header">last played</span>
+                    <span id="live-indicator"></span>
+                </div>
                 <div class="media-content">
-                    <a href="https://www.last.fm/user/barndoors__" target="_blank"> <img id="track-art" class="media-art" src="" alt="Album Art"></a>
+                    <a href="https://www.last.fm/user/barndoors__" target="_blank">
+                        <img id="track-art" class="media-art" src="" alt="Album Art">
+                    </a>
                     <div class="media-details">
                         <div class="marquee"><p id="track-name" class="media-title">Track Name</p></div>
                         <span id="artist-name" class="media-artist">Artist Name</span>
@@ -147,6 +191,13 @@
                 </div>
             </div>
         </div>
+
+        <div id="history-widget" class="media-widget" style="display: none;">
+            <div class="widget-header">recently played</div>
+            <ul id="history-list" class="history-list">
+            </ul>
+        </div>
+
     </div>
 </div>
 
@@ -284,24 +335,49 @@
     });
 
     const username = 'barndoors__';
-    const apiKey = '9ab48a5502554a499e1897abddedca05'; //go nuts buddy
-    fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=1`)
+    const apiKey = '9ab48a5502554a499e1897abddedca05';
+    fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=6`)
         .then(r => r.json())
         .then(d => {
-            const t = d.recenttracks.track[0];
+            const tracks = d.recenttracks.track;
+            if (!tracks || tracks.length === 0) return;
+
+            const t = tracks[0];
             const w = document.getElementById('lastfm-widget');
 
-            document.getElementById('track-art').src = t.image[1]['#text'] || '';
+            const imgUrl = t.image[2]['#text'] || t.image[1]['#text'] || '';
+            if(imgUrl) document.getElementById('track-art').src = imgUrl;
+
             document.getElementById('track-name').textContent = t.name;
             document.getElementById('artist-name').textContent = t.artist['#text'];
 
             if (t['@attr']?.nowplaying === 'true') {
-                document.getElementById('status-header').textContent = "Now Playing:";
-                document.getElementById('status-header').classList.add('anim-pulse');
+                document.getElementById('status-header').textContent = "now playing";
+                const liveInd = document.getElementById('live-indicator');
+                liveInd.textContent = "LIVE";
+                liveInd.className = "live-tag";
             }
 
             w.querySelector('.loading').style.display = 'none';
             w.querySelector('.song-info').style.display = 'block';
+
+            const historyWidget = document.getElementById('history-widget');
+            const historyList = document.getElementById('history-list');
+
+            const historyTracks = tracks.slice(2, 5);
+
+            if (historyTracks.length > 0) {
+                historyTracks.forEach(track => {
+                    const li = document.createElement('li');
+                    li.className = 'history-item';
+                    li.innerHTML = `
+                        <span class="history-track">${track.name}</span>
+                        <span class="history-artist">${track.artist['#text']}</span>
+                    `;
+                    historyList.appendChild(li);
+                });
+                historyWidget.style.display = 'block';
+            }
         })
         .catch(e => console.error(e));
 </script>
